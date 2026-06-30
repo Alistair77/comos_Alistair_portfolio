@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Alistair Rodrigues — AI Engineering, Data Analysis & UI/UX Design.">
+<meta name="author" content="Alistair Rodrigues">
+<title>Alistair Rodrigues — Signal From the Void</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -30,14 +33,14 @@
 
     <canvas id="hero-stars" style="position:absolute;top:0;bottom:0;right:0;width:min(50%,860px);height:100%;z-index:1;pointer-events:none;mix-blend-mode:screen"></canvas>
     <header style="position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:24px clamp(22px,4vw,56px);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#cdc9bf">
-      <span style="display:inline-flex;align-items:center;gap:7px;text-shadow:0 1px 8px rgba(0,0,0,.6)"><span style="width:7px;height:7px;border-radius:50%;background:#7fd1a8;animation:sigPulse 2.6s ease-in-out infinite"></span>CLAYTON.G — ENG &amp; DSGN</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;text-shadow:0 1px 8px rgba(0,0,0,.6)"><span style="width:7px;height:7px;border-radius:50%;background:#7fd1a8;animation:sigPulse 2.6s ease-in-out infinite"></span>ALISTAIR RODRIGUES — AI + DATA + UX</span>
       <span id="sig-clock" style="text-shadow:0 1px 8px rgba(0,0,0,.6)">27.06.2026 · 00:00:00 UTC</span>
     </header>
 
     <div style="position:relative;z-index:2;padding:0 clamp(22px,4vw,56px);max-width:56%">
       <p style="font-family:'Space Mono',monospace;font-size:clamp(10px,1.1vw,12px);letter-spacing:0.5em;color:#c7d2ea;margin:0 0 16px">— A SIGNAL FROM THE VOID —</p>
       <h1 id="sig-name" style="font-style:italic;font-weight:400;font-size:clamp(48px,8vw,116px);line-height:.94;letter-spacing:-0.028em;color:#fff;margin:0;text-shadow:0 4px 40px rgba(0,0,0,.45)"></h1>
-      <p style="font-size:clamp(14px,1.6vw,18px);color:#d4d0c6;letter-spacing:.01em;max-width:34ch;margin:20px 0 0">Interfaces, agents, and quiet things in the silicon void.</p>
+      <p style="font-size:clamp(14px,1.6vw,18px);color:#d4d0c6;letter-spacing:.01em;max-width:34ch;margin:20px 0 0">Computer Science graduate, MSc Advanced Computer Science at University of Strathclyde. Data analysis &amp; UI/UX design experience. Currently focused on AI engineering.</p>
     </div>
 
     <div style="position:absolute;left:clamp(22px,4vw,56px);bottom:22px;z-index:3;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.35em;color:#8a93a8">SCROLL<div style="width:1px;height:30px;margin:10px 0 0 16px;background:linear-gradient(#8a93a8,transparent);animation:sigDrop 2.4s ease-in-out infinite"></div></div>
@@ -72,13 +75,12 @@
 
       <div style="position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 clamp(22px,4vw,56px) clamp(22px,3vh,34px)">
         <nav style="display:flex;justify-content:center;flex-wrap:wrap;gap:12px clamp(20px,4vw,44px);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;color:#aeb6c8;padding-bottom:16px">
-          <a href="#" style="color:#aeb6c8;text-decoration:none;text-shadow:0 1px 10px rgba(0,0,0,.8)" style-hover="color:#fff">I — STUDIO</a>
-          <a href="#" style="color:#aeb6c8;text-decoration:none;text-shadow:0 1px 10px rgba(0,0,0,.8)" style-hover="color:#fff">II — WORK</a>
-          <a href="#" style="color:#aeb6c8;text-decoration:none;text-shadow:0 1px 10px rgba(0,0,0,.8)" style-hover="color:#fff">III — TRANSMIT</a>
-          <a href="#" style="color:#aeb6c8;text-decoration:none;text-shadow:0 1px 10px rgba(0,0,0,.8)" style-hover="color:#fff">IV — LOG</a>
+          <a href="https://linkedin.com/in/alistair77" target="_blank" rel="noopener" style="color:#aeb6c8;text-decoration:none;text-shadow:0 1px 10px rgba(0,0,0,.8)">LINKEDIN</a>
+          <a href="https://github.com/Alistair77" target="_blank" rel="noopener" style="color:#aeb6c8;text-decoration:none;text-shadow:0 1px 10px rgba(0,0,0,.8)">GITHUB</a>
+          <a href="mailto:alistairar7@gmail.com" style="color:#aeb6c8;text-decoration:none;text-shadow:0 1px 10px rgba(0,0,0,.8)">EMAIL</a>
         </nav>
         <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(174,182,200,0.2);padding-top:14px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;color:#8089a0">
-          <span style="text-shadow:0 1px 8px rgba(0,0,0,.8)">CLAYTON GOMES</span><span style="text-shadow:0 1px 8px rgba(0,0,0,.8)">© 2026 — ALL SIGNALS RESERVED</span>
+          <span style="text-shadow:0 1px 8px rgba(0,0,0,.8)">ALISTAIR RODRIGUES</span><span style="text-shadow:0 1px 8px rgba(0,0,0,.8)">© 2026 — ALL RIGHTS RESERVED</span>
         </div>
       </div>
     </div>
@@ -95,7 +97,7 @@ class Component extends DCLogic {
     const nameEl = $('#sig-name');
     if(nameEl && !nameEl.dataset.done){
       nameEl.dataset.done = '1';
-      'Clayton Gomes'.split('').forEach((ch,i)=>{
+      'Alistair Rodrigues'.split('').forEach((ch,i)=>{
         const s = document.createElement('span');
         s.textContent = ch === ' ' ? '\u00A0' : ch;
         s.style.display = 'inline-block';
