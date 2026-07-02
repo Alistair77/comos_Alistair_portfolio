@@ -226,7 +226,26 @@
   .journey-card .slide-date{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;color:#7fd1a8;margin:0;white-space:nowrap}
   .journey-card h3{font-family:'Orbitron',-apple-system,sans-serif;font-size:clamp(24px,3.4vw,40px);font-weight:600;letter-spacing:.02em;color:#fff;margin:0 0 8px;line-height:1.08}
   .journey-card .slide-role{display:block;color:#c7d2ea;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;margin-bottom:6px}
-  .journey-card .slide-meta{display:block;color:#8f98ad;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;margin-bottom:18px}
+  .journey-card .slide-meta{display:block;color:#8f98ad;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;margin-bottom:10px}
+  .journey-card .slide-cat{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:999px;margin-bottom:14px}
+  .slide-cat--web{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
+  .slide-cat--ai{background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.25)}
+  .slide-cat--fullstack{background:rgba(139,92,246,.15);color:#c4b5fd;border:1px solid rgba(139,92,246,.25)}
+  .slide-cat--mobile{background:rgba(236,72,153,.15);color:#f9a8d4;border:1px solid rgba(236,72,153,.25)}
+  .journey-tabs{display:flex;justify-content:center;gap:10px;margin:18px auto 28px;flex-wrap:wrap;position:relative;z-index:2}
+  .journey-tab{font-family:'Orbitron','Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;padding:9px 18px;border-radius:999px;border:1px solid rgba(199,210,234,.15);background:rgba(4,5,10,.6);color:#8f98ad;cursor:pointer;transition:all .3s ease;text-transform:uppercase;backdrop-filter:blur(8px)}
+  .journey-tab:hover{border-color:rgba(199,210,234,.3);color:#c7d2ea}
+  .journey-tab.is-active{border-color:rgba(127,209,168,.4);color:#fff;background:rgba(127,209,168,.08);box-shadow:0 0 30px rgba(127,209,168,.06)}
+  .journey-tab--web{border-color:rgba(59,130,246,.2);color:#7aa9e6}
+  .journey-tab--web:hover{border-color:rgba(59,130,246,.4)}
+  .journey-tab--web.is-active{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.4);color:#93c5fd;box-shadow:0 0 30px rgba(59,130,246,.08)}
+  .journey-tab--ai{border-color:rgba(16,185,129,.2);color:#5cb88a}
+  .journey-tab--ai:hover{border-color:rgba(16,185,129,.4)}
+  .journey-tab--ai.is-active{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.4);color:#6ee7b7;box-shadow:0 0 30px rgba(16,185,129,.08)}
+  .journey-tab--app{border-color:rgba(139,92,246,.2);color:#a88bdc}
+  .journey-tab--app:hover{border-color:rgba(139,92,246,.4)}
+  .journey-tab--app.is-active{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.4);color:#c4b5fd;box-shadow:0 0 30px rgba(139,92,246,.08)}
+  .journey-card[data-hidden]{display:none!important}
   .journey-bullets{margin:0;padding:0;list-style:none;display:grid;gap:10px;color:#aeb6c8;font-size:clamp(14px,1.4vw,16px);line-height:1.5}
   .journey-bullets li{position:relative;padding-left:20px}.journey-bullets li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:#7fd1a8}
   /* journey side constellations — a different one per card, alternating sides */
@@ -260,27 +279,35 @@
   .hydra-const .hydra--p2{animation:hydraPulse2 3.6s ease-in-out infinite .5s}
   .hydra-const .hydra--s{fill:rgba(199,210,234,.25);filter:drop-shadow(0 0 2px rgba(199,210,234,.12))}
 
-  .display-cards{position:relative;display:grid;grid-template-areas:"stack";place-items:center;width:min(100%,38rem);min-height:260px;margin-top:34px;opacity:1}
-  .display-card{grid-area:stack;position:relative;display:flex;height:9rem;width:min(22rem,72vw);user-select:none;flex-direction:column;justify-content:space-between;border:2px solid rgba(174,182,200,.16);border-radius:12px;background:rgba(20,22,30,.72);backdrop-filter:blur(8px);padding:14px 16px;transform:skewY(-8deg);transition:border-color .7s ease,background .7s ease,filter .7s ease,transform .7s ease;filter:grayscale(1);box-shadow:0 22px 70px rgba(0,0,0,.34)}
-  .display-card::before{content:"";position:absolute;inset:0;border-radius:10px;background:rgba(4,5,10,.42);transition:opacity .7s ease}
-  .display-card::after{content:"";position:absolute;top:-5%;right:-4px;width:min(20rem,65vw);height:110%;background:linear-gradient(to left,#04050a,transparent);pointer-events:none}
-  .display-card:hover{border-color:rgba(255,255,255,.2);background:rgba(28,30,40,.82);filter:grayscale(0)}
-  .display-card:hover::before{opacity:0}
-  .display-card--one:hover{transform:skewY(-8deg) translateY(-40px)}
-  .display-card--two{transform:translate(64px,40px) skewY(-8deg)}
-  .display-card--two:hover{transform:translate(64px,-4px) skewY(-8deg)}
-  .display-card--three{transform:translate(128px,80px) skewY(-8deg);filter:grayscale(0)}
-  .display-card--three:hover{transform:translate(128px,40px) skewY(-8deg)}
-  .display-card--four{transform:translate(172px,108px) skewY(-8deg)}
-  .display-card--four:hover{transform:translate(172px,68px) skewY(-8deg)}
-  .display-card--five{transform:translate(216px,136px) skewY(-8deg)}
-  .display-card--five:hover{transform:translate(216px,96px) skewY(-8deg)}
-  .display-card__row,.display-card__title,.display-card__desc,.display-card__date{position:relative;z-index:1}
-  .display-card__row{display:flex;align-items:center;gap:8px}
-  .display-card__icon{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:#1e3a8a;color:#93c5fd;font-size:13px}
-  .display-card__title{font-family:'Orbitron','Space Mono',monospace;font-size:14px;color:#93c5fd;letter-spacing:.02em}
-  .display-card__desc{font-size:18px;color:#e8e6e0;white-space:nowrap}
-  .display-card__date{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:#8f98ad}
+  .display-cards{position:relative;display:flex;flex-direction:column;gap:28px;width:min(100%,38rem);margin-top:34px;opacity:1}
+  .display-cluster{border:1px solid rgba(174,182,200,.08);border-radius:14px;padding:14px 16px;background:rgba(10,12,20,.36);backdrop-filter:blur(4px);position:relative}
+  .display-cluster--web{border-color:rgba(59,130,246,.12)}
+  .display-cluster--ai{border-color:rgba(16,185,129,.12)}
+  .display-cluster--app{border-color:rgba(139,92,246,.12)}
+  .display-cluster__head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(174,182,200,.06)}
+  .display-cluster__star{flex-shrink:0;font-size:11px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:'Space Mono',monospace}
+  .display-cluster--web .display-cluster__star{background:rgba(59,130,246,.15);color:#93c5fd;box-shadow:0 0 16px rgba(59,130,246,.12)}
+  .display-cluster--ai .display-cluster__star{background:rgba(16,185,129,.15);color:#6ee7b7;box-shadow:0 0 16px rgba(16,185,129,.12)}
+  .display-cluster--app .display-cluster__star{background:rgba(139,92,246,.15);color:#c4b5fd;box-shadow:0 0 16px rgba(139,92,246,.12)}
+  .display-cluster__label{font-family:'Orbitron','Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.15em;color:#c7d2ea;text-transform:uppercase}
+  .display-cluster__count{font-family:'Space Mono',monospace;font-size:9px;color:#5a6278;margin-left:auto}
+  .display-cluster__cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+  .display-cluster .display-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:8rem;user-select:none;border:2px solid rgba(174,182,200,.14);border-radius:12px;background:rgba(20,22,30,.7);backdrop-filter:blur(6px);padding:12px 14px;transform:skewY(-6deg);transition:border-color .6s ease,background .6s ease,filter .6s ease,transform .6s ease;filter:grayscale(1);box-shadow:0 18px 50px rgba(0,0,0,.3);cursor:pointer}
+  .display-cluster .display-card::before{content:"";position:absolute;inset:0;border-radius:10px;background:rgba(4,5,10,.38);transition:opacity .6s ease;pointer-events:none}
+  .display-cluster .display-card::after{content:"";position:absolute;top:-4%;right:-3px;width:70%;height:108%;background:linear-gradient(to left,#04050a,transparent);pointer-events:none}
+  .display-cluster .display-card:hover{border-color:rgba(255,255,255,.2);background:rgba(28,30,40,.82);filter:grayscale(0);transform:skewY(-6deg) translateY(-8px)}
+  .display-cluster .display-card:hover::before{opacity:0}
+  .display-cluster .display-card__row,.display-cluster .display-card__desc,.display-cluster .display-card__date{position:relative;z-index:1}
+  .display-cluster .display-card__row{display:flex;align-items:center;gap:8px}
+  .display-cluster .display-card__icon{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;border-radius:999px;background:#1e3a8a;color:#93c5fd;font-size:12px;flex-shrink:0}
+  .display-cluster .display-card__title{font-family:'Orbitron','Space Mono',monospace;font-size:13px;color:#93c5fd;letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .display-cluster .display-card__tag{font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:999px;line-height:1.3;margin-left:auto;white-space:nowrap;flex-shrink:0}
+  .display-cluster .display-card__tag--web{background:rgba(59,130,246,.18);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+  .display-cluster .display-card__tag--ai{background:rgba(16,185,129,.18);color:#6ee7b7;border:1px solid rgba(16,185,129,.3)}
+  .display-cluster .display-card__tag--fullstack{background:rgba(139,92,246,.18);color:#c4b5fd;border:1px solid rgba(139,92,246,.3)}
+  .display-cluster .display-card__tag--mobile{background:rgba(236,72,153,.18);color:#f9a8d4;border:1px solid rgba(236,72,153,.3)}
+  .display-cluster .display-card__desc{font-size:15px;color:#d4d0c6;margin-top:auto;padding-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:relative;z-index:1}
+  .display-cluster .display-card__date{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8f98ad;position:relative;z-index:1}
 
   .footer-11{position:relative;z-index:2;width:100%;min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;padding:32px clamp(24px,5vw,80px) 48px}
   .footer-11__top{display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.08em;color:#f4f4f5}
@@ -359,21 +386,17 @@
     section[id="observer"] span{font-size:10px!important}
 
     /* ── DISPLAY CARDS (Observer project cards) ── */
-    .display-cards{place-items:center;min-height:260px;margin-top:16px}
-    .display-card{width:min(16rem,72vw);height:7rem;padding:10px 12px}
-    .display-card--one{transform:skewY(-6deg)}
-    .display-card--two{transform:translate(16px,30px) skewY(-6deg)}
-    .display-card--two:hover{transform:translate(16px,16px) skewY(-6deg)}
-    .display-card--three{transform:translate(32px,60px) skewY(-6deg)}
-    .display-card--three:hover{transform:translate(32px,44px) skewY(-6deg)}
-    .display-card--four{transform:translate(44px,80px) skewY(-6deg)}
-    .display-card--four:hover{transform:translate(44px,64px) skewY(-6deg)}
-    .display-card--five{transform:translate(56px,100px) skewY(-6deg)}
-    .display-card--five:hover{transform:translate(56px,84px) skewY(-6deg)}
-    .display-card__title{font-size:11px}
-    .display-card__desc{font-size:13px;white-space:normal}
-    .display-card__date{font-size:10px}
-    .display-card--one .display-card__icon,.display-card--two .display-card__icon{width:18px;height:18px;font-size:11px}
+    .display-cards{margin-top:16px;gap:20px}
+    .display-cluster{padding:10px 12px}
+    .display-cluster__head{margin-bottom:10px;padding-bottom:8px}
+    .display-cluster__label{font-size:9px}
+    .display-cluster__cards{grid-template-columns:1fr;gap:12px}
+    .display-cluster .display-card{height:6.5rem;padding:10px 12px;transform:skewY(-4deg)}
+    .display-cluster .display-card:hover{transform:skewY(-4deg) translateY(-6px)}
+    .display-cluster .display-card__title{font-size:11px}
+    .display-cluster .display-card__desc{font-size:13px}
+    .display-cluster .display-card__date{font-size:10px}
+    .display-cluster .display-card__icon{width:18px;height:18px;font-size:11px}
 
     /* ── MISSION DESKTOP (original layout) ── */
 
@@ -619,31 +642,63 @@
       <p style="font-size:clamp(14px,1.6vw,19px);line-height:1.55;color:#d4d0c6;margin:20px 0 0;max-width:44ch">A silhouette holding whole galaxies, still, watching, swirling with quiet light. The space between signal and answer, rendered in motion.</p>
       <span style="display:inline-block;margin-top:24px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;color:#c7d2ea">2026 · SINGLE FRAME</span>
       <div class="display-cards" aria-label="Selected work">
-        <a class="display-card display-card--one" href="work/hawkai-login-showcase/" target="_blank" style="text-decoration:none;color:inherit">
-          <div class="display-card__row"><span class="display-card__icon" style="background:#1e3a8a;color:#93c5fd">H</span><p class="display-card__title">HawkAI Login</p></div>
-          <p class="display-card__desc">3D login experience — React, Three.js, Ant Design</p>
-          <p class="display-card__date">2026 · Featured Project</p>
-        </a>
-        <a class="display-card display-card--two" href="work/quantasphere-hero-export/" target="_blank" style="text-decoration:none;color:inherit">
-          <div class="display-card__row"><span class="display-card__icon" style="background:#4a1d6e;color:#c084fc">Q</span><p class="display-card__title">Quantasphere</p></div>
-          <p class="display-card__desc">Quantum-security hero with cursor-driven video scrub</p>
-          <p class="display-card__date">2026 · Interactive Hero</p>
-        </a>
-        <a class="display-card display-card--three" href="work/ragstar-showcase/" target="_blank" style="text-decoration:none;color:inherit">
-          <div class="display-card__row"><span class="display-card__icon" style="background:#0a4a3a;color:#6ee7b7">R</span><p class="display-card__title">RAGStar</p></div>
-          <p class="display-card__desc">Hybrid search RAG — Pinecone, BM25, Cohere + Ollama</p>
-          <p class="display-card__date">2026 · AI Engineering</p>
-        </a>
-        <a class="display-card display-card--four" href="work/study-snipp-showcase/" target="_blank" style="text-decoration:none;color:inherit">
-          <div class="display-card__row"><span class="display-card__icon" style="background:#5b21b6;color:#c4b5fd">S</span><p class="display-card__title">Study Snippets</p></div>
-          <p class="display-card__desc">Android + FastAPI monorepo — Kotlin, Compose, Supabase</p>
-          <p class="display-card__date">2026 · Full-Stack</p>
-        </a>
-        <a class="display-card display-card--five" href="work/health-weight-app-showcase/" target="_blank" style="text-decoration:none;color:inherit">
-          <div class="display-card__row"><span class="display-card__icon" style="background:#a21caf;color:#e9d5ff">W</span><p class="display-card__title">Health Weight</p></div>
-          <p class="display-card__desc">Android health tracker — Kotlin, Jetpack Compose</p>
-          <p class="display-card__date">2026 · Mobile App</p>
-        </a>
+        <div class="display-cluster display-cluster--web">
+          <div class="display-cluster__head">
+            <span class="display-cluster__star">✦</span>
+            <span class="display-cluster__label">Web / Frontend</span>
+            <span class="display-cluster__count">3 projects</span>
+          </div>
+          <div class="display-cluster__cards">
+            <a class="display-card" href="#" style="text-decoration:none;color:inherit">
+              <div class="display-card__row"><span class="display-card__icon" style="background:#1e3a8a;color:#93c5fd">C</span><p class="display-card__title">Cosmos Portfolio</p><span class="display-card__tag display-card__tag--web">WEB</span></div>
+              <p class="display-card__desc">3D satellite portfolio with Three.js</p>
+              <p class="display-card__date">2026 · Featured</p>
+            </a>
+            <a class="display-card" href="work/hawkai-login-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+              <div class="display-card__row"><span class="display-card__icon" style="background:#1e3a8a;color:#93c5fd">H</span><p class="display-card__title">HawkAI Login</p><span class="display-card__tag display-card__tag--web">WEB</span></div>
+              <p class="display-card__desc">3D login — React, Three.js, Ant Design</p>
+              <p class="display-card__date">2026 · Featured</p>
+            </a>
+            <a class="display-card" href="work/quantasphere-hero-export/" target="_blank" style="text-decoration:none;color:inherit">
+              <div class="display-card__row"><span class="display-card__icon" style="background:#4a1d6e;color:#c084fc">Q</span><p class="display-card__title">Quantasphere</p><span class="display-card__tag display-card__tag--web">WEB</span></div>
+              <p class="display-card__desc">Cursor-driven video scrub hero</p>
+              <p class="display-card__date">2026 · Interactive</p>
+            </a>
+          </div>
+        </div>
+        <div class="display-cluster display-cluster--ai">
+          <div class="display-cluster__head">
+            <span class="display-cluster__star">◆</span>
+            <span class="display-cluster__label">AI Engineering</span>
+            <span class="display-cluster__count">1 project</span>
+          </div>
+          <div class="display-cluster__cards">
+            <a class="display-card" href="work/ragstar-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+              <div class="display-card__row"><span class="display-card__icon" style="background:#0a4a3a;color:#6ee7b7">R</span><p class="display-card__title">RAGStar</p><span class="display-card__tag display-card__tag--ai">AI</span></div>
+              <p class="display-card__desc">Hybrid search RAG pipeline</p>
+              <p class="display-card__date">2026 · AI</p>
+            </a>
+          </div>
+        </div>
+        <div class="display-cluster display-cluster--app">
+          <div class="display-cluster__head">
+            <span class="display-cluster__star">■</span>
+            <span class="display-cluster__label">Application Design</span>
+            <span class="display-cluster__count">2 projects</span>
+          </div>
+          <div class="display-cluster__cards">
+            <a class="display-card" href="work/study-snipp-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+              <div class="display-card__row"><span class="display-card__icon" style="background:#5b21b6;color:#c4b5fd">S</span><p class="display-card__title">Study Snippets</p><span class="display-card__tag display-card__tag--fullstack">FULL-STACK</span></div>
+              <p class="display-card__desc">Android + FastAPI monorepo</p>
+              <p class="display-card__date">2026 · Full-Stack</p>
+            </a>
+            <a class="display-card" href="work/health-weight-app-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+              <div class="display-card__row"><span class="display-card__icon" style="background:#a21caf;color:#e9d5ff">W</span><p class="display-card__title">Health Weight</p><span class="display-card__tag display-card__tag--mobile">MOBILE</span></div>
+              <p class="display-card__desc">Android health tracker in Compose</p>
+              <p class="display-card__date">2026 · Mobile</p>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -655,8 +710,14 @@
       <h2>Journey So Far</h2>
       <span class="journey-hint">scroll to stack the timeline</span>
     </div>
+    <div class="journey-tabs" role="tablist">
+      <button class="journey-tab is-active" data-tab="all" role="tab" aria-selected="true">All</button>
+      <button class="journey-tab journey-tab--web" data-tab="web" role="tab">Web Design</button>
+      <button class="journey-tab journey-tab--ai" data-tab="ai" role="tab">AI Engineering</button>
+      <button class="journey-tab journey-tab--app" data-tab="app" role="tab">Application Design</button>
+    </div>
     <div class="journey-stack" id="journeyStack">
-      <div class="journey-card"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+      <div class="journey-card" data-category="web"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M40 40 L70 150 M150 55 L120 150 M70 150 L95 160 L120 150 M70 150 L52 262 M120 150 L160 250"/>
         <circle cx="40" cy="40" r="4"/><circle cx="150" cy="55" r="4.5"/><circle cx="70" cy="150" r="3.5"/><circle cx="95" cy="160" r="3"/><circle cx="120" cy="150" r="3.5"/><circle cx="52" cy="262" r="4"/><circle cx="160" cy="250" r="4"/>
         <text x="2" y="18">ORION</text>
@@ -665,13 +726,14 @@
         <h3>Cosmos Portfolio System</h3>
         <span class="slide-role">Full-stack portfolio / Motion &amp; 3D web experience</span>
         <span class="slide-meta">ALISTAIR RODRIGUES / AI + DATA + UX</span>
+        <span class="slide-cat slide-cat--web">WEB / FRONTEND</span>
         <ul class="journey-bullets">
           <li>Architected a single-page portfolio with Three.js 3D satellite rendering, custom GLB model integration, and real-time animation loop.</li>
           <li>Built a modular project showcase with staggered card reveal mechanics and scroll-driven timeline using IntersectionObserver and Lenis.</li>
           <li>Integrated WebGL starfield with parallax mouse tracking, live UTC clock, and multi-layer video playback with lazy loading.</li>
         </ul>
       </article></div>
-      <div class="journey-card"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
+      <div class="journey-card" data-category="web"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M104 26 L58 62 L36 116 L76 154 L54 202 L94 238 L134 202 L118 154 L152 112 L132 56 L104 26"/>
         <circle cx="104" cy="26" r="4.5"/>
         <circle cx="58" cy="62" r="3.5"/>
@@ -689,13 +751,14 @@
         <h3>HawkAI — 3D Authentication UI</h3>
         <span class="slide-role">React · Three.js · GLSL · Ant Design</span>
         <span class="slide-meta">FRONTEND ENGINEERING</span>
+        <span class="slide-cat slide-cat--web">WEB / FRONTEND</span>
         <ul class="journey-bullets">
           <li>Engineered a Three.js-powered 3D scene featuring a Draco-compressed GLB security camera model with real-time mouse-responsive tracking and depth.</li>
           <li>Wrote custom GLSL shaders for animated data-flow ribbons and built a particle system with 600+ floating dust points for cinematic atmosphere.</li>
           <li>Delivered responsive, optimized 3D rendering with dynamic viewport adaptation and transparent WebGL overlay composited with Ant Design form UI.</li>
         </ul>
       </article></div>
-      <div class="journey-card"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+      <div class="journey-card" data-category="web"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M106 32 L80 86 L42 60 L106 118 L170 60 L132 86 L106 32 M106 118 L82 164 L44 148 L106 208 L168 148 L130 164 L106 118"/>
         <circle cx="106" cy="32" r="4.5"/>
         <circle cx="80" cy="86" r="3"/>
@@ -714,13 +777,14 @@
         <h3>Quantasphere — Interactive Hero</h3>
         <span class="slide-role">Vanilla HTML/CSS/JS · Video engineering</span>
         <span class="slide-meta">CREATIVE DEVELOPMENT</span>
+        <span class="slide-cat slide-cat--web">WEB / FRONTEND</span>
         <ul class="journey-bullets">
           <li>Built a full-viewport hero with custom JavaScript-driven video scrubbing — mouse X-position maps to precise playhead control for interactive storytelling.</li>
           <li>Implemented CSS mask-image gradients for seamless video-to-background blending and frosted-glass navigation with backdrop-filter.</li>
           <li>Designed with accessibility in mind — respects prefers-reduced-motion and requires zero frameworks or build tooling.</li>
         </ul>
       </article></div>
-      <div class="journey-card"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
+      <div class="journey-card" data-category="all"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M24 78 L70 92 L116 98 L160 84 L168 138 L122 150 L112 100"/>
         <circle cx="24" cy="78" r="4"/><circle cx="70" cy="92" r="3.5"/><circle cx="116" cy="98" r="3.5"/><circle cx="160" cy="84" r="4"/><circle cx="168" cy="138" r="3.5"/><circle cx="122" cy="150" r="4"/>
         <text x="28" y="48">URSA MAJOR</text>
@@ -734,7 +798,7 @@
           <li>Experimenting with WebGPU, real-time collaboration tools, and agent-assisted coding to stay at the edge of frontend innovation.</li>
         </ul>
       </article></div>
-      <div class="journey-card"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+      <div class="journey-card" data-category="ai"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M40 60 L80 50 L120 70 L160 40 M80 50 L100 120 L160 40 M120 70 L100 120 L140 180"/>
         <circle cx="40" cy="60" r="4"/><circle cx="80" cy="50" r="4.5"/><circle cx="120" cy="70" r="3.5"/><circle cx="160" cy="40" r="4"/><circle cx="100" cy="120" r="5"/><circle cx="140" cy="180" r="4"/>
         <text x="30" y="28">LYRA</text>
@@ -743,13 +807,14 @@
         <h3>RAGStar — Hybrid Search RAG</h3>
         <span class="slide-role">Python · FastAPI · Pinecone · BM25 · Cohere · Ollama</span>
         <span class="slide-meta">AI ENGINEERING</span>
+        <span class="slide-cat slide-cat--ai">AI ENGINEERING</span>
         <ul class="journey-bullets">
           <li>Built a full hybrid RAG pipeline combining Pinecone vector search with BM25 keyword search, merged via Reciprocal Rank Fusion with a k=60 smoothing constant.</li>
           <li>Implemented Cohere cross-encoder reranking over the top-20 candidates for precision, with a local Ollama LLM for private, citation-grounded generation.</li>
           <li>Designed a FastAPI layer with Pydantic validation, deterministic MD5-hashed chunk IDs to prevent duplicate ingestion, and comprehensive unit tests.</li>
         </ul>
       </article></div>
-      <div class="journey-card"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
+      <div class="journey-card" data-category="app"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M36 48 L82 38 L124 54 L172 42 L124 94 L82 124 L36 96 M124 54 L124 94 L156 150"/>
         <circle cx="36" cy="48" r="4"/><circle cx="82" cy="38" r="4.5"/><circle cx="124" cy="54" r="3.5"/><circle cx="172" cy="42" r="4"/><circle cx="124" cy="94" r="5"/><circle cx="82" cy="124" r="4"/><circle cx="36" cy="96" r="3.5"/><circle cx="156" cy="150" r="4"/>
         <text x="32" y="24">CASSIOPEIA</text>
@@ -758,13 +823,14 @@
         <h3>Study Snippets — Full-Stack Monorepo</h3>
         <span class="slide-role">Kotlin · Jetpack Compose · FastAPI · Supabase · Docker</span>
         <span class="slide-meta">FULL-STACK DEVELOPMENT</span>
+        <span class="slide-cat slide-cat--fullstack">FULL-STACK</span>
         <ul class="journey-bullets">
           <li>Built an Android app with Jetpack Compose and a FastAPI backend with Supabase integration — two modules in one monorepo for full-stack study.</li>
           <li>Containerized the backend with Docker Compose for reproducible environments and set up GitHub Actions CI/CD pipelines.</li>
           <li>Implemented rate limiting, JWT auth middleware, and structured database migrations for production-ready backend practices.</li>
         </ul>
       </article></div>
-      <div class="journey-card"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+      <div class="journey-card" data-category="app"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M26 90 L72 64 L116 82 L160 58 M72 64 L100 128 L116 82 M100 128 L134 168 L72 182"/>
         <circle cx="26" cy="90" r="4"/><circle cx="72" cy="64" r="4.5"/><circle cx="116" cy="82" r="3.5"/><circle cx="160" cy="58" r="4"/><circle cx="100" cy="128" r="5"/><circle cx="134" cy="168" r="4"/><circle cx="72" cy="182" r="4"/>
         <text x="28" y="34">AQUILA</text>
@@ -773,6 +839,7 @@
         <h3>Health Weight App — Android/Compose</h3>
         <span class="slide-role">Kotlin · Jetpack Compose · Material Design · Gradle</span>
         <span class="slide-meta">MOBILE DEVELOPMENT</span>
+        <span class="slide-cat slide-cat--mobile">MOBILE APP</span>
         <ul class="journey-bullets">
           <li>Developed a health and weight tracking Android app entirely in Kotlin with a declarative Jetpack Compose UI and Material Design principles.</li>
           <li>Structured the project with clean architecture patterns, Kotlin DSL Gradle build scripts, and proper separation of concerns.</li>
@@ -1076,34 +1143,30 @@ class Component extends DCLogic {
     const journeyInners = journeyStack ? [...journeyStack.querySelectorAll('.journey-card__inner')] : [];
     const journeyConstels = journeyStack ? [...journeyStack.querySelectorAll('.jc')] : [];
     if(journeyStack && journeyInners.length){
-      const n = journeyInners.length;
       const reduceJ = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      // scale target per card: earlier cards shrink more as they get buried
-      const targets = journeyInners.map((_, i)=> Math.max(0.5, 1 - (n - i - 1) * 0.1));
       const clamp = (v,a,b)=> Math.min(b, Math.max(a, v));
-      let lastConstel = -1;
+      let lastConstel = -1, rafId = 0, looping = false;
       const applyJourney = ()=>{
+        const visible = journeyInners.filter(c=>!c.closest('[data-hidden]'));
+        const n = visible.length;
+        if(!n) return;
+        const targets = visible.map((_, i)=> Math.max(0.5, 1 - (n - i - 1) * 0.1));
         const rect = journeyStack.getBoundingClientRect();
         const span = rect.height - window.innerHeight;
-        // 0 when stack top reaches viewport top, 1 when stack bottom reaches viewport bottom
         const progress = span > 0 ? clamp(-rect.top / span, 0, 1) : 0;
         for(let i=0;i<n;i++){
-          const start = i * 0.25;            // matches the reference range [i*0.25, 1]
+          const start = i * 0.25;
           const local = clamp((progress - start) / (1 - start), 0, 1);
           const scale = reduceJ ? 1 : (1 - (1 - targets[i]) * local);
-          journeyInners[i].style.transform = `scale(${scale.toFixed(4)})`;
+          visible[i].style.transform = `scale(${scale.toFixed(4)})`;
         }
-        // reveal the constellation for whichever card is currently in front
+        // scale hidden cards to 0 so they don't take space
+        journeyInners.forEach(c=>{ if(c.closest('[data-hidden]')) c.style.transform = 'scale(0)'; });
         const frontIdx = clamp(Math.round(progress * (n - 1)), 0, n - 1);
-        if(frontIdx !== lastConstel){
-          journeyConstels.forEach((c, k)=> c.classList.toggle('is-active', k === frontIdx));
-          lastConstel = frontIdx;
-        }
+        const frontConstel = visible[frontIdx] ? visible[frontIdx].closest('.journey-card').querySelector('.jc') : null;
+        journeyConstels.forEach(c=> c.classList.toggle('is-active', c === frontConstel));
       };
-      // Drive with a rAF loop while the stack is on-screen. The page scroll
-      // container is <body> (overflow-x:hidden makes it the scroller), so window
-      // 'scroll' events are unreliable — a loop reads getBoundingClientRect directly.
-      let rafId = 0, looping = false;
+      this._applyJourney = applyJourney;
       const loop = ()=>{ applyJourney(); if(looping) rafId = requestAnimationFrame(loop); };
       const jObs = new IntersectionObserver(([entry])=>{
         if(entry.isIntersecting && !looping){
@@ -1116,6 +1179,29 @@ class Component extends DCLogic {
       applyJourney();
       this._journeyObs = jObs;
       this._journeyStop = ()=>{ looping = false; cancelAnimationFrame(rafId); };
+    }
+
+    // ---- journey tab filter ----
+    const journeyTabs = [...document.querySelectorAll('.journey-tab')];
+    const journeyCards = [...document.querySelectorAll('.journey-card')];
+    if(journeyTabs.length){
+      const tabHandlers = [];
+      journeyTabs.forEach(tab=>{
+        const handler = ()=>{
+          journeyTabs.forEach(t=>{ t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+          tab.classList.add('is-active'); tab.setAttribute('aria-selected','true');
+          const cat = tab.dataset.tab;
+          journeyCards.forEach(c=>{
+            const cCat = c.dataset.category || '';
+            if(cat === 'all' || cCat === cat) c.removeAttribute('data-hidden');
+            else c.setAttribute('data-hidden','');
+          });
+          if(this._applyJourney) this._applyJourney();
+        };
+        tab.addEventListener('click', handler);
+        tabHandlers.push(()=> tab.removeEventListener('click', handler));
+      });
+      this._tabCleanup = ()=> tabHandlers.forEach(f=>f());
     }
 
     // FOOTER: smooth continuous loop
@@ -1185,6 +1271,7 @@ class Component extends DCLogic {
     const _ov = document.querySelector('[data-role="obs"]');
     if(_ov && this._obsEnter) _ov.removeEventListener('mouseenter', this._obsEnter);
     if(_ov && this._obsLeave) _ov.removeEventListener('mouseleave', this._obsLeave);
+    if(this._tabCleanup) this._tabCleanup();
   }
 }
 </script>
