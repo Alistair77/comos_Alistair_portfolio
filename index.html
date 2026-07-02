@@ -16,7 +16,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Archivo+Black&family=Archivo:wght@500;600;700;800;900&family=Syncopate:wght@400;700&display=swap" rel="stylesheet" />
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <link rel="preload" href="uploads/satellite.glb" as="fetch" type="model/gltf-binary" crossorigin="anonymous">
-<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <style>
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:#04050a;overflow-x:clip}
@@ -29,9 +31,9 @@
   @keyframes sigPulse{0%,100%{opacity:.35}50%{opacity:1}}
   @keyframes sigDrop{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(7px);opacity:1}}
   @keyframes sigHue{from{filter:blur(42px) hue-rotate(0deg)}to{filter:blur(42px) hue-rotate(360deg)}}
-@keyframes signalFadeIn{0%{opacity:0}42%{opacity:1}50%{opacity:1}100%{opacity:0;visibility:hidden}}
-@keyframes constDraw{0%{stroke-dashoffset:420;opacity:.06}40%{opacity:.85}100%{stroke-dashoffset:0;opacity:.5}}
-@keyframes starFadeIn{0%{opacity:0;transform:scale(.3)}100%{opacity:.88;transform:scale(1)}}
+@keyframes introIn{from{opacity:0}to{opacity:1}}
+@keyframes haloBreathe{0%,100%{opacity:.65;transform:scale(1)}50%{opacity:1;transform:scale(1.045)}}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
 @keyframes letterRise{to{opacity:1;transform:none;filter:blur(0)}}
 @keyframes wordFadeIn{0%{opacity:0;transform:translateY(10px);filter:blur(4px)}14%{opacity:1;transform:translateY(0);filter:blur(0)}55%{opacity:1;transform:translateY(0);filter:blur(0)}100%{opacity:0;transform:translateY(-8px);filter:blur(5px);visibility:hidden}}
 @keyframes heroContentIn{0%{opacity:0;transform:translateY(-24px)}100%{opacity:1;transform:translateY(0)}}
@@ -51,61 +53,71 @@
 
   .page-stars{position:fixed;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;opacity:.72}
 
-  .signal-intro-group{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:radial-gradient(circle at 50% 46%,rgba(70,92,150,.16),transparent 42%),#04050a;pointer-events:none;animation:signalFadeIn 4.8s cubic-bezier(.22,1,.36,1) forwards}
-  .signal-intro-group__inner{position:relative;display:grid;place-items:center}
+  /* SIGNAL INTRO — load-driven loader: constellation lines draw with real progress, overlay releases on "signal locked" */
+  .signal-intro-group{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:radial-gradient(circle at 50% 46%,rgba(70,92,150,.16),transparent 42%),#04050a;pointer-events:none;animation:introIn .6s ease both;transition:opacity 1.05s cubic-bezier(.4,0,.2,1),visibility 0s 1.1s}
+  .signal-intro-group.is-done{opacity:0;visibility:hidden}
+  .signal-intro-group__inner{position:relative;display:grid;place-items:center;transition:transform 1s cubic-bezier(.22,1,.36,1),opacity .85s ease,filter .85s ease}
+  .signal-intro-group.is-done .signal-intro-group__inner{transform:scale(1.05);opacity:0;filter:blur(10px)}
   .signal-intro-group__inner svg{position:absolute;left:50%;bottom:calc(100% + clamp(16px,3.5vh,52px));transform:translateX(-50%);width:min(66vw,520px);height:auto;overflow:visible;pointer-events:none}
-  .signal-intro-group__inner path{fill:none;stroke:rgba(216,232,255,.85);stroke-width:1.15;stroke-dasharray:420;stroke-dashoffset:420;animation:constDraw 2.6s ease 0.35s forwards}
-  .signal-intro-group__inner circle{fill:#fff;filter:drop-shadow(0 0 12px rgba(199,210,234,.74));opacity:0;animation:starFadeIn .3s ease forwards}
-  .signal-intro-group__inner circle:nth-child(1){animation-delay:0s}
-  .signal-intro-group__inner circle:nth-child(2){animation-delay:0.04s}
-  .signal-intro-group__inner circle:nth-child(3){animation-delay:0.08s}
-  .signal-intro-group__inner circle:nth-child(4){animation-delay:0.12s}
-  .signal-intro-group__inner circle:nth-child(5){animation-delay:0.16s}
-  .signal-intro-group__inner circle:nth-child(6){animation-delay:0.20s}
-  .signal-intro-group__inner circle:nth-child(7){animation-delay:0.24s}
-  .signal-intro-group__inner circle:nth-child(8){animation-delay:0.28s}
+  .signal-intro-group__inner path{fill:none;stroke:rgba(216,232,255,.8);stroke-width:1.15;stroke-linecap:round;filter:drop-shadow(0 0 5px rgba(170,200,255,.35))}
+  .signal-intro-group__inner circle{fill:#fff;filter:drop-shadow(0 0 12px rgba(199,210,234,.74));opacity:0;transform:scale(.35);transform-box:fill-box;transform-origin:center;transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  .signal-intro-group__inner circle.lit{opacity:.92;transform:scale(1)}
   .signal-intro-group__inner .leo-lead{fill:#cfe0ff;filter:drop-shadow(0 0 16px rgba(180,210,255,.9))}
-  .signal-word{font-family:'Orbitron',sans-serif;font-style:normal;font-weight:700;font-size:clamp(58px,11vw,148px);line-height:.9;color:#fff;text-shadow:0 0 50px rgba(178,214,255,.32)}
-  .signal-word span{display:inline-block;opacity:0;transform:translateY(34px) scale(.92);filter:blur(8px);animation:letterRise 1s cubic-bezier(.16,1,.3,1) both}
-  .signal-word span:nth-child(1){animation-delay:.40s}
-  .signal-word span:nth-child(2){animation-delay:.54s}
-  .signal-word span:nth-child(3){animation-delay:.68s}
-  .signal-word span:nth-child(4){animation-delay:.82s}
-  .signal-word span:nth-child(5){animation-delay:.96s}
-  .hero-headline-wrap{opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.2s both}
-  .hero-sub-wrap{opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.3s both}
+  .signal-intro-group__inner .leo-lead.lit{opacity:1}
+  #introHead{fill:#fff;filter:drop-shadow(0 0 10px rgba(210,230,255,.95));opacity:0;transform:none;transition:opacity .3s ease}
+  #introHead.on{opacity:1}
+  .signal-halo{position:absolute;inset:0;margin:auto;width:clamp(240px,42vw,520px);aspect-ratio:1;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(126,156,230,.15),rgba(100,130,210,.05) 46%,transparent 70%);filter:blur(8px);animation:haloBreathe 5.5s ease-in-out infinite}
+  .signal-ring{position:absolute;inset:0;margin:auto;width:clamp(290px,50vw,620px);aspect-ratio:1;border-radius:50%;pointer-events:none;opacity:.5;animation:ringSpin 48s linear infinite}
+  .signal-ring::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(150,175,235,.24);-webkit-mask:conic-gradient(#000 0 76%,transparent 76% 100%);mask:conic-gradient(#000 0 76%,transparent 76% 100%)}
+  .signal-word{position:relative;font-family:'Orbitron',sans-serif;font-style:normal;font-weight:600;font-size:clamp(52px,10vw,132px);line-height:.9;letter-spacing:.14em;margin-left:.14em;color:#fff;filter:drop-shadow(0 0 38px rgba(178,214,255,.28))}
+  .signal-word span{display:inline-block;opacity:0;transform:translateY(30px) scale(.94);filter:blur(10px);animation:letterRise 1.1s cubic-bezier(.16,1,.3,1) both;background:linear-gradient(180deg,#ffffff 6%,#dde7ff 46%,#94a9da 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .signal-word span:nth-child(1){animation-delay:.45s}
+  .signal-word span:nth-child(2){animation-delay:.58s}
+  .signal-word span:nth-child(3){animation-delay:.71s}
+  .signal-word span:nth-child(4){animation-delay:.84s}
+  .signal-word span:nth-child(5){animation-delay:.97s}
+  .signal-status{display:flex;align-items:center;justify-content:space-between;width:min(78vw,400px);margin-top:clamp(24px,4.5vh,44px);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.3em;color:#5f6880;text-transform:uppercase;opacity:0;animation:letterRise 1s ease 1.15s both}
+  .signal-status>span:first-child{display:inline-flex;align-items:center;gap:10px}
+  .signal-status .sig-dot{width:5px;height:5px;border-radius:50%;background:#7fd1a8;box-shadow:0 0 10px rgba(127,209,168,.8);animation:sigPulse 1.8s ease-in-out infinite}
+  #introPct{color:#aebadb}
+  .hdr-in{opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .1s both;animation-play-state:paused}
+  .hero-headline-wrap{opacity:0;animation:heroContentIn .55s cubic-bezier(.44,0,.56,1) .12s both;animation-play-state:paused}
+  .hero-sub-wrap{opacity:0;animation:heroContentIn .55s cubic-bezier(.44,0,.56,1) .28s both;animation-play-state:paused}
+  body.is-ready .hdr-in,body.is-ready .hero-headline-wrap,body.is-ready .hero-sub-wrap,body.is-ready .hero-dashboard,body.is-ready .hero-card,body.is-ready .hero-constellation,body.is-ready .satellite-hub,body.is-ready .hero-planets,body.is-ready .hero-planets .planet{animation-play-state:running}
 
 
-  /* HERO copy — hard-left text column (golden-ratio left band) */
-  .hero-copy{position:absolute;top:clamp(44px,6.5vh,86px);left:50%;transform:translateX(-50%);text-align:center;z-index:4;width:min(60vw,640px)}
-  .hero-copy .hero-kicker{font-family:'Orbitron','Space Mono',monospace;font-size:clamp(10px,1.1vw,12px);letter-spacing:.5em;color:#c7d2ea;margin:0 0 14px}
-  .hero-copy .hero-name{font-family:'Orbitron','Archivo Black',sans-serif;font-style:normal;font-weight:800;text-transform:uppercase;font-size:clamp(34px,5.8vw,88px);line-height:.92;letter-spacing:.04em;color:#fff;margin:0;text-shadow:0 4px 40px rgba(0,0,0,.45)}
-  .hero-copy .hero-sub{font-size:clamp(13px,1.3vw,16px);color:#d4d0c6;letter-spacing:.01em;max-width:34ch;margin:15px auto 0}
+  /* HERO copy — positioned to avoid overlap with header */
+  .hero-copy{position:absolute;top:52px;left:28px;transform:none;text-align:left;z-index:4;width:min(44vw,480px)}
+  .hero-copy .hero-kicker{font-family:'Orbitron','Space Mono',monospace;font-size:clamp(9px,0.95vw,11px);letter-spacing:.45em;color:#7f8ba3;margin:0 0 10px}
+  .hero-copy .hero-name{font-family:'Orbitron','Archivo Black',sans-serif;font-style:normal;font-weight:800;text-transform:uppercase;font-size:clamp(30px,4.8vw,72px);line-height:.9;letter-spacing:.03em;color:#fff;margin:0;text-shadow:0 4px 40px rgba(0,0,0,.45)}
+  .hero-copy .hero-sub{font-size:clamp(12px,1.1vw,15px);color:#b0b8c8;letter-spacing:.015em;max-width:40ch;margin:12px 0 0}
   /* HERO dashboard — tidy 3-card row bottom-left (replaces scattered nodes) */
-  .hero-dashboard{position:absolute;left:clamp(22px,4vw,56px);bottom:clamp(42px,6.5vh,82px);z-index:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:min(44vw,540px);opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.6s both}
-  .hero-card{min-height:72px;border:1px solid rgba(199,210,234,.16);border-radius:18px;background:linear-gradient(145deg,rgba(10,13,24,.72),rgba(4,5,10,.42));backdrop-filter:blur(14px);box-shadow:0 22px 70px rgba(0,0,0,.22);padding:10px 13px;opacity:0;transform:translateY(18px);animation:cardArrive .9s cubic-bezier(.16,1,.3,1) forwards}
-.hero-card:nth-child(1){animation-delay:2.8s}
-.hero-card:nth-child(2){animation-delay:2.95s}
-.hero-card:nth-child(3){animation-delay:3.1s}
+  .hero-dashboard{position:absolute;left:clamp(22px,4vw,56px);bottom:clamp(42px,6.5vh,82px);z-index:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:min(44vw,540px);opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .5s both;animation-play-state:paused}
+  .hero-card{min-height:72px;border:1px solid rgba(199,210,234,.16);border-radius:18px;background:linear-gradient(145deg,rgba(10,13,24,.72),rgba(4,5,10,.42));backdrop-filter:blur(14px);box-shadow:0 22px 70px rgba(0,0,0,.22);padding:10px 13px;opacity:0;transform:translateY(18px);animation:cardArrive .9s cubic-bezier(.16,1,.3,1) forwards;animation-play-state:paused}
+.hero-card:nth-child(1){animation-delay:.65s}
+.hero-card:nth-child(2){animation-delay:.8s}
+.hero-card:nth-child(3){animation-delay:.95s}
   .hero-card__label{display:block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.28em;color:#7f8ba3;margin-bottom:7px;text-transform:uppercase}
   .hero-card__value{margin:0;color:#f8fbff;font-size:clamp(12px,1.05vw,14px);line-height:1.22}
   .hero-card__meta{margin:7px 0 0;font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.05em;line-height:1.4;color:#8f98ad}
 
-  /* SATELLITE — central focal point at the golden coil, between text & video */
-  .satellite-hub{position:absolute;left:clamp(22px,4vw,56px);width:min(50vw,600px);top:clamp(224px,26vh,312px);bottom:clamp(138px,17vh,176px);z-index:3;display:grid;place-items:center;perspective:1100px;pointer-events:none;overflow:visible;opacity:0;animation:heroContentIn .7s cubic-bezier(.44,0,.56,1) 2.5s both}
-  .satellite-core{position:relative;width:min(45vw,55vh,580px);height:min(45vw,55vh,580px);pointer-events:auto;overflow:visible}
+  /* CONSTELLATION — shifted 36px left */
+  .hero-constellation{position:absolute;left:clamp(444px,45vw,544px);top:80px;width:min(52vw,540px);height:auto;z-index:6;pointer-events:none;opacity:0;animation:heroContentIn .7s cubic-bezier(.44,0,.56,1) .4s both;animation-play-state:paused}
+  .taurus-const{width:100%;height:auto;display:block;overflow:visible}
+  .taurus-const path{fill:none;stroke:rgba(199,210,234,.7);stroke-width:.8;stroke-dasharray:360;stroke-dashoffset:360;animation:taurusDraw 5s ease-in-out infinite}
+  .taurus-const circle{fill:#fff;filter:drop-shadow(0 0 8px rgba(199,210,234,.6))}
+  .taurus-const .taurus-star--b{fill:#fbbf24;filter:drop-shadow(0 0 14px rgba(251,191,36,.8))}
+  .taurus-const .taurus-star--p{animation:taurusPulse 3.4s ease-in-out infinite}
+
+  /* SATELLITE — original left position, tilted 45° */
+  .satellite-hub{position:absolute;left:clamp(22px,4vw,56px);width:min(50vw,600px);top:clamp(224px,26vh,312px);bottom:clamp(138px,17vh,176px);z-index:3;display:grid;place-items:center;perspective:1100px;pointer-events:none;overflow:visible;opacity:0;animation:heroContentIn .7s cubic-bezier(.44,0,.56,1) .4s both;animation-play-state:paused}
+  .satellite-core{position:relative;width:min(36vw,48vh,440px);height:min(36vw,48vh,440px);pointer-events:auto;overflow:visible;transform:rotate(45deg)}
   .satellite-orbit{position:absolute;inset:4%;border:1px solid rgba(199,210,234,.13);border-radius:50%;transform:rotateX(64deg) rotateZ(-18deg);box-shadow:0 0 60px rgba(127,209,168,.07)}
   .satellite-orbit:nth-child(2){inset:15%;transform:rotateX(68deg) rotateZ(24deg)}
   .satellite-model{width:100%;height:100%;filter:drop-shadow(0 32px 80px rgba(0,0,0,.72)) drop-shadow(0 0 34px rgba(127,209,168,.18))}
   .satellite-core::after{content:"";position:absolute;left:18%;right:18%;bottom:4%;height:16%;border-radius:50%;background:radial-gradient(ellipse,rgba(127,209,168,.16),transparent 72%);filter:blur(10px);pointer-events:none}
   .copy-mail::before{content:attr(data-title);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,6px);opacity:0;pointer-events:none;white-space:nowrap;border:1px solid rgba(199,210,234,.18);border-radius:999px;background:rgba(4,5,10,.92);padding:7px 10px;color:#c7d2ea;font-size:9px;letter-spacing:.12em;box-shadow:0 14px 44px rgba(0,0,0,.34);transition:opacity .2s ease,transform .2s ease}
   .copy-mail:hover::before{opacity:1;transform:translate(-50%,0)}
-
-  .taurus-const{position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:80%;height:auto;z-index:1;pointer-events:none;overflow:visible}
-  .taurus-const path{fill:none;stroke:rgba(199,210,234,.7);stroke-width:.8;stroke-dasharray:360;stroke-dashoffset:360;animation:taurusDraw 5s ease-in-out infinite}
-  .taurus-const circle{fill:#fff;filter:drop-shadow(0 0 8px rgba(199,210,234,.6))}
-  .taurus-const .taurus-star--b{fill:#fbbf24;filter:drop-shadow(0 0 14px rgba(251,191,36,.8))}
-  .taurus-const .taurus-star--p{animation:taurusPulse 3.4s ease-in-out infinite}
 
   .hero-scroll-cue{position:absolute;right:clamp(34px,8vw,128px);bottom:clamp(48px,8vw,96px);z-index:5;display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(199,210,234,.28);border-radius:999px;background:rgba(5,8,16,.74);backdrop-filter:blur(14px);color:#f8fbff;text-decoration:none;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;padding:13px 17px;box-shadow:0 18px 70px rgba(0,0,0,.38);transition:transform .24s ease,border-color .24s ease,background .24s ease,opacity .3s ease;opacity:0;pointer-events:none}
   .hero-scroll-cue:hover{transform:translateY(-4px);border-color:rgba(127,209,168,.5);background:rgba(10,16,28,.84)}
@@ -144,12 +156,12 @@
   .glow-n{box-shadow:0 0 13px rgba(176,90,158,.3)}
   .p-pulse{animation:pPulse 3.2s ease-in-out infinite}
   /* repositioned planets — absolutely positioned along curved path */
-  .hero-planets{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.4s both}
+  .hero-planets{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .35s both;animation-play-state:paused}
   .hero-planets .planet{position:absolute;pointer-events:auto}
-  .hero-planets .planet:nth-child(1){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.4s both}
-  .hero-planets .planet:nth-child(2){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.55s both}
-  .hero-planets .planet:nth-child(3){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.7s both}
-  .hero-planets .planet:nth-child(4){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.85s both}
+  .hero-planets .planet:nth-child(1){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .35s both;animation-play-state:paused}
+  .hero-planets .planet:nth-child(2){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .5s both;animation-play-state:paused}
+  .hero-planets .planet:nth-child(3){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .65s both;animation-play-state:paused}
+  .hero-planets .planet:nth-child(4){animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .8s both;animation-play-state:paused}
   /* dark cinematic planet themes */
   .pbody.p-merc-dark{background:radial-gradient(circle at 37% 31%,#3a3a3e,#2a2a2e 38%,#1a1a1e 72%,#0a0a0d)}
   .pbody.p-sat-dark{background:radial-gradient(circle at 37% 31%,#4a3f2a,#3a3020 44%,#2a2010 74%,#1a1008)}
@@ -191,6 +203,15 @@
   .desktop-file{display:grid;place-items:center;gap:9px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12.5px;color:#e6e6ea;text-align:center;padding:9px 4px;border-radius:10px;transition:background .2s ease;cursor:default}
   .desktop-file:hover{background:rgba(255,255,255,.07)}
   .desktop-file .label{max-width:96px;line-height:1.25}
+  .df-thumb{width:100%;aspect-ratio:1;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+  .df-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .agent-flow{grid-column:1/-1;display:flex;flex-direction:column;gap:8px;padding:10px 0;width:100%}
+  .flow-row{display:flex;align-items:center;gap:12px;justify-content:center}
+  .flow-node{background:rgba(127,209,168,.08);border:1px solid rgba(127,209,168,.2);border-radius:8px;padding:10px 16px;font-family:'Space Mono',monospace;font-size:10px;color:#b8d8e8;text-align:center;min-width:80px}
+  .flow-arrow{color:rgba(127,209,168,.4);font-size:16px;font-family:monospace}
+  .flow-node--in{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);color:#93b8f0}
+  .flow-node--out{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:#6ee7b7}
+  .flow-node--proc{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.2);color:#c4b5fd}
   .ico{position:relative;filter:drop-shadow(0 7px 13px rgba(0,0,0,.4))}
   .ico--folder{width:64px;height:50px;border-radius:8px;background:linear-gradient(#54c4ff,#1c8fe6)}
   .ico--folder::before{content:"";position:absolute;left:9px;top:-7px;width:26px;height:12px;border-radius:6px 6px 0 0;background:#54c4ff}
@@ -232,19 +253,30 @@
   .slide-cat--ai{background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.25)}
   .slide-cat--fullstack{background:rgba(139,92,246,.15);color:#c4b5fd;border:1px solid rgba(139,92,246,.25)}
   .slide-cat--mobile{background:rgba(236,72,153,.15);color:#f9a8d4;border:1px solid rgba(236,72,153,.25)}
-  .journey-tabs{display:flex;justify-content:center;gap:10px;margin:18px auto 28px;flex-wrap:wrap;position:relative;z-index:2}
-  .journey-tab{font-family:'Orbitron','Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;padding:9px 18px;border-radius:999px;border:1px solid rgba(199,210,234,.15);background:rgba(4,5,10,.6);color:#8f98ad;cursor:pointer;transition:all .3s ease;text-transform:uppercase;backdrop-filter:blur(8px)}
-  .journey-tab:hover{border-color:rgba(199,210,234,.3);color:#c7d2ea}
-  .journey-tab.is-active{border-color:rgba(127,209,168,.4);color:#fff;background:rgba(127,209,168,.08);box-shadow:0 0 30px rgba(127,209,168,.06)}
-  .journey-tab--web{border-color:rgba(59,130,246,.2);color:#7aa9e6}
-  .journey-tab--web:hover{border-color:rgba(59,130,246,.4)}
-  .journey-tab--web.is-active{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.4);color:#93c5fd;box-shadow:0 0 30px rgba(59,130,246,.08)}
-  .journey-tab--ai{border-color:rgba(16,185,129,.2);color:#5cb88a}
-  .journey-tab--ai:hover{border-color:rgba(16,185,129,.4)}
-  .journey-tab--ai.is-active{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.4);color:#6ee7b7;box-shadow:0 0 30px rgba(16,185,129,.08)}
-  .journey-tab--app{border-color:rgba(139,92,246,.2);color:#a88bdc}
-  .journey-tab--app:hover{border-color:rgba(139,92,246,.4)}
-  .journey-tab--app.is-active{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.4);color:#c4b5fd;box-shadow:0 0 30px rgba(139,92,246,.08)}
+  /* journey tabs — deep-space galaxy orbs (mirrors hero planet nav: orb above, label below) */
+  .journey-tabs{display:flex;justify-content:center;align-items:flex-start;gap:clamp(16px,4.5vw,52px);margin:30px auto 38px;flex-wrap:wrap;position:relative;z-index:2}
+  .journey-tab{display:flex;flex-direction:column;align-items:center;gap:13px;background:none;border:0;padding:6px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .journey-tab .jgal{position:relative;display:block;width:clamp(80px,9.5vw,116px);aspect-ratio:1;filter:saturate(.72) brightness(.78);transition:filter .5s ease,transform .5s cubic-bezier(.16,1,.3,1)}
+  .journey-tab .jgal::before{content:"";position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(circle,var(--jgal-glow,rgba(199,210,234,.16)),transparent 66%);opacity:0;transition:opacity .5s ease}
+  .journey-tab .jgal svg{position:relative;display:block;width:100%;height:100%;overflow:visible}
+  .journey-tab:hover .jgal{transform:translateY(-5px) scale(1.06);filter:saturate(.95) brightness(1.02)}
+  .journey-tab.is-active .jgal{transform:scale(1.05);filter:saturate(1.1) brightness(1.15)}
+  .journey-tab.is-active .jgal::before,.journey-tab:hover .jgal::before{opacity:1}
+  .journey-tab__lbl{font-family:'Orbitron','Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;color:#7f8ba3;text-transform:uppercase;transition:color .3s ease,text-shadow .3s ease}
+  .journey-tab:hover .journey-tab__lbl{color:#c6d2ea}
+  .journey-tab.is-active .journey-tab__lbl{color:var(--jgal-lbl,#fff);text-shadow:0 0 18px var(--jgal-glow,rgba(255,255,255,.35))}
+  .journey-tab[data-tab="all"]{--jgal-glow:rgba(255,214,160,.2);--jgal-lbl:#ffe6c4}
+  .journey-tab[data-tab="web"]{--jgal-glow:rgba(126,150,255,.22);--jgal-lbl:#b3c4ff}
+  .journey-tab[data-tab="ai"]{--jgal-glow:rgba(52,211,153,.2);--jgal-lbl:#9ff0c8}
+  .journey-tab[data-tab="app"]{--jgal-glow:rgba(167,139,250,.24);--jgal-lbl:#d4beff}
+  .jgal .tw{animation:jgalTw 3.4s ease-in-out infinite}
+  .jgal .tw2{animation:jgalTw 4.6s ease-in-out 1.2s infinite}
+  .jgal .tw3{animation:jgalTw 5.6s ease-in-out 2.2s infinite}
+  .jgal .jcorepulse{animation:jgalCore 5s ease-in-out infinite}
+  @keyframes jgalTw{0%,100%{opacity:.25}50%{opacity:1}}
+  @keyframes jgalCore{0%,100%{opacity:.82}50%{opacity:1}}
+  @media (max-width:640px){.journey-tab .jgal{width:64px}.journey-tab__lbl{font-size:8.5px;letter-spacing:.14em}.journey-tabs{gap:12px 20px}}
+  @media (prefers-reduced-motion:reduce){.jgal .tw,.jgal .tw2,.jgal .tw3,.jgal .jcorepulse{animation:none}}
   .journey-card[data-hidden]{display:none!important}
   .journey-bullets{margin:0;padding:0;list-style:none;display:grid;gap:10px;color:#aeb6c8;font-size:clamp(14px,1.4vw,16px);line-height:1.5}
   .journey-bullets li{position:relative;padding-left:20px}.journey-bullets li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:#7fd1a8}
@@ -345,6 +377,15 @@
   .event-word--z{animation:floatWord1 6.1s ease-in-out infinite .7s}
   .event-word--on{animation:floatWord2 5.6s ease-in-out infinite 1.4s}
 
+  /* ── ANTI-EXTRACTION ── */
+  body{-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+  img,video{ -webkit-user-drag:none;user-select:none;-webkit-touch-callout:none;pointer-events:none}
+  img{-webkit-touch-callout:none}
+  video{pointer-events:none}
+  .df-thumb{position:relative;overflow:hidden}
+  .df-thumb::after{content:"";position:absolute;inset:0;z-index:2;background:transparent;pointer-events:none}
+
+  @media print{img,video{display:none!important}}
   @media (max-width:760px){
     /* ── GENERAL ── */
     .signal-intro__cluster{width:min(86vw,430px)}
@@ -353,14 +394,14 @@
     .signal-intro-group{background:radial-gradient(circle at 50% 46%,rgba(70,92,150,.12),transparent 38%),#04050a}
 
     /* ── HERO ── */
-    .hero-copy{position:relative;top:auto;left:auto;transform:none;width:auto;max-width:none;margin:0;padding:80px 0 0;z-index:4}
+    .hero-copy{position:relative;top:auto;left:auto;transform:none;width:auto;max-width:none;margin:0;padding:100px 20px 0;z-index:4}
     .hero-copy .hero-kicker{font-size:9px;letter-spacing:.35em}
-    .hero-copy .hero-name{font-size:clamp(26px,8vw,40px);padding:0 14px}
-    .hero-copy .hero-sub{font-size:13px;margin:10px auto 0;max-width:30ch;padding:0 18px}
+    .hero-copy .hero-name{font-size:clamp(26px,8vw,40px);padding:0}
+    .hero-copy .hero-sub{font-size:13px;margin:10px 0 0;max-width:30ch;padding:0}
     header{padding:16px 16px!important}
     header span:first-child{font-size:10px;letter-spacing:.12em}
     #sig-clock{font-size:9px}
-    .satellite-hub,.hero-dashboard{display:none}
+    .satellite-hub,.hero-constellation,.hero-dashboard{display:none}
     .hero-video-area{width:100%;opacity:.5}
     .hero-scroll-cue{right:14px;bottom:18px;padding:10px 14px;font-size:10px;gap:8px}
     .hero-scroll-cue span{width:24px;height:24px}
@@ -368,10 +409,10 @@
     /* ── PLANETS on mobile: arc on the left (mirrors desktop right-side arc) ── */
     .hero-planets{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5}
     .hero-planets .planet{position:absolute!important;pointer-events:auto}
-    .hero-planets .planet:nth-child(1){left:6%!important;top:76%!important}
-    .hero-planets .planet:nth-child(2){left:12%!important;top:55%!important}
-    .hero-planets .planet:nth-child(3){left:5%!important;top:38%!important}
-    .hero-planets .planet:nth-child(4){left:10%!important;top:22%!important}
+    .hero-planets .planet:nth-child(1){left:4%!important;top:78%!important}
+    .hero-planets .planet:nth-child(2){left:10%!important;top:58%!important}
+    .hero-planets .planet:nth-child(3){left:3%!important;top:42%!important}
+    .hero-planets .planet:nth-child(4){left:8%!important;top:25%!important}
     .planet__ico{width:36px;height:36px}
     .planet__lbl{font-size:9px;letter-spacing:.12em}
     .hero-copy .hero-name{padding-left:clamp(52px,14vw,70px)}
@@ -423,6 +464,21 @@
     .journey-bullets{font-size:14px;gap:8px}
     .jc{display:none}
 
+    /* ── DESKTOP / MAC OS ── */
+    .desktop-grid{grid-template-columns:1fr}
+    .desktop-sidebar{flex-direction:row;overflow-x:auto;gap:0;padding:8px 8px;border-right:none;border-bottom:1px solid rgba(0,0,0,.28);scrollbar-width:none}
+    .desktop-sidebar::-webkit-scrollbar{display:none}
+    .desktop-sidebar .sb-head{display:none}
+    .desktop-sidebar span.sb-item{white-space:nowrap;font-size:12px;padding:5px 8px}
+    .desktop-pane{padding:14px}
+    .desktop-pane h2{font-size:clamp(18px,5vw,22px)}
+    .desktop-pane-head small{font-size:10px}
+    .desktop-files{grid-template-columns:repeat(2,1fr);gap:10px}
+    .agent-flow{overflow-x:auto;scrollbar-width:none}
+    .agent-flow::-webkit-scrollbar{display:none}
+    .flow-row{flex-wrap:wrap;justify-content:flex-start}
+    .flow-node{font-size:9px;padding:7px 12px;min-width:60px}
+
     /* ── FOOTER (original layout) ── */
   }
 </style>
@@ -437,10 +493,12 @@
     <div class="hero-video-area" aria-hidden="true"></div>
     <div class="signal-intro-group" aria-hidden="true">
       <div class="signal-intro-group__inner">
+        <span class="signal-halo"></span>
+        <span class="signal-ring"></span>
         <svg viewBox="0 0 560 250" role="img" aria-label="Leo constellation">
-          <path pathLength="420" d="M404 70 L440 52 L462 76 L468 108 L452 138 L440 170" />
-          <path pathLength="420" d="M468 108 L228 92 L92 118 M228 92 L250 140 L440 170" />
-          <path pathLength="420" d="M250 140 L300 236" />
+          <path d="M404 70 L440 52 L462 76 L468 108 L452 138 L440 170" />
+          <path d="M468 108 L228 92 L92 118 M228 92 L250 140 L440 170" />
+          <path d="M250 140 L300 236" />
           <circle cx="404" cy="70" r="3.4" />
           <circle cx="440" cy="52" r="3.4" />
           <circle cx="462" cy="76" r="3.4" />
@@ -450,13 +508,17 @@
           <circle cx="228" cy="92" r="4" />
           <circle class="leo-lead" cx="92" cy="118" r="5" />
           <circle cx="250" cy="140" r="3.4" />
+          <circle id="introHead" cx="404" cy="70" r="2.6" />
         </svg>
         <div class="signal-word"><span>h</span><span>e</span><span>l</span><span>l</span><span>o</span></div>
+        <div class="signal-status"><span><span class="sig-dot"></span><span id="introStatus">Acquiring signal</span></span><span id="introPct">000%</span></div>
       </div>
     </div>
+
+    <noscript><style>.signal-intro-group{display:none}.hdr-in,.hero-headline-wrap,.hero-sub-wrap,.hero-dashboard,.hero-card,.hero-constellation,.satellite-hub,.hero-planets,.hero-planets .planet{animation:none!important;opacity:1!important;transform:none!important}</style></noscript>
     <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#04050a 0%,rgba(4,5,10,0) 16%,rgba(4,5,10,0) 80%,#04050a 100%)"></div>
 
-    <header style="position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:24px clamp(22px,4vw,56px);font-family:'Orbitron','Space Mono',monospace;font-size:11px;letter-spacing:0.22em;color:#cdc9bf;opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) 2.2s both">
+    <header class="hdr-in" style="position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:24px clamp(22px,4vw,56px);font-family:'Orbitron','Space Mono',monospace;font-size:11px;letter-spacing:0.22em;color:#cdc9bf">
       <span style="display:inline-flex;align-items:center;gap:7px;text-shadow:0 1px 8px rgba(0,0,0,.6)"><span style="width:7px;height:7px;border-radius:50%;background:#7fd1a8;animation:sigPulse 2.6s ease-in-out infinite"></span>ALISTAIR RODRIGUES / AI + DATA + UX</span>
       <span id="sig-clock" style="text-shadow:0 1px 8px rgba(0,0,0,.6)">27.06.2026 · 00:00:00 UTC</span>
     </header>
@@ -468,26 +530,26 @@
     </div>
 
     <div class="hero-planets" aria-label="Primary signals">
-      <a class="planet" data-title="Selected work" href="#observer" style="left:clamp(520px,67%,740px);top:clamp(270px,38%,350px)">
+      <a class="planet" data-title="Selected work" href="#observer" style="left:clamp(420px,55%,640px);top:clamp(310px,44%,400px)">
         <span class="planet__ico"><span class="pbody p-merc-dark glow-m-dark"><span class="psurf d-craters"></span><span class="pshade"></span><span class="pspec"></span></span></span>
         <span class="planet__lbl">WORK</span>
       </a>
-      <a class="planet" data-title="The journey so far" href="#journey" style="left:clamp(580px,75%,800px);top:clamp(370px,52%,470px)">
+      <a class="planet" data-title="The journey so far" href="#journey" style="left:clamp(480px,63%,700px);top:clamp(420px,58%,520px)">
         <span class="planet__ico"><span class="psatwrap"><span class="pbody p-sat-dark glow-s-dark"><span class="psurf d-bands"></span><span class="pshade"></span><span class="pspec"></span></span><span class="pring pring-dark"></span></span></span>
         <span class="planet__lbl">JOURNEY</span>
       </a>
-      <a class="planet" data-title="Education &amp; experience" href="#journey" style="left:clamp(540px,71%,760px);top:clamp(470px,68%,590px)">
+      <a class="planet" data-title="Education &amp; experience" href="uploads/resume.pdf" download style="left:clamp(440px,59%,660px);top:clamp(520px,74%,640px)">
         <span class="planet__ico"><span class="pbody p-earth-dark glow-e-dark"><span class="psurf d-land"></span><span class="pshade"></span><span class="pspec"></span><span class="pmoon"><i></i></span></span></span>
         <span class="planet__lbl">RÉSUMÉ</span>
       </a>
-      <a class="planet" data-title="Send a transmission" href="mailto:alistairar7@gmail.com" style="left:clamp(500px,65%,720px);top:clamp(570px,84%,710px)">
+      <a class="planet" data-title="Send a transmission" href="mailto:alistairar7@gmail.com" style="left:clamp(400px,52%,620px);top:clamp(620px,92%,760px)">
         <span class="planet__ico"><span class="pbody p-nep-dark glow-n-dark"><span class="psurf d-bands"></span><span class="pshade"></span><span class="pspec"></span></span></span>
         <span class="planet__lbl">CONTACT</span>
       </a>
     </div>
 
-    <div class="satellite-hub" aria-label="Identity satellite">
-      <svg class="taurus-const" viewBox="0 0 400 200" aria-hidden="true">
+    <div class="hero-constellation" aria-hidden="true">
+      <svg class="taurus-const" viewBox="0 0 400 200">
         <path d="M64 56 L128 28 L190 52 L264 20 L336 54 M128 28 L190 106 L264 20 M190 52 L190 106 L272 98 L336 54 M64 56 L98 108 L190 106 L272 98 L306 148" />
         <circle cx="64" cy="56" r="3" />
         <circle cx="128" cy="28" r="3.5" />
@@ -499,6 +561,9 @@
         <circle cx="272" cy="98" r="3" />
         <circle cx="306" cy="148" r="3" />
       </svg>
+    </div>
+
+    <div class="satellite-hub" aria-label="Identity satellite">
       <div class="satellite-core" aria-hidden="true">
         <div class="satellite-orbit"></div>
         <div class="satellite-orbit"></div>
@@ -582,20 +647,18 @@
       <div class="desktop-grid">
         <aside class="desktop-sidebar" aria-label="Finder sidebar">
           <span class="sb-head">Favorites</span>
-          <span class="sb-item is-active"><i></i>All Work</span>
-          <span class="sb-item sb-item--proj"><i></i>Projects</span>
-          <span class="sb-item sb-item--case"><i></i>Case Studies</span>
-          <span class="sb-item sb-item--pics"><i></i>Visuals</span>
+          <span class="sb-item is-active" data-section="all"><i></i>All Work</span>
+          <span class="sb-item sb-item--proj" data-section="projects"><i></i>Projects</span>
+          <span class="sb-item sb-item--case" data-section="agents"><i></i>AI Agents</span>
           <span class="sb-head">Locations</span>
-          <span class="sb-item sb-item--res"><i></i>Résumé</span>
-          <span class="sb-item sb-item--exp"><i></i>Experiments</span>
+          <span class="sb-item sb-item--res" data-section="resume"><i></i>Résumé</span>
         </aside>
         <div class="desktop-pane">
           <div class="desktop-pane-head">
-            <h2>All Work</h2>
-            <small>9 items · updated today</small>
+            <h2 id="desktopTitle">All Work</h2>
+            <small id="desktopMeta">9 items · updated today</small>
           </div>
-          <div class="desktop-files">
+          <div class="desktop-files" id="desktopFiles">
             <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
             <div class="desktop-file"><div class="ico ico--folder p"></div><span class="label">Quantasphere</span></div>
             <div class="desktop-file"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
@@ -603,7 +666,7 @@
             <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Health Weight</span></div>
             <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
             <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Cosmos Hero.png</span></div>
-            <div class="desktop-file"><div class="ico ico--doc"></div><span class="label">Résumé.pdf</span></div>
+            <a class="desktop-file" href="uploads/resume.pdf" download style="text-decoration:none;color:inherit"><div class="ico ico--doc"></div><span class="label">Résumé.pdf</span></a>
             <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Education</span></div>
           </div>
         </div>
@@ -710,11 +773,139 @@
       <h2>Journey So Far</h2>
       <span class="journey-hint">scroll to stack the timeline</span>
     </div>
+    </div>
     <div class="journey-tabs" role="tablist">
-      <button class="journey-tab is-active" data-tab="all" role="tab" aria-selected="true">All</button>
-      <button class="journey-tab journey-tab--web" data-tab="web" role="tab">Web Design</button>
-      <button class="journey-tab journey-tab--ai" data-tab="ai" role="tab">AI Engineering</button>
-      <button class="journey-tab journey-tab--app" data-tab="app" role="tab">Application Design</button>
+      <!-- ALL — edge-on galaxy (Centaurus A): warm luminous halo cut by a ragged rust dust lane, blue star-forming patches at the tips -->
+      <button class="journey-tab is-active" data-tab="all" role="tab" aria-selected="true">
+        <span class="jgal" aria-hidden="true"><svg viewBox="0 0 120 120">
+          <defs>
+            <radialGradient id="cnaHalo" cx="50%" cy="49%" r="50%"><stop offset="0%" stop-color="#fff7e8" stop-opacity=".9"/><stop offset="30%" stop-color="#f6e6cd" stop-opacity=".6"/><stop offset="58%" stop-color="#d6c3ab" stop-opacity=".26"/><stop offset="100%" stop-color="#9c8b78" stop-opacity="0"/></radialGradient>
+            <linearGradient id="cnaLane" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#160b04" stop-opacity="0"/><stop offset="20%" stop-color="#2a1406" stop-opacity=".9"/><stop offset="50%" stop-color="#43220b" stop-opacity=".96"/><stop offset="80%" stop-color="#200f05" stop-opacity=".9"/><stop offset="100%" stop-color="#120902" stop-opacity="0"/></linearGradient>
+            <filter id="cnaRag" x="-20%" y="-150%" width="140%" height="400%"><feTurbulence type="fractalNoise" baseFrequency=".085 .3" numOctaves="3" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G"/></filter>
+            <filter id="cnaB2"><feGaussianBlur stdDeviation="2"/></filter>
+            <filter id="cnaB4"><feGaussianBlur stdDeviation="4"/></filter>
+          </defs>
+          <g opacity=".9">
+            <circle cx="12" cy="18" r=".8" fill="#cfd9ee" class="tw"/><circle cx="28" cy="8" r=".6" fill="#fff"/><circle cx="52" cy="6" r=".9" fill="#e6eeff" class="tw2"/><circle cx="88" cy="10" r=".7" fill="#fff"/><circle cx="108" cy="26" r=".9" fill="#d8e4ff" class="tw3"/><circle cx="112" cy="66" r=".6" fill="#fff"/><circle cx="104" cy="98" r=".8" fill="#e8eeff" class="tw"/><circle cx="70" cy="112" r=".7" fill="#fff"/><circle cx="34" cy="108" r=".9" fill="#dce6ff" class="tw2"/><circle cx="8" cy="84" r=".7" fill="#fff"/><circle cx="6" cy="52" r=".6" fill="#e0e8ff"/><circle cx="94" cy="44" r=".5" fill="#fff"/>
+            <g class="tw3"><path d="M17 87.5 L18.1 92.9 L23.5 94 L18.1 95.1 L17 100.5 L15.9 95.1 L10.5 94 L15.9 92.9 Z" fill="#cfe2ff" opacity=".9"/><circle cx="17" cy="94" r="1.7" fill="#fff"/></g>
+            <g class="tw"><path d="M99 15.5 L99.7 19.3 L103.5 20 L99.7 20.7 L99 24.5 L98.3 20.7 L94.5 20 L98.3 19.3 Z" fill="#ffe9c0" opacity=".85"/><circle cx="99" cy="20" r="1.1" fill="#fff8ea"/></g>
+          </g>
+          <g class="jcorepulse"><circle cx="60" cy="59" r="45" fill="url(#cnaHalo)"/><ellipse cx="60" cy="58" rx="27" ry="21" fill="#ffedd0" opacity=".4" filter="url(#cnaB4)"/></g>
+          <g transform="rotate(-21 60 58)">
+            <g filter="url(#cnaRag)">
+              <rect x="6" y="50" width="108" height="15.5" fill="url(#cnaLane)"/>
+              <path d="M8 47 C 30 43.5, 54 49, 76 45 C 91 42.5, 103 46, 113 43.5" stroke="#1a0c04" stroke-width="2.8" fill="none" opacity=".85" stroke-linecap="round"/>
+              <path d="M10 69 C 36 72, 58 66.5, 84 70.5 C 97 72.5, 106 69.5, 113 71.5" stroke="#200f05" stroke-width="2.4" fill="none" opacity=".75" stroke-linecap="round"/>
+              <path d="M26 52 C 44 55, 66 53, 88 56" stroke="#0e0702" stroke-width="1.8" fill="none" opacity=".7"/>
+            </g>
+            <g filter="url(#cnaB2)"><ellipse cx="58" cy="57.5" rx="15" ry="4.2" fill="#eda23e" opacity=".55"/><ellipse cx="45" cy="59.5" rx="6.5" ry="2.4" fill="#d97f2a" opacity=".42"/><ellipse cx="73" cy="56" rx="7.5" ry="2.6" fill="#f4b657" opacity=".4"/><ellipse cx="63" cy="60.5" rx="4" ry="1.6" fill="#ffd27e" opacity=".38"/></g>
+            <g filter="url(#cnaB4)"><ellipse cx="16" cy="60" rx="9" ry="4" fill="#8fa4f2" opacity=".38"/><ellipse cx="104" cy="54.5" rx="10" ry="4.4" fill="#9db0f5" opacity=".42"/><ellipse cx="97" cy="58.5" rx="5" ry="2.4" fill="#c7d4ff" opacity=".4"/></g>
+            <circle cx="49" cy="53" r=".6" fill="#fff" opacity=".9"/><circle cx="68" cy="61" r=".7" fill="#ffeccc" opacity=".85" class="tw2"/><circle cx="57" cy="64" r=".5" fill="#fff" opacity=".8"/>
+          </g>
+        </svg></span>
+        <span class="journey-tab__lbl">All</span>
+      </button>
+      <!-- WEB — tilted grand spiral (M81): cream-pink core, sweeping blue-violet arms studded with pink star-forming knots, slow orbital rotation -->
+      <button class="journey-tab" data-tab="web" role="tab" aria-selected="false">
+        <span class="jgal" aria-hidden="true"><svg viewBox="0 0 120 120">
+          <defs>
+            <radialGradient id="m81Core" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff8ec" stop-opacity=".98"/><stop offset="38%" stop-color="#fbd9b4" stop-opacity=".85"/><stop offset="70%" stop-color="#e8a987" stop-opacity=".35"/><stop offset="100%" stop-color="#c98f7a" stop-opacity="0"/></radialGradient>
+            <radialGradient id="m81Haze" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#8d9ce8" stop-opacity=".3"/><stop offset="55%" stop-color="#6f7fd8" stop-opacity=".14"/><stop offset="100%" stop-color="#5560c0" stop-opacity="0"/></radialGradient>
+            <linearGradient id="m81Arm" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a9bcff"/><stop offset="60%" stop-color="#b7a8ff"/><stop offset="100%" stop-color="#8f9cf0"/></linearGradient>
+            <filter id="m81B1"><feGaussianBlur stdDeviation=".7"/></filter>
+            <filter id="m81B2"><feGaussianBlur stdDeviation="2.2"/></filter>
+            <filter id="m81B3"><feGaussianBlur stdDeviation="3.2"/></filter>
+          </defs>
+          <g opacity=".9">
+            <circle cx="14" cy="24" r=".7" fill="#fff"/><circle cx="42" cy="8" r=".8" fill="#dfe8ff" class="tw"/><circle cx="86" cy="12" r=".6" fill="#fff"/><circle cx="110" cy="38" r=".9" fill="#d8e4ff" class="tw3"/><circle cx="112" cy="88" r=".6" fill="#fff"/><circle cx="82" cy="110" r=".8" fill="#e6eeff" class="tw2"/><circle cx="30" cy="106" r=".7" fill="#fff"/><circle cx="8" cy="68" r=".8" fill="#dce6ff" class="tw"/><circle cx="98" cy="64" r=".5" fill="#fff"/><circle cx="24" cy="46" r=".5" fill="#e6eeff"/>
+          </g>
+          <g transform="translate(60 60) rotate(-26)">
+            <g transform="scale(1 .6)">
+              <circle r="48" fill="url(#m81Haze)"/>
+              <g>
+                <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="150s" repeatCount="indefinite"/>
+                <g id="m81ArmA">
+                  <path d="M 3 -9 C 22 -13 35 -2 34 14 C 33 30 17 41 -4 37" fill="none" stroke="url(#m81Arm)" stroke-width="7" stroke-linecap="round" opacity=".8" filter="url(#m81B2)"/>
+                  <path d="M 7 -17 C 32 -23 50 -4 45 21 C 41 41 19 51 -8 47" fill="none" stroke="#93a7f5" stroke-width="4.6" stroke-linecap="round" opacity=".38" filter="url(#m81B3)"/>
+                  <circle cx="31" cy="7" r="1.9" fill="#f27fd2" opacity=".9" filter="url(#m81B1)"/><circle cx="34" cy="18" r="1.5" fill="#ff9ce0" opacity=".85" filter="url(#m81B1)"/><circle cx="25" cy="30" r="1.7" fill="#ef6fc8" opacity=".8" filter="url(#m81B1)"/><circle cx="8" cy="37" r="1.4" fill="#fb8fd8" opacity=".8" filter="url(#m81B1)"/><circle cx="44" cy="16" r="1.2" fill="#ff9ce0" opacity=".6" filter="url(#m81B1)"/>
+                  <circle cx="15" cy="-9" r=".8" fill="#dfe8ff" opacity=".85"/><circle cx="27" cy="-3" r=".7" fill="#fff" opacity=".8"/><circle cx="36" cy="26" r=".8" fill="#d4e0ff" opacity=".75"/><circle cx="18" cy="38" r=".7" fill="#fff" opacity=".7"/>
+                </g>
+                <use href="#m81ArmA" transform="rotate(180)"/>
+              </g>
+              <circle r="22" fill="url(#m81Core)" opacity=".55" filter="url(#m81B3)"/>
+              <circle r="13" fill="url(#m81Core)"/>
+              <circle r="3.2" fill="#fffdf6" filter="url(#m81B1)" class="jcorepulse"/>
+            </g>
+          </g>
+        </svg></span>
+        <span class="journey-tab__lbl">Web Design</span>
+      </button>
+      <!-- AI — emerald whirlpool: same family as the M81 spiral but face-on, mint-teal arms, counter-rotating -->
+      <button class="journey-tab" data-tab="ai" role="tab" aria-selected="false">
+        <span class="jgal" aria-hidden="true"><svg viewBox="0 0 120 120">
+          <defs>
+            <radialGradient id="aiCore" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f4fffa" stop-opacity=".98"/><stop offset="40%" stop-color="#b5f5d8" stop-opacity=".8"/><stop offset="72%" stop-color="#5fd9ae" stop-opacity=".3"/><stop offset="100%" stop-color="#34d399" stop-opacity="0"/></radialGradient>
+            <radialGradient id="aiHaze" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#2ea886" stop-opacity=".24"/><stop offset="55%" stop-color="#1f8a6e" stop-opacity=".12"/><stop offset="100%" stop-color="#156e58" stop-opacity="0"/></radialGradient>
+            <linearGradient id="aiArm" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8cf5d2"/><stop offset="60%" stop-color="#4fe0b0"/><stop offset="100%" stop-color="#2fd4a4"/></linearGradient>
+            <filter id="aiB1"><feGaussianBlur stdDeviation=".7"/></filter>
+            <filter id="aiB2"><feGaussianBlur stdDeviation="2.2"/></filter>
+            <filter id="aiB3"><feGaussianBlur stdDeviation="3.2"/></filter>
+          </defs>
+          <g opacity=".9">
+            <circle cx="18" cy="14" r=".8" fill="#dff5ec" class="tw2"/><circle cx="58" cy="6" r=".6" fill="#fff"/><circle cx="96" cy="16" r=".8" fill="#d8efff" class="tw"/><circle cx="112" cy="52" r=".6" fill="#fff"/><circle cx="106" cy="94" r=".9" fill="#e2f7ee" class="tw3"/><circle cx="64" cy="112" r=".7" fill="#fff"/><circle cx="22" cy="102" r=".8" fill="#dcf2e8" class="tw"/><circle cx="6" cy="60" r=".7" fill="#fff"/><circle cx="34" cy="30" r=".5" fill="#e6fff5"/><circle cx="88" cy="76" r=".5" fill="#fff"/>
+          </g>
+          <g transform="translate(60 60) rotate(14)">
+            <g transform="scale(1 .82)">
+              <circle r="46" fill="url(#aiHaze)"/>
+              <g>
+                <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="120s" repeatCount="indefinite"/>
+                <g id="aiArmA">
+                  <path d="M 3 -10 C 24 -14 38 -2 36 15 C 34 32 17 43 -5 39" fill="none" stroke="url(#aiArm)" stroke-width="6.5" stroke-linecap="round" opacity=".82" filter="url(#aiB2)"/>
+                  <path d="M 8 -18 C 34 -24 52 -3 46 22 C 41 42 18 52 -9 48" fill="none" stroke="#5eead4" stroke-width="4" stroke-linecap="round" opacity=".32" filter="url(#aiB3)"/>
+                  <circle cx="32" cy="8" r="1.6" fill="#c8ffe8" opacity=".9" filter="url(#aiB1)"/><circle cx="26" cy="29" r="1.4" fill="#a9f7d8" opacity=".8" filter="url(#aiB1)"/><circle cx="9" cy="38" r="1.3" fill="#c8ffe8" opacity=".75" filter="url(#aiB1)"/>
+                  <circle cx="16" cy="-10" r=".8" fill="#fff" opacity=".85"/><circle cx="37" cy="20" r=".7" fill="#eafff6" opacity=".8"/><circle cx="20" cy="40" r=".7" fill="#fff" opacity=".7"/>
+                </g>
+                <use href="#aiArmA" transform="rotate(180)"/>
+              </g>
+              <circle r="20" fill="url(#aiCore)" opacity=".5" filter="url(#aiB3)"/>
+              <circle r="12" fill="url(#aiCore)"/>
+              <circle r="3" fill="#fbfffd" filter="url(#aiB1)" class="jcorepulse"/>
+            </g>
+          </g>
+        </svg></span>
+        <span class="journey-tab__lbl">AI Engineering</span>
+      </button>
+      <!-- APP — violet vortex (painterly reference): concentric swirl bands spiraling into a blazing white core, star speckles riding the bands -->
+      <button class="journey-tab" data-tab="app" role="tab" aria-selected="false">
+        <span class="jgal" aria-hidden="true"><svg viewBox="0 0 120 120">
+          <defs>
+            <radialGradient id="vorHaze" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#6d28d9" stop-opacity=".38"/><stop offset="55%" stop-color="#4c1d95" stop-opacity=".2"/><stop offset="100%" stop-color="#2e1065" stop-opacity="0"/></radialGradient>
+            <radialGradient id="vorCore" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".98"/><stop offset="35%" stop-color="#ead9ff" stop-opacity=".8"/><stop offset="70%" stop-color="#b78cf7" stop-opacity=".3"/><stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient>
+            <filter id="vorB1"><feGaussianBlur stdDeviation="1.2"/></filter>
+            <filter id="vorB2"><feGaussianBlur stdDeviation="2.4"/></filter>
+            <filter id="vorB3"><feGaussianBlur stdDeviation="3.6"/></filter>
+          </defs>
+          <g opacity=".9">
+            <circle cx="10" cy="30" r=".8" fill="#e7dcff" class="tw"/><circle cx="36" cy="10" r=".6" fill="#fff"/><circle cx="78" cy="6" r=".8" fill="#eee6ff" class="tw3"/><circle cx="108" cy="20" r=".6" fill="#fff"/><circle cx="114" cy="58" r=".8" fill="#e2d6ff" class="tw2"/><circle cx="104" cy="104" r=".7" fill="#fff"/><circle cx="52" cy="114" r=".8" fill="#ece2ff" class="tw"/><circle cx="12" cy="96" r=".7" fill="#fff"/><circle cx="6" cy="64" r=".5" fill="#f0e8ff"/>
+          </g>
+          <circle cx="60" cy="60" r="50" fill="url(#vorHaze)"/>
+          <g>
+            <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="170s" repeatCount="indefinite"/>
+            <g id="vorArm">
+              <path d="M60 12 C 92 14 110 42 104 72 C 99 96 76 110 52 106" fill="none" stroke="#3b1478" stroke-width="8.5" stroke-linecap="round" opacity=".8" filter="url(#vorB3)"/>
+              <path d="M60 22 C 86 24 99 46 94 70 C 90 89 70 100 51 96" fill="none" stroke="#6d28d9" stroke-width="7" stroke-linecap="round" opacity=".85" filter="url(#vorB2)"/>
+              <path d="M60 32 C 80 34 89 51 85 68 C 82 81 68 89 55 86" fill="none" stroke="#8b5cf6" stroke-width="5.5" stroke-linecap="round" opacity=".85" filter="url(#vorB2)"/>
+              <path d="M60 42 C 74 43 80 55 77 66 C 75 74 66 79 58 77" fill="none" stroke="#b494f8" stroke-width="4" stroke-linecap="round" opacity=".9" filter="url(#vorB1)"/>
+              <path d="M60 50 C 68 51 71 58 69.5 64 C 68.5 68.5 63.5 71.5 59 70.5" fill="none" stroke="#e2ccff" stroke-width="2.6" stroke-linecap="round" opacity=".9" filter="url(#vorB1)"/>
+              <circle cx="60" cy="17" r="1" fill="#fff" opacity=".9"/><circle cx="84" cy="24" r=".8" fill="#efe4ff" opacity=".8"/><circle cx="101" cy="47" r="1.1" fill="#fff" opacity=".85" class="tw"/><circle cx="103" cy="70" r=".7" fill="#f2e8ff" opacity=".75"/><circle cx="90" cy="94" r="1" fill="#fff" opacity=".8" class="tw2"/><circle cx="68" cy="105" r=".8" fill="#e8dcff" opacity=".7"/><circle cx="88" cy="55" r=".9" fill="#fff" opacity=".9"/><circle cx="80" cy="76" r=".7" fill="#fff" opacity=".75" class="tw3"/><circle cx="70" cy="60" r=".8" fill="#fff" opacity=".85"/><circle cx="66" cy="74" r=".6" fill="#f4ecff" opacity=".7"/>
+            </g>
+            <use href="#vorArm" transform="rotate(180 60 60)"/>
+          </g>
+          <circle cx="60" cy="60" r="17" fill="url(#vorCore)" opacity=".9"/>
+          <circle cx="60" cy="60" r="4" fill="#fff" filter="url(#vorB1)" class="jcorepulse"/>
+        </svg></span>
+        <span class="journey-tab__lbl">Application Design</span>
+      </button>
     </div>
     <div class="journey-stack" id="journeyStack">
       <div class="journey-card" data-category="web"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
@@ -849,6 +1040,34 @@
     </div>
   </section>
 
+  <!-- ============ PERSONAL JOURNEY · PHOTO CAROUSEL ============ -->
+  <section class="pj-section" id="personal-journey" aria-label="Personal journey snapshots">
+    <style>
+      .pj-section{position:relative;width:100%;min-height:40vh;overflow:hidden;display:flex;align-items:center;border-top:1px solid rgba(199,210,234,.06);border-bottom:1px solid rgba(199,210,234,.06)}
+      .pj-inner{width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,2.5vh,40px) clamp(20px,4vw,60px)}
+      .pj-header{text-align:center;margin-bottom:clamp(12px,1.5vh,24px)}
+      .pj-kicker{font-family:'Space Mono',monospace;font-size:clamp(10px,0.85vw,12px);letter-spacing:.5em;color:#7f8ba3;margin:0 0 6px;text-transform:uppercase}
+      .pj-header h2{font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(18px,1.8vw,28px);color:#f8fbff;margin:0;letter-spacing:.06em}
+      .pj-swiper{width:100%;height:350px;padding-bottom:50px!important;overflow:visible}
+      .pj-swiper .swiper-slide{width:280px;height:280px;background-position:center;background-size:cover;border-radius:10px;overflow:hidden;border:1px solid rgba(199,210,234,.1);opacity:.5;transition:opacity .5s ease,transform .5s ease;transform:scale(.88);cursor:pointer}
+      .pj-swiper .swiper-slide-active{opacity:1;transform:scale(1)}
+      .pj-swiper .swiper-slide img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.22,1,.36,1)}
+      .pj-swiper .swiper-slide-active img{transform:scale(1.12)}
+      .pj-pagination{--swiper-pagination-color:rgba(199,210,234,.6);--swiper-pagination-bullet-inactive-color:rgba(199,210,234,.2);--swiper-pagination-bullet-inactive-opacity:1;bottom:0!important}
+      .pj-pagination .swiper-pagination-bullet{width:7px;height:7px;border-radius:50%}
+    </style>
+    <div class="pj-inner">
+      <div class="pj-header">
+        <p class="pj-kicker">along the way</p>
+        <h2>Personal Journey</h2>
+      </div>
+      <div class="swiper pj-swiper" data-lenis-prevent>
+        <div class="swiper-wrapper" id="pjWrapper"></div>
+        <div class="swiper-pagination pj-pagination"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ FOOTER · EVENT HORIZON (16:9 band, segment loop) ============ -->
   <section style="position:relative;width:100%;min-height:100svh;overflow:hidden;background:#04050a">
     <video data-role="footer" data-lazy="1" class="sig-vid" src="uploads/Animate_smooth_loop_landscape_202606270321.mp4" muted loop playsinline preload="none" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0;display:block;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%);filter:brightness(1.08) contrast(1.05) saturate(1.02)"></video>
@@ -906,7 +1125,7 @@ class Component extends DCLogic {
     // ---- smooth scrolling (Lenis) — buttery 60/120fps feel ----
     const startLenis = ()=>{
       if(this._lenis || !window.Lenis) return;
-      const lenis = new Lenis({ duration: 1.15, lerp: 0.1, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.5 });
+      const lenis = new Lenis({ duration: 1.6, lerp: 0.06, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.5 });
       this._lenis = lenis;
       const rafL = (t)=>{ lenis.raf(t); this._lenisRAF = requestAnimationFrame(rafL); };
       this._lenisRAF = requestAnimationFrame(rafL);
@@ -922,6 +1141,67 @@ class Component extends DCLogic {
     };
     if(window.Lenis) startLenis();
     else { this._lenisOnLoad = startLenis; window.addEventListener('load', startLenis, { once: true }); }
+
+    // ---- signal intro loader: constellation draws with real load progress ----
+    (function(){
+      var intro=document.querySelector('.signal-intro-group'); if(!intro) return;
+      var svg=intro.querySelector('svg');
+      var paths=[].slice.call(svg.querySelectorAll('path'));
+      var stars=[].slice.call(svg.querySelectorAll('circle')).filter(function(c){return c.id!=='introHead';});
+      var head=document.getElementById('introHead');
+      var pnode=document.getElementById('introPct'), snode=document.getElementById('introStatus');
+      var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var seq=[],total=0,finished=false,loaded=false;
+      var target=.06,shown=0;
+      paths.forEach(function(p){var L=p.getTotalLength();seq.push({p:p,start:total,len:L});total+=L;p.style.strokeDasharray=L;p.style.strokeDashoffset=L;});
+      stars.forEach(function(c){var cx=+c.getAttribute('cx'),cy=+c.getAttribute('cy'),best=Infinity,at=0;
+        seq.forEach(function(s){for(var i=0;i<=64;i++){var pt=s.p.getPointAtLength(s.len*i/64),d=(pt.x-cx)*(pt.x-cx)+(pt.y-cy)*(pt.y-cy);if(d<best){best=d;at=(s.start+s.len*i/64)/total;}}});
+        c.dataset.at=Math.max(.03,Math.min(.97,at));});
+      var labels=[[0,'Acquiring signal'],[.32,'Linking constellation'],[.62,'Calibrating orbits'],[.92,'Signal locked']];
+      if(document.readyState!=='loading')target=Math.max(target,.5);
+      else document.addEventListener('DOMContentLoaded',function(){target=Math.max(target,.5);});
+      if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){target=Math.max(target,.68);});
+      function markLoaded(){loaded=true;target=1;}
+      if(document.readyState==='complete')markLoaded();
+      else window.addEventListener('load',markLoaded,{once:true});
+      setTimeout(markLoaded,9000);
+      function render(f){
+        var hlen=f*total,active=null;
+        seq.forEach(function(s){var drawn=Math.max(0,Math.min(s.len,hlen-s.start));s.p.style.strokeDashoffset=s.len-drawn;if(hlen>s.start&&hlen<=s.start+s.len)active=s;});
+        stars.forEach(function(c){if(f>=+c.dataset.at)c.classList.add('lit');});
+        if(head){if(active&&f<1){var pt=active.p.getPointAtLength(hlen-active.start);head.setAttribute('cx',pt.x);head.setAttribute('cy',pt.y);head.classList.add('on');}else{head.classList.remove('on');}}
+        if(pnode)pnode.textContent=String(Math.round(f*100)).padStart(3,'0')+'%';
+        if(snode){var lab=labels[0][1];labels.forEach(function(l){if(f>=l[0])lab=l[1];});if(snode.textContent!==lab)snode.textContent=lab;}
+      }
+      var lastTick=0,watchdog=null;
+      function finish(){
+        if(finished)return;finished=true;render(1);
+        if(watchdog)clearInterval(watchdog);
+        setTimeout(function(){intro.classList.add('is-done');document.body.classList.add('is-ready');document.dispatchEvent(new CustomEvent('cosmos:ready'));},450);
+        setTimeout(function(){intro.style.display='none';},1900);
+      }
+      if(reduce){render(1);if(loaded){finish();}else{window.addEventListener('load',finish,{once:true});setTimeout(finish,9000);}return;}
+      function step(gain){
+        if(!loaded&&target<.9)target=Math.min(target+gain,.9);
+        shown+=(target-shown)*(loaded?.075:.045);
+        if(loaded&&shown>.996)shown=1;
+        render(shown);
+        if(shown>=1)finish();
+      }
+      function frame(){
+        if(finished)return;
+        lastTick=performance.now();
+        step(.0009);
+        if(!finished)requestAnimationFrame(frame);
+      }
+      // watchdog: rAF stalls in hidden/background tabs — keep progressing on a timer so the intro can never trap the page
+      watchdog=setInterval(function(){
+        if(finished){clearInterval(watchdog);return;}
+        if(performance.now()-lastTick>400)step(.015);
+      },250);
+      setTimeout(function(){if(!finished){render(1);finish();}},12000);
+      try{requestAnimationFrame(frame);}catch(e){finish();}
+    })();
 
     // ---- name carve-in (+ guaranteed-visible fallback) ----
     const nameEl = $('#sig-name');
@@ -943,15 +1223,21 @@ class Component extends DCLogic {
           s.style.transform = 'translateY(30px) rotate(2deg)';
           s.style.filter = 'blur(8px)';
           s.style.animation = 'sigCarve 1.1s cubic-bezier(.22,1,.36,1) forwards';
-          s.style.animationDelay = (2.2 + i*0.05) + 's';
+          s.style.animationDelay = (0.3 + i*0.05) + 's';
+          s.style.animationPlayState = 'paused';
           wEl.appendChild(s);
           i++;
         });
         nameEl.appendChild(wEl);
       });
-      this._nameFallback = setTimeout(()=>{
-        nameEl.querySelectorAll('span').forEach(s=>{ s.style.opacity='1'; s.style.transform='none'; s.style.filter='none'; });
-      }, 4500);
+      const releaseName = ()=>{
+        nameEl.querySelectorAll('span span').forEach(s=>{ s.style.animationPlayState='running'; });
+        this._nameFallback = setTimeout(()=>{
+          nameEl.querySelectorAll('span').forEach(s=>{ s.style.opacity='1'; s.style.transform='none'; s.style.filter='none'; });
+        }, 3000);
+      };
+      if(document.body.classList.contains('is-ready')) releaseName();
+      else document.addEventListener('cosmos:ready', releaseName, { once:true });
     }
 
     // ---- live UTC clock ----
@@ -1013,6 +1299,13 @@ class Component extends DCLogic {
       });
     }
 
+    // ---- anti-copy / anti-extraction ----
+    document.addEventListener('contextmenu', (e)=>e.preventDefault());
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','C','J'].includes(e.key.toUpperCase())) || (e.ctrlKey && ['U','S','P'].includes(e.key.toUpperCase()))){ e.preventDefault(); return false; }
+    });
+    document.querySelectorAll('img').forEach(img=>{ img.setAttribute('draggable','false'); img.setAttribute('loading','lazy'); });
+
     // ---- scroll cue visibility on video hover ----
     const videoArea = document.querySelector('.hero-video-area');
     const scrollCue = document.querySelector('.hero-scroll-cue');
@@ -1060,23 +1353,23 @@ class Component extends DCLogic {
       const shootingStars = [];
       let shootTimer = 0;
       const spawnShootingStars = ()=>{
-        const count = Math.random() < 0.4 ? 2 + Math.floor(Math.random() * 2) : 1;
+        const count = 1 + Math.floor(Math.random() * 3);
         for(let i=0;i<count;i++){
           const fromRight = Math.random() < 0.5;
           shootingStars.push({
-            x: fromRight ? rand(W * 0.6, W * 1.2) : rand(-W * 0.2, W * 0.4),
-            y: rand(0, H * 0.4),
-            vx: fromRight ? rand(-6, -3) : rand(3, 6),
-            vy: rand(2, 5),
-            len: rand(60, 160),
+            x: fromRight ? rand(W * 0.5, W * 1.3) : rand(-W * 0.3, W * 0.5),
+            y: fromRight ? rand(0, H * 0.9) : rand(0, H * 0.7),
+            vx: fromRight ? rand(-6, -3.5) : rand(3.5, 6),
+            vy: rand(1.2, 3.5),
+            len: rand(100, 260),
             life: 1,
-            decay: rand(0.008, 0.018),
-            width: rand(1, 2.2)
+            decay: rand(0.005, 0.012),
+            width: rand(3, 6)
           });
         }
       };
       spawnShootingStars();
-      shootTimer = rand(300, 800);
+      shootTimer = rand(200, 360);
 
       const onStarMove = (e)=>{
         tx = (e.clientX / Math.max(1, W) - 0.5) * 18;
@@ -1105,7 +1398,7 @@ class Component extends DCLogic {
         // shooting stars
         if(!reduce){
           shootTimer--;
-          if(shootTimer <= 0){ spawnShootingStars(); shootTimer = rand(400, 900); }
+          if(shootTimer <= 0){ spawnShootingStars(); shootTimer = rand(200, 360); }
           for(let i=shootingStars.length-1;i>=0;i--){
             const s = shootingStars[i];
             s.x += s.vx; s.y += s.vy; s.life -= s.decay;
@@ -1115,8 +1408,8 @@ class Component extends DCLogic {
             const tailX = s.x - s.vx * (s.len / Math.hypot(s.vx, s.vy));
             const tailY = s.y - s.vy * (s.len / Math.hypot(s.vx, s.vy));
             const grad = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
-            grad.addColorStop(0, `rgba(255,255,255,${s.life * 0.92})`);
-            grad.addColorStop(0.15, `rgba(220,235,255,${s.life * 0.5})`);
+            grad.addColorStop(0, `rgba(255,255,255,${s.life * 0.98})`);
+            grad.addColorStop(0.15, `rgba(220,235,255,${s.life * 0.7})`);
             grad.addColorStop(1, `rgba(180,210,255,0)`);
             ctx.strokeStyle = grad;
             ctx.lineWidth = s.width * s.life;
@@ -1184,6 +1477,9 @@ class Component extends DCLogic {
     // ---- journey tab filter ----
     const journeyTabs = [...document.querySelectorAll('.journey-tab')];
     const journeyCards = [...document.querySelectorAll('.journey-card')];
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.querySelectorAll('.jgal svg').forEach(s=>{ if(s.pauseAnimations) s.pauseAnimations(); });
+    }
     if(journeyTabs.length){
       const tabHandlers = [];
       journeyTabs.forEach(tab=>{
@@ -1202,6 +1498,127 @@ class Component extends DCLogic {
         tabHandlers.push(()=> tab.removeEventListener('click', handler));
       });
       this._tabCleanup = ()=> tabHandlers.forEach(f=>f());
+    }
+
+    // ---- personal journey swiper ----
+    const pjWrapper = document.querySelector('#pjWrapper');
+    if(pjWrapper && window.Swiper){
+      const IMAGES = [
+        '20240717_122858.jpg','20240329_160422(0).jpg',
+        '20250323_150013.jpg','IMG_20240208_181605_000.webp','20240319_143452.jpg',
+        '20240417_150848.jpg','20241029_142549.jpg',
+        '20240207_112023.jpg','20240424_172305.jpg','IMG_20240318_001117_171.jpg',
+        '20240204_164543.jpg','20240717_122825.jpg',
+        '20240725_173112.jpg','20240202_224657.jpg','20240408_230245.jpg',
+        '20241029_185425.jpg','20240221_194117.jpg','20240325_000654.jpg',
+        '20240613_162058.jpg','20250327_224105.jpg','20240319_123124.jpg',
+        '20240513_201649.jpg','20240202_230454.jpg','IMG_20240310_020333_606.jpg',
+        'IMG-20241029-WA0060.jpg','20240310_151354.jpg'
+      ];
+      IMAGES.forEach((file, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        slide.innerHTML = `<img src="personal/${file}" alt="Journey snapshot ${i+1}" loading="lazy" />`;
+        pjWrapper.appendChild(slide);
+      });
+      const pjSwiper = new Swiper('.pj-swiper', {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        loop: true,
+        slidesPerView: 'auto',
+        speed: 900,
+        coverflowEffect: { rotate: 40, stretch: 0, depth: 100, modifier: 1, slideShadows: true },
+        pagination: { el: '.pj-pagination', clickable: true },
+        autoplay: { delay: 2400, disableOnInteraction: false },
+      });
+      this._pjSwiper = pjSwiper;
+    }
+    // ---- desktop sidebar tab switching ----
+    const desktopSections = {
+      all: {
+        title: 'All Work',
+        meta: '9 items · updated today',
+        html: `<div class="desktop-file"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
+               <div class="desktop-file"><div class="ico ico--folder p"></div><span class="label">Quantasphere</span></div>
+               <div class="desktop-file"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
+               <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Study Snippets</span></div>
+               <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Health Weight</span></div>
+               <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
+               <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Cosmos Hero.png</span></div>
+               <div class="desktop-file"><div class="ico ico--doc"></div><span class="label">Resume.pdf</span></div>
+               <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Education</span></div>`
+      },
+      projects: {
+        title: 'Projects',
+        meta: '5 projects · click to explore',
+        html: `<div class="desktop-file"><div class="df-thumb"><img src="uploads/hawkai-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">HawkAI Login</span></div>
+               <div class="desktop-file"><div class="df-thumb"><img src="uploads/quantasphere-thumb.jpg" loading="lazy" draggable="false"/></div><span class="label">Quantasphere</span></div>
+               <div class="desktop-file"><div class="df-thumb"><img src="uploads/ragstar-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">RAGStar</span></div>
+               <div class="desktop-file"><div class="df-thumb"><img src="uploads/study-snippets-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">Study Snippets</span></div>
+               <div class="desktop-file"><div class="df-thumb"><img src="uploads/health-weight-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">Health Weight</span></div>`
+      },
+      agents: {
+        title: 'AI Agents',
+        meta: 'pipeline flows · reasoning chains',
+        html: `<div class="agent-flow">
+                <div class="flow-row">
+                  <div class="flow-node flow-node--in">Query</div>
+                  <span class="flow-arrow">→</span>
+                  <div class="flow-node flow-node--proc">Embed</div>
+                  <span class="flow-arrow">→</span>
+                  <div class="flow-node flow-node--proc">Retrieve</div>
+                  <span class="flow-arrow">→</span>
+                  <div class="flow-node flow-node--out">Response</div>
+                </div>
+                <div class="flow-row" style="margin-top:4px">
+                  <div class="flow-node flow-node--in">RAG Input</div>
+                  <span class="flow-arrow">→</span>
+                  <div class="flow-node flow-node--proc">BM25</div>
+                  <span class="flow-arrow">→</span>
+                  <div class="flow-node flow-node--proc">RRF Merge</div>
+                  <span class="flow-arrow">→</span>
+                  <div class="flow-node flow-node--proc">Cross-Encoder</div>
+                  <span class="flow-arrow">→</span>
+                  <div class="flow-node flow-node--out">LLM Output</div>
+                </div>
+               </div>`
+      },
+      resume: {
+        title: 'Resume',
+        meta: 'AI Engineering · Data · UX',
+        html: `<div style="grid-column:1/-1;padding:10px 0;font-family:'Space Mono',monospace;font-size:12px;color:#b0b8c8;line-height:1.8">
+               <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                <div><strong style="color:#e6e6ea;font-family:'Orbitron',sans-serif;font-size:13px">Skills</strong>
+                 <div style="margin-top:8px">Python · FastAPI · Kotlin · Jetpack Compose<br/>React · Three.js · AI/ML · RAG Pipelines<br/>UI/UX Design · Data Analysis</div></div>
+                <div><strong style="color:#e6e6ea;font-family:'Orbitron',sans-serif;font-size:13px">Education</strong>
+                 <div style="margin-top:8px">MSc Advanced Computer Science<br/>University of Strathclyde<br/>BSc Computer Science</div></div>
+                <div><strong style="color:#e6e6ea;font-family:'Orbitron',sans-serif;font-size:13px">Experience</strong>
+                 <div style="margin-top:8px">AI Engineering · Full-Stack Development<br/>Data Analysis · UI/UX Design<br/>5+ Projects Shipped</div></div>
+                <div><strong style="color:#e6e6ea;font-family:'Orbitron',sans-serif;font-size:13px">Stack</strong>
+                 <div style="margin-top:8px">FastAPI · Pinecone · Supabase · Docker<br/>React · Kotlin · Git · CI/CD<br/>3D Web · Motion Design</div></div>
+                <a href="uploads/resume.pdf" download style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;border:1px solid rgba(199,210,234,.2);border-radius:999px;padding:10px 18px;color:#e4e4e7;text-decoration:none;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(255,255,255,.06)';this.style.borderColor='rgba(127,209,168,.5)'" onmouseleave="this.style.background='';this.style.borderColor=''">↓ Download Résumé (PDF)</a>
+                </div></div>`
+      }
+    };
+    const sbItems = [...document.querySelectorAll('.desktop-sidebar .sb-item[data-section]')];
+    const desktopTitle = document.querySelector('#desktopTitle');
+    const desktopMeta = document.querySelector('#desktopMeta');
+    const desktopFiles = document.querySelector('#desktopFiles');
+    if(sbItems.length && desktopFiles){
+      sbItems.forEach(item => {
+        const handler = ()=>{
+          sbItems.forEach(s=>s.classList.remove('is-active'));
+          item.classList.add('is-active');
+          const sec = item.dataset.section;
+          const data = desktopSections[sec];
+          if(!data) return;
+          desktopTitle.textContent = data.title;
+          desktopMeta.textContent = data.meta;
+          desktopFiles.innerHTML = data.html;
+        };
+        item.addEventListener('click', handler);
+      });
     }
 
     // FOOTER: smooth continuous loop
@@ -1272,6 +1689,10 @@ class Component extends DCLogic {
     if(_ov && this._obsEnter) _ov.removeEventListener('mouseenter', this._obsEnter);
     if(_ov && this._obsLeave) _ov.removeEventListener('mouseleave', this._obsLeave);
     if(this._tabCleanup) this._tabCleanup();
+    if(this._pjSwiper){
+      this._pjSwiper.off('autoplay');
+      if(this._pjSwiper.el) this._pjSwiper.destroy(true, true);
+    }
   }
 }
 </script>

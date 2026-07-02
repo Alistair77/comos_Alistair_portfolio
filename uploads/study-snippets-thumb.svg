@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280">
+  <defs>
+    <linearGradient id="ssBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e1040"/>
+      <stop offset="100%" stop-color="#04050a"/>
+    </linearGradient>
+    <linearGradient id="ssChip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="280" height="280" fill="url(#ssBg)" rx="12"/>
+  <rect x="54" y="56" width="172" height="168" rx="16" fill="rgba(196,181,253,.06)" stroke="rgba(196,181,253,.12)" stroke-width="1"/>
+  <g transform="translate(140 140)">
+    <rect x="-32" y="-40" width="64" height="80" rx="8" fill="rgba(196,181,253,.1)" stroke="rgba(196,181,253,.2)" stroke-width="1"/>
+    <line x1="-18" y1="-22" x2="18" y2="-22" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>
+    <line x1="-18" y1="-10" x2="18" y2="-10" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+    <line x1="-18" y1="2" x2="10" y2="2" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>
+    <line x1="-18" y1="14" x2="16" y2="14" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round" opacity=".4"/>
+    <line x1="-18" y1="26" x2="8" y2="26" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+    <circle cx="0" cy="0" r="18" fill="none" stroke="rgba(196,181,253,.08)" stroke-width="1"/>
+    <circle cx="0" cy="0" r="36" fill="none" stroke="rgba(196,181,253,.05)" stroke-width="1"/>
+  </g>
+  <circle cx="80" cy="80" r="2" fill="#c4b5fd" opacity=".3"/>
+  <circle cx="200" cy="64" r="1.5" fill="#c4b5fd" opacity=".25"/>
+  <circle cx="210" cy="196" r="2" fill="#c4b5fd" opacity=".3"/>
+  <circle cx="72" cy="206" r="1.5" fill="#c4b5fd" opacity=".2"/>
+</svg>
