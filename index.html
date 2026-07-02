@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Archivo+Black&family=Archivo:wght@500;600;700;800;900&family=Syncopate:wght@400;700&display=swap" rel="stylesheet" />
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<link rel="preload" href="uploads/satellite.glb" as="fetch" type="model/gltf-binary" crossorigin="anonymous">
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
 <style>
   *{box-sizing:border-box}
@@ -270,6 +271,10 @@
   .display-card--two:hover{transform:translate(64px,-4px) skewY(-8deg)}
   .display-card--three{transform:translate(128px,80px) skewY(-8deg);filter:grayscale(0)}
   .display-card--three:hover{transform:translate(128px,40px) skewY(-8deg)}
+  .display-card--four{transform:translate(172px,108px) skewY(-8deg)}
+  .display-card--four:hover{transform:translate(172px,68px) skewY(-8deg)}
+  .display-card--five{transform:translate(216px,136px) skewY(-8deg)}
+  .display-card--five:hover{transform:translate(216px,96px) skewY(-8deg)}
   .display-card__row,.display-card__title,.display-card__desc,.display-card__date{position:relative;z-index:1}
   .display-card__row{display:flex;align-items:center;gap:8px}
   .display-card__icon{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:#1e3a8a;color:#93c5fd;font-size:13px}
@@ -314,29 +319,88 @@
   .event-word--on{animation:floatWord2 5.6s ease-in-out infinite 1.4s}
 
   @media (max-width:760px){
+    /* ── GENERAL ── */
     .signal-intro__cluster{width:min(86vw,430px)}
-    .hero-copy{position:relative;top:auto;left:auto;transform:none;width:auto;max-width:none;margin:0;padding:96px clamp(22px,5vw,40px) 0;z-index:4}
+    .signal-intro-group__inner svg{width:min(76vw,340px)}
+    .signal-word{font-size:clamp(42px,16vw,72px)}
+    .signal-intro-group{background:radial-gradient(circle at 50% 46%,rgba(70,92,150,.12),transparent 38%),#04050a}
+
+    /* ── HERO ── */
+    .hero-copy{position:relative;top:auto;left:auto;transform:none;width:auto;max-width:none;margin:0;padding:80px 0 0;z-index:4}
+    .hero-copy .hero-kicker{font-size:9px;letter-spacing:.35em}
+    .hero-copy .hero-name{font-size:clamp(26px,8vw,40px);padding:0 14px}
+    .hero-copy .hero-sub{font-size:13px;margin:10px auto 0;max-width:30ch;padding:0 18px}
+    header{padding:16px 16px!important}
+    header span:first-child{font-size:10px;letter-spacing:.12em}
+    #sig-clock{font-size:9px}
     .satellite-hub,.hero-dashboard{display:none}
-    .hero-planets{position:relative;inset:auto;display:flex;flex-wrap:wrap;gap:18px 22px;pointer-events:auto;justify-content:center;padding:0 clamp(22px,5vw,40px)}
-    .hero-planets .planet{position:relative;top:auto!important;left:auto!important}
-    .hero-scroll-cue{right:22px;bottom:24px}
-    .hero-video-area{width:100%}
-    .desktop-grid{grid-template-columns:1fr}
-    .desktop-sidebar{display:none}
-    .desktop-files{grid-template-columns:repeat(3,1fr)}
+    .hero-video-area{width:100%;opacity:.5}
+    .hero-scroll-cue{right:14px;bottom:18px;padding:10px 14px;font-size:10px;gap:8px}
+    .hero-scroll-cue span{width:24px;height:24px}
+
+    /* ── PLANETS on mobile: arc on the left (mirrors desktop right-side arc) ── */
+    .hero-planets{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5}
+    .hero-planets .planet{position:absolute!important;pointer-events:auto}
+    .hero-planets .planet:nth-child(1){left:6%!important;top:76%!important}
+    .hero-planets .planet:nth-child(2){left:12%!important;top:55%!important}
+    .hero-planets .planet:nth-child(3){left:5%!important;top:38%!important}
+    .hero-planets .planet:nth-child(4){left:10%!important;top:22%!important}
+    .planet__ico{width:36px;height:36px}
+    .planet__lbl{font-size:9px;letter-spacing:.12em}
+    .hero-copy .hero-name{padding-left:clamp(52px,14vw,70px)}
+
+    /* ── OBSERVER — keep side-by-side, smaller text ── */
+    section[id="observer"]{min-height:auto;padding-bottom:40px}
+    section[id="observer"] video.sig-vid{width:min(44%,320px);top:30%;left:0}
+    section[id="observer"] > div:last-of-type{left:44%!important;right:16px!important;top:30%!important;width:auto!important;max-width:none!important;transform:translateY(-50%)!important;padding-left:18px}
+    section[id="observer"] .hydra-const{width:min(200px,70%);margin:0 0 10px}
+    section[id="observer"] h2{font-size:clamp(20px,5.5vw,28px)!important}
+    section[id="observer"] > div:last-of-type p{font-size:13px!important}
+    section[id="observer"] span{font-size:10px!important}
+
+    /* ── DISPLAY CARDS (Observer project cards) ── */
+    .display-cards{place-items:center;min-height:260px;margin-top:16px}
+    .display-card{width:min(16rem,72vw);height:7rem;padding:10px 12px}
+    .display-card--one{transform:skewY(-6deg)}
+    .display-card--two{transform:translate(16px,30px) skewY(-6deg)}
+    .display-card--two:hover{transform:translate(16px,16px) skewY(-6deg)}
+    .display-card--three{transform:translate(32px,60px) skewY(-6deg)}
+    .display-card--three:hover{transform:translate(32px,44px) skewY(-6deg)}
+    .display-card--four{transform:translate(44px,80px) skewY(-6deg)}
+    .display-card--four:hover{transform:translate(44px,64px) skewY(-6deg)}
+    .display-card--five{transform:translate(56px,100px) skewY(-6deg)}
+    .display-card--five:hover{transform:translate(56px,84px) skewY(-6deg)}
+    .display-card__title{font-size:11px}
+    .display-card__desc{font-size:13px;white-space:normal}
+    .display-card__date{font-size:10px}
+    .display-card--one .display-card__icon,.display-card--two .display-card__icon{width:18px;height:18px;font-size:11px}
+
+    /* ── MISSION DESKTOP (original layout) ── */
+
+    /* ── MARQUEE ── */
+    .marquee-wrap{min-height:280px}
+    .marquee-tilt{transform:rotateX(4deg) rotateY(-12deg)}
+    .marquee-item{font-size:clamp(28px,9vw,42px);padding-right:clamp(16px,4vw,32px)}
+    .marquee-corner{font-size:9px}
+    .marquee-label{font-size:9px}
+
+    /* ── JOURNEY ── */
     .journey-stack{width:auto}
+    .journey-intro{padding:4vh clamp(18px,5vw,24px) 2vh}
+    .journey-intro h2{font-size:clamp(26px,9vw,40px)}
+    .journey-intro .journey-hint{font-size:10px}
+    .journey-intro .journey-hint::after{height:32px}
+    .journey-card{height:auto;min-height:80svh;padding:12px 0}
+    .journey-card__inner{top:0;padding:24px 18px;border-radius:16px}
+    .journey-card__top{margin-bottom:16px}
+    .journey-card__no{font-size:clamp(32px,12vw,52px)}
+    .journey-card h3{font-size:clamp(20px,6vw,28px)}
+    .journey-card .slide-role{font-size:11px}
+    .journey-card .slide-meta{font-size:12px}
+    .journey-bullets{font-size:14px;gap:8px}
     .jc{display:none}
-    .journey-intro{padding-top:6vh}
-    .display-cards{place-items:start;min-height:360px}
-    .display-card{width:min(20rem,82vw)}
-    .display-card--two{transform:translate(24px,92px) skewY(-8deg)}
-    .display-card--two:hover{transform:translate(24px,62px) skewY(-8deg)}
-    .display-card--three{transform:translate(48px,184px) skewY(-8deg)}
-    .display-card--three:hover{transform:translate(48px,150px) skewY(-8deg)}
-    .footer-11__top,.footer-11__mid{align-items:flex-start;flex-direction:column}
-    .footer-11__nav{justify-content:flex-start}
-    .footer-11__brand{white-space:normal}
-    .event-horizon-words{display:none}
+
+    /* ── FOOTER (original layout) ── */
   }
 </style>
 </helmet>
@@ -415,24 +479,24 @@
       <div class="satellite-core" aria-hidden="true">
         <div class="satellite-orbit"></div>
         <div class="satellite-orbit"></div>
-        <model-viewer class="satellite-model" style="width:100%;height:100%;display:block;filter:drop-shadow(0 32px 80px rgba(0,0,0,.72)) drop-shadow(0 0 34px rgba(127,209,168,.18))" src="uploads/satellite.glb" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="18deg" camera-orbit="-35deg 72deg 115%" field-of-view="30deg" min-camera-orbit="auto auto 115%" max-camera-orbit="auto auto 115%" exposure="1.1" shadow-intensity=".45" interaction-prompt="none" disable-zoom></model-viewer>
+        <model-viewer class="satellite-model" style="width:100%;height:100%;display:block;filter:drop-shadow(0 32px 80px rgba(0,0,0,.72)) drop-shadow(0 0 34px rgba(127,209,168,.18))" src="uploads/satellite.glb" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="18deg" camera-orbit="-35deg 72deg 115%" field-of-view="30deg" min-camera-orbit="auto auto 115%" max-camera-orbit="auto auto 115%" exposure="1.1" shadow-intensity=".45" interaction-prompt="none" disable-zoom loading="eager" reveal="auto"></model-viewer>
       </div>
     </div>
 
     <div class="hero-dashboard" aria-label="Identity signals">
       <article class="hero-card">
         <span class="hero-card__label">Mission</span>
-        <p class="hero-card__value">AI Engineering &bull; Data Analysis &bull; UI/UX Design</p>
+        <p class="hero-card__value">AI Engineering &bull; Android &bull; Full-Stack &bull; UI/UX</p>
         <p class="hero-card__meta">MSc ADV COMP SCI &bull; STRATHCLYDE</p>
       </article>
       <article class="hero-card">
-        <span class="hero-card__label">Origin</span>
-        <p class="hero-card__value">Data Analysis at Binex Controls &bull; UI/UX at CMS Info Systems</p>
-        <p class="hero-card__meta">INTERNSHIP EXPERIENCE</p>
+        <span class="hero-card__label">Projects</span>
+        <p class="hero-card__value">HawkAI &bull; Quantasphere &bull; RAGStar &bull; Study Snippets &bull; Health Weight</p>
+        <p class="hero-card__meta">5 PROJECTS SHIPPED</p>
       </article>
       <article class="hero-card">
         <span class="hero-card__label">Stack</span>
-        <p class="hero-card__value">Python, SQL, React, Figma, AI/ML fundamentals</p>
+        <p class="hero-card__value">Python, Kotlin, FastAPI, Jetpack Compose, React, AI/ML</p>
         <p class="hero-card__meta">TOOLCHAIN</p>
       </article>
     </div>
@@ -506,15 +570,18 @@
         <div class="desktop-pane">
           <div class="desktop-pane-head">
             <h2>All Work</h2>
-            <small>6 items · updated today</small>
+            <small>9 items · updated today</small>
           </div>
           <div class="desktop-files">
             <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
             <div class="desktop-file"><div class="ico ico--folder p"></div><span class="label">Quantasphere</span></div>
-            <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Experiments</span></div>
+            <div class="desktop-file"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
+            <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Study Snippets</span></div>
+            <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Health Weight</span></div>
+            <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
             <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Cosmos Hero.png</span></div>
             <div class="desktop-file"><div class="ico ico--doc"></div><span class="label">Résumé.pdf</span></div>
-            <div class="desktop-file"><div class="ico ico--folder o"></div><span class="label">Education</span></div>
+            <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Education</span></div>
           </div>
         </div>
       </div>
@@ -562,10 +629,20 @@
           <p class="display-card__desc">Quantum-security hero with cursor-driven video scrub</p>
           <p class="display-card__date">2026 · Interactive Hero</p>
         </a>
-        <a class="display-card display-card--three" style="text-decoration:none;color:inherit;cursor:default">
-          <div class="display-card__row"><span class="display-card__icon" style="background:#1e3a5f;color:#7dd3fc">+</span><p class="display-card__title">Next Signal</p></div>
-          <p class="display-card__desc">More projects arriving soon</p>
-          <p class="display-card__date">Incoming transmission</p>
+        <a class="display-card display-card--three" href="work/ragstar-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+          <div class="display-card__row"><span class="display-card__icon" style="background:#0a4a3a;color:#6ee7b7">R</span><p class="display-card__title">RAGStar</p></div>
+          <p class="display-card__desc">Hybrid search RAG — Pinecone, BM25, Cohere + Ollama</p>
+          <p class="display-card__date">2026 · AI Engineering</p>
+        </a>
+        <a class="display-card display-card--four" href="work/study-snipp-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+          <div class="display-card__row"><span class="display-card__icon" style="background:#5b21b6;color:#c4b5fd">S</span><p class="display-card__title">Study Snippets</p></div>
+          <p class="display-card__desc">Android + FastAPI monorepo — Kotlin, Compose, Supabase</p>
+          <p class="display-card__date">2026 · Full-Stack</p>
+        </a>
+        <a class="display-card display-card--five" href="work/health-weight-app-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+          <div class="display-card__row"><span class="display-card__icon" style="background:#a21caf;color:#e9d5ff">W</span><p class="display-card__title">Health Weight</p></div>
+          <p class="display-card__desc">Android health tracker — Kotlin, Jetpack Compose</p>
+          <p class="display-card__date">2026 · Mobile App</p>
         </a>
       </div>
     </div>
@@ -657,13 +734,58 @@
           <li>Experimenting with WebGPU, real-time collaboration tools, and agent-assisted coding to stay at the edge of frontend innovation.</li>
         </ul>
       </article></div>
+      <div class="journey-card"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+        <path d="M40 60 L80 50 L120 70 L160 40 M80 50 L100 120 L160 40 M120 70 L100 120 L140 180"/>
+        <circle cx="40" cy="60" r="4"/><circle cx="80" cy="50" r="4.5"/><circle cx="120" cy="70" r="3.5"/><circle cx="160" cy="40" r="4"/><circle cx="100" cy="120" r="5"/><circle cx="140" cy="180" r="4"/>
+        <text x="30" y="28">LYRA</text>
+      </svg><article class="journey-card__inner" style="--i:4">
+        <div class="journey-card__top"><p class="slide-date">2026</p><span class="journey-card__no">05</span></div>
+        <h3>RAGStar — Hybrid Search RAG</h3>
+        <span class="slide-role">Python · FastAPI · Pinecone · BM25 · Cohere · Ollama</span>
+        <span class="slide-meta">AI ENGINEERING</span>
+        <ul class="journey-bullets">
+          <li>Built a full hybrid RAG pipeline combining Pinecone vector search with BM25 keyword search, merged via Reciprocal Rank Fusion with a k=60 smoothing constant.</li>
+          <li>Implemented Cohere cross-encoder reranking over the top-20 candidates for precision, with a local Ollama LLM for private, citation-grounded generation.</li>
+          <li>Designed a FastAPI layer with Pydantic validation, deterministic MD5-hashed chunk IDs to prevent duplicate ingestion, and comprehensive unit tests.</li>
+        </ul>
+      </article></div>
+      <div class="journey-card"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
+        <path d="M36 48 L82 38 L124 54 L172 42 L124 94 L82 124 L36 96 M124 54 L124 94 L156 150"/>
+        <circle cx="36" cy="48" r="4"/><circle cx="82" cy="38" r="4.5"/><circle cx="124" cy="54" r="3.5"/><circle cx="172" cy="42" r="4"/><circle cx="124" cy="94" r="5"/><circle cx="82" cy="124" r="4"/><circle cx="36" cy="96" r="3.5"/><circle cx="156" cy="150" r="4"/>
+        <text x="32" y="24">CASSIOPEIA</text>
+      </svg><article class="journey-card__inner" style="--i:5">
+        <div class="journey-card__top"><p class="slide-date">2026</p><span class="journey-card__no">06</span></div>
+        <h3>Study Snippets — Full-Stack Monorepo</h3>
+        <span class="slide-role">Kotlin · Jetpack Compose · FastAPI · Supabase · Docker</span>
+        <span class="slide-meta">FULL-STACK DEVELOPMENT</span>
+        <ul class="journey-bullets">
+          <li>Built an Android app with Jetpack Compose and a FastAPI backend with Supabase integration — two modules in one monorepo for full-stack study.</li>
+          <li>Containerized the backend with Docker Compose for reproducible environments and set up GitHub Actions CI/CD pipelines.</li>
+          <li>Implemented rate limiting, JWT auth middleware, and structured database migrations for production-ready backend practices.</li>
+        </ul>
+      </article></div>
+      <div class="journey-card"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+        <path d="M26 90 L72 64 L116 82 L160 58 M72 64 L100 128 L116 82 M100 128 L134 168 L72 182"/>
+        <circle cx="26" cy="90" r="4"/><circle cx="72" cy="64" r="4.5"/><circle cx="116" cy="82" r="3.5"/><circle cx="160" cy="58" r="4"/><circle cx="100" cy="128" r="5"/><circle cx="134" cy="168" r="4"/><circle cx="72" cy="182" r="4"/>
+        <text x="28" y="34">AQUILA</text>
+      </svg><article class="journey-card__inner" style="--i:6">
+        <div class="journey-card__top"><p class="slide-date">2026</p><span class="journey-card__no">07</span></div>
+        <h3>Health Weight App — Android/Compose</h3>
+        <span class="slide-role">Kotlin · Jetpack Compose · Material Design · Gradle</span>
+        <span class="slide-meta">MOBILE DEVELOPMENT</span>
+        <ul class="journey-bullets">
+          <li>Developed a health and weight tracking Android app entirely in Kotlin with a declarative Jetpack Compose UI and Material Design principles.</li>
+          <li>Structured the project with clean architecture patterns, Kotlin DSL Gradle build scripts, and proper separation of concerns.</li>
+          <li>Implemented reactive state management with Compose for smooth, modern Android UX with intuitive input and tracking flows.</li>
+        </ul>
+      </article></div>
     </div>
   </section>
 
   <!-- ============ FOOTER · EVENT HORIZON (16:9 band, segment loop) ============ -->
   <section style="position:relative;width:100%;min-height:100svh;overflow:hidden;background:#04050a">
-    <video data-role="footer" data-lazy="1" class="sig-vid" src="uploads/Animate_smooth_loop_landscape_202606270321.mp4" muted loop playsinline preload="none" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0;display:block"></video>
-    <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(4,5,10,0.54) 0%,rgba(4,5,10,0.12) 28%,rgba(4,5,10,0.7) 72%,#04050a 100%)"></div>
+    <video data-role="footer" data-lazy="1" class="sig-vid" src="uploads/Animate_smooth_loop_landscape_202606270321.mp4" muted loop playsinline preload="none" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0;display:block;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%);filter:brightness(1.08) contrast(1.05) saturate(1.02)"></video>
+    <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#04050a 0%,rgba(4,5,10,0) 18%,rgba(4,5,10,0) 78%,#04050a 100%)"></div>
 
     <div class="event-horizon-words" aria-hidden="true">
       <span class="event-word event-word--e">EVENT</span>
