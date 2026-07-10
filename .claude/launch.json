@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "cosmos",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4521"],
-      "port": 4521
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "exec python3 /private/tmp/claude-501/-Users-obito-Desktop-cosmos-concept/87a13da3-2902-4a19-9c8c-0ecdfd52607a/scratchpad/serve.py"],
+      "port": 4521,
+      "autoPort": true
     }
   ]
 }

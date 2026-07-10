@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alistair Rodrigues — UI/UX Designer · AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MISSION CONSOLE — design tokens
+   ============================================================ */
+:root{
+  --ink:        #05060A;   /* page ground */
+  --panel:      #0A0C12;   /* raised module */
+  --panel-2:    #0D101A;   /* hover / inset */
+  --hairline:   #1B202B;   /* all rules */
+  --hairline-2: #12151E;   /* faint grid */
+  --text-hi:    #E8EAF0;   /* primary */
+  --text-mid:   #8A90A0;   /* secondary */
+  --text-low:   #4A5163;   /* tertiary / disabled */
+  --accent:     #7FD1A8;   /* the ONE accent — state, never decoration */
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --text-hero: 96px;
+  --text-h2:   32px;
+  --text-h3:   24px;
+  --text-body: 16px;
+  --text-mono: 11px;
+  --text-mono-lg: 12px;
+
+  --container: 1152px;     /* 12 col × 74px + 11 × 24px gutter */
+  --gutter: 24px;
+
+  --sp-1: 8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 40px;
+  --sp-5: 64px;
+  --sp-6: 96px;
+  --sp-7: 160px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html{ background: var(--ink); }
+body{
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-mid);
+  background: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+::selection{ background: var(--accent); color: var(--ink); }
+
+a{ color: inherit; text-decoration: none; }
+
+/* mono microcopy */
+.mono{
+  font-family: var(--font-mono);
+  font-size: var(--text-mono);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+.mono-lg{ font-size: var(--text-mono-lg); }
+
+/* ============================================================
+   PAGE FRAME — the coordinate system is visible
+   ============================================================ */
+.frame{
+  max-width: var(--container);
+  margin: 0 auto;
+  border-left: 1px solid var(--hairline-2);
+  border-right: 1px solid var(--hairline-2);
+  position: relative;
+}
+.section{
+  position: relative;
+  border-top: 1px solid var(--hairline);
+}
+/* registration crosses at section intersections */
+.section::before,
+.section::after{
+  content:"+";
+  position:absolute;
+  top:-9px;
+  font-family: var(--font-mono);
+  font-size:12px;
+  line-height:1;
+  color: var(--text-low);
+  background: var(--ink);
+  padding: 2px 1px;
+}
+.section::before{ left:-7px; }
+.section::after{ right:-7px; }
+
+.pad{ padding-left: var(--sp-5); padding-right: var(--sp-5); }
+
+/* section header convention: index / title / count */
+.sec-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding-top: var(--sp-3);
+  padding-bottom: var(--sp-5);
+}
+.sec-head .idx{ color: var(--text-hi); }
+.sec-head .idx span{ color: var(--text-low); }
+.sec-head .count{ color: var(--text-low); }
+
+/* ============================================================
+   00 — TOP BAR
+   ============================================================ */
+header{
+  border-top:none;
+  height: 56px;
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items:center;
+  border-bottom: 1px solid var(--hairline);
+}
+.brand{
+  display:flex; align-items:baseline; gap: var(--sp-2);
+}
+.brand .name{
+  font-size:14px; font-weight:500; letter-spacing:0.02em; color:var(--text-hi);
+}
+.brand .role{ color: var(--text-low); }
+
+nav{ display:flex; gap: var(--sp-4); }
+nav a{
+  position:relative;
+  color: var(--text-mid);
+  transition: color 200ms var(--ease);
+  padding: 4px 0;
+}
+nav a:hover, nav a:focus-visible{ color: var(--text-hi); outline:none; }
+nav a.active{ color: var(--text-hi); }
+nav a.active::before{
+  content:"";
+  position:absolute; left:-12px; top:50%;
+  width:5px; height:5px; margin-top:-2.5px;
+  border-radius:50%;
+  background: var(--accent);          /* accent 1 of 6: active-nav marker */
+}
+
+.meta-cluster{
+  display:flex; justify-content:flex-end; align-items:center; gap: var(--sp-3);
+  color: var(--text-low);
+}
+.meta-cluster .sep{ color: var(--hairline); }
+.status{
+  display:flex; align-items:center; gap:8px; color: var(--text-mid);
+}
+.status .dot{
+  width:6px; height:6px; border-radius:50%;
+  background: var(--accent);          /* accent 2 of 6: availability state */
+}
+
+/* ============================================================
+   HERO — one commanding statement + one instrument
+   ============================================================ */
+.hero{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--gutter);
+  padding-top: var(--sp-5);
+  padding-bottom: var(--sp-6);
+  border-top:none;
+}
+.hero::before, .hero::after{ display:none; }
+
+.hero-copy{ grid-column: 1 / span 7; display:flex; flex-direction:column; }
+
+.hero-idx{
+  color: var(--text-hi);
+  margin-bottom: var(--sp-5);
+}
+.hero-idx span{ color: var(--text-low); }
+
+h1{
+  font-size: var(--text-hero);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--text-hi);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-4);
+}
+h1 .terminal{ color: var(--accent); } /* accent 3 of 6: the headline terminal */
+
+.hero-intro{
+  max-width: 52ch;
+  margin-bottom: var(--sp-5);
+}
+.hero-intro strong{ color: var(--text-hi); font-weight:400; }
+
+.hero-actions{ display:flex; gap: var(--sp-5); margin-top:auto; }
+.action{
+  font-family: var(--font-mono);
+  font-size: var(--text-mono);
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color: var(--text-hi);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+  display:inline-flex; align-items:center; gap:10px;
+  transition: border-color 250ms var(--ease), color 250ms var(--ease);
+}
+.action .arr{ color: var(--text-low); transition: transform 250ms var(--ease), color 250ms var(--ease); }
+.action:hover{ border-color: var(--text-mid); }
+.action:hover .arr{ transform: translateX(3px); color: var(--text-hi); }
+
+/* --- the single cosmic element: an orbital track, treated as data --- */
+.instrument{
+  grid-column: 8 / span 5;
+  border: 1px solid var(--hairline);
+  background: var(--panel);
+  position:relative;
+  display:flex; flex-direction:column;
+}
+.instrument-head{
+  display:flex; justify-content:space-between;
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--hairline);
+  color: var(--text-low);
+}
+.instrument-head .fig{ color: var(--text-mid); }
+.instrument-plot{ padding: var(--sp-3); }
+.instrument-plot svg{ display:block; width:100%; height:auto; }
+
+.readouts{
+  margin-top:auto;
+  display:grid; grid-template-columns: 1fr 1fr 1fr;
+  border-top: 1px solid var(--hairline);
+}
+.readout{ padding: var(--sp-2) var(--sp-3); }
+.readout + .readout{ border-left: 1px solid var(--hairline); }
+.readout .k{ color: var(--text-low); display:block; margin-bottom:4px; }
+.readout .v{ color: var(--text-hi); font-family: var(--font-mono); font-size: var(--text-mono-lg); letter-spacing:0.06em; text-transform:uppercase; }
+
+/* ============================================================
+   01 — SELECTED WORK
+   ============================================================ */
+.featured{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--gutter);
+  border: 1px solid var(--hairline);
+  background: var(--panel);
+  margin-bottom: var(--sp-3);
+}
+.featured-meta{
+  grid-column: 1 / span 4;
+  padding: var(--sp-4);
+  display:flex; flex-direction:column;
+  border-right: 1px solid var(--hairline);
+}
+.featured-idx{ color: var(--text-low); margin-bottom: var(--sp-4); display:flex; justify-content:space-between; align-items:center; }
+.tag{
+  display:inline-block;
+  font-family: var(--font-mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase;
+  color: var(--accent);               /* accent 4 of 6: featured designation */
+  border: 1px solid rgba(127,209,168,0.35);
+  padding: 4px 10px;
+}
+.featured-title{
+  font-size: var(--text-h2);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-hi);
+  line-height:1.1;
+  margin-bottom: var(--sp-2);
+}
+.featured-desc{ font-size:15px; max-width:34ch; margin-bottom: var(--sp-4); }
+.spec-list{ margin-top:auto; border-top:1px solid var(--hairline); }
+.spec-row{
+  display:flex; justify-content:space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.spec-row .k{ color: var(--text-low); }
+.spec-row .v{ color: var(--text-mid); }
+
+.featured-preview{
+  grid-column: 5 / span 8;
+  position:relative;
+  min-height: 420px;
+  background-image:
+    linear-gradient(var(--hairline-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hairline-2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center center;
+  display:flex; align-items:center; justify-content:center;
+}
+.featured-preview .corner{ position:absolute; width:12px; height:12px; border-color:var(--text-low); border-style:solid; border-width:0; }
+.featured-preview .c-tl{ top:12px; left:12px; border-top-width:1px; border-left-width:1px; }
+.featured-preview .c-tr{ top:12px; right:12px; border-top-width:1px; border-right-width:1px; }
+.featured-preview .c-bl{ bottom:12px; left:12px; border-bottom-width:1px; border-left-width:1px; }
+.featured-preview .c-br{ bottom:12px; right:12px; border-bottom-width:1px; border-right-width:1px; }
+.preview-caption{
+  position:absolute; bottom: var(--sp-2); left: var(--sp-3);
+  color: var(--text-low);
+}
+.preview-caption-r{
+  position:absolute; bottom: var(--sp-2); right: var(--sp-3);
+  color: var(--text-low);
+}
+.wordmark{
+  text-align:center;
+}
+.wordmark .wm{
+  font-size: 64px; font-weight:500; letter-spacing:-0.02em;
+  color: var(--text-hi); line-height:1;
+}
+.wordmark .wm-sub{
+  display:block; margin-top: var(--sp-2);
+  color: var(--text-low);
+}
+
+/* project index rows */
+.index-list{ border-top: 1px solid var(--hairline); }
+.project-row{
+  display:grid;
+  grid-template-columns: 64px 1fr 300px 90px 40px;
+  align-items:center;
+  column-gap: var(--gutter);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--hairline);
+  transition: background-color 250ms var(--ease);
+  position:relative;
+}
+.project-row:hover{ background: var(--panel-2); }
+.project-row .p-idx{
+  color: var(--text-low);
+  transition: color 250ms var(--ease);
+  padding-left: 2px;
+}
+.project-row:hover .p-idx{ color: var(--accent); } /* accent 5 of 6: hover state on row index */
+.p-name{
+  font-size: var(--text-h3);
+  font-weight: 400;
+  letter-spacing:-0.01em;
+  color: var(--text-hi);
+  line-height:1.2;
+}
+.p-name small{
+  display:block;
+  font-family: var(--font-display);
+  font-size: 13px; font-weight:300;
+  color: var(--text-mid);
+  letter-spacing:0;
+  margin-top: 3px;
+}
+.p-stack{ color: var(--text-mid); text-align:left; }
+.p-year{ color: var(--text-low); text-align:right; }
+.p-arr{
+  text-align:right;
+  color: var(--text-low);
+  font-family: var(--font-mono); font-size:14px;
+  transition: transform 250ms var(--ease), color 250ms var(--ease);
+  padding-right:2px;
+}
+.project-row:hover .p-arr{ transform: translateX(4px); color: var(--text-hi); }
+
+.work-foot{
+  display:flex; justify-content:space-between;
+  padding-top: var(--sp-3);
+  padding-bottom: var(--sp-6);
+  color: var(--text-low);
+}
+
+/* ============================================================
+   02 — TRAJECTORY (short intro / credentials strip)
+   ============================================================ */
+.traj{
+  display:grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter);
+  padding-bottom: var(--sp-6);
+}
+.traj-statement{
+  grid-column: 1 / span 6;
+  font-size: var(--text-h3);
+  font-weight: 300;
+  line-height: 1.45;
+  color: var(--text-hi);
+  letter-spacing:-0.005em;
+}
+.traj-statement em{ font-style:normal; color: var(--text-mid); }
+.traj-data{
+  grid-column: 8 / span 5;
+  border-top: 1px solid var(--hairline);
+}
+.traj-row{
+  display:grid; grid-template-columns: 120px 1fr;
+  column-gap: var(--gutter);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.traj-row .k{ color: var(--text-low); padding-top:4px; }
+.traj-row .v{ color: var(--text-mid); font-size:15px; }
+.traj-row .v b{ font-weight:400; color: var(--text-hi); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer.section{
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top: var(--sp-3); padding-bottom: var(--sp-3);
+  color: var(--text-low);
+}
+footer .f-links{ display:flex; gap: var(--sp-4); }
+footer .f-links a{ color: var(--text-mid); transition: color 200ms var(--ease); }
+footer .f-links a:hover{ color: var(--text-hi); }
+
+/* ============================================================
+   DESIGN SYSTEM PANEL (proof of intent)
+   ============================================================ */
+.ds{
+  background: var(--panel);
+  padding-top: var(--sp-4);
+  padding-bottom: var(--sp-5);
+}
+.ds-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  margin-bottom: var(--sp-4);
+  color: var(--text-hi);
+}
+.ds-head span{ color: var(--text-low); }
+.ds-grid{
+  display:grid; grid-template-columns: repeat(4, 1fr); column-gap: var(--gutter);
+}
+.ds-col{ border-top:1px solid var(--hairline); padding-top: var(--sp-2); }
+.ds-col h4{
+  font-family: var(--font-mono); font-size: var(--text-mono);
+  font-weight:500; letter-spacing:0.14em; text-transform:uppercase;
+  color: var(--text-mid); margin-bottom: var(--sp-2);
+}
+.ds-col p, .ds-col li{
+  font-size: 13px; line-height:1.7; color: var(--text-mid);
+}
+.ds-col ul{ list-style:none; }
+.ds-col li{ display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--hairline-2); }
+.ds-col li .l{ color: var(--text-mid); }
+.ds-col li .r{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color: var(--text-low); text-transform:uppercase; }
+.swatch-row{ display:flex; align-items:center; gap:10px; padding:5px 0; border-bottom:1px solid var(--hairline-2); }
+.swatch{ width:14px; height:14px; border:1px solid var(--hairline); flex:none; }
+.swatch-row .hex{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--text-low); margin-left:auto; }
+.swatch-row .use{ font-size:13px; color: var(--text-mid); }
+
+/* ============================================================
+   02 — JOURNEY (timeline / flight log)
+   ============================================================ */
+.journey-statement{
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.45;
+  color: var(--text-hi);
+  max-width: 60ch;
+  margin-bottom: var(--sp-5);
+}
+.journey-statement em{ font-style: normal; color: var(--text-mid); }
+.timeline{ border-top: 1px solid var(--hairline); }
+.tl-row{
+  display: grid;
+  grid-template-columns: 132px 1fr auto;
+  gap: var(--sp-4);
+  align-items: baseline;
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--hairline);
+  transition: background .3s var(--ease);
+}
+.tl-row:hover{ background: var(--panel-2); }
+.tl-year{ font-family: var(--font-mono); font-size: var(--text-mono); font-weight:400; letter-spacing: .14em; text-transform: uppercase; color: var(--text-low); padding-top: 6px; }
+.tl-main h3{ font-family: var(--font-display); font-weight: 400; font-size: var(--text-h3); color: var(--text-hi); letter-spacing: -.01em; margin-bottom: 4px; }
+.tl-org{ color: var(--text-mid); font-size: 15px; }
+.tl-note{ color: var(--text-mid); font-size: 14px; line-height: 1.5; max-width: 54ch; margin-top: var(--sp-1); }
+.tl-kind{ font-family: var(--font-mono); font-size: var(--text-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--text-low); white-space: nowrap; padding-top: 8px; }
+.tl-kind .dot{ color: var(--accent); }   /* accent: the AI-engineering marker */
+
+/* ============================================================
+   03 — OBSERVER (the one kept video, framed as an instrument plate)
+   ============================================================ */
+.observer-lead{ max-width: 58ch; margin-bottom: var(--sp-5); color: var(--text-mid); font-size: 18px; line-height: 1.5; }
+.observer-lead b{ color: var(--text-hi); font-weight: 400; }
+.plate{ position: relative; border: 1px solid var(--hairline); background: var(--panel); padding: 12px; }
+.plate-media{ position: relative; aspect-ratio: 16 / 9; background: #03040A; overflow: hidden; display: grid; place-items: center; }
+.plate-media video, .plate-media img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.plate .corner{ position: absolute; width: 12px; height: 12px; border-color: var(--text-low); border-style: solid; border-width: 0; z-index: 2; }
+.plate .c-tl{ top: 20px; left: 20px; border-top-width: 1px; border-left-width: 1px; }
+.plate .c-tr{ top: 20px; right: 20px; border-top-width: 1px; border-right-width: 1px; }
+.plate .c-bl{ bottom: 20px; left: 20px; border-bottom-width: 1px; border-left-width: 1px; }
+.plate .c-br{ bottom: 20px; right: 20px; border-bottom-width: 1px; border-right-width: 1px; }
+.plate-holder{ font-family: var(--font-mono); font-size: var(--text-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--text-low); }
+.plate-cap{ display: flex; justify-content: space-between; margin-top: var(--sp-2); }
+
+/* ============================================================
+   CONTACT — closing statement
+   ============================================================ */
+.contact-hero{ display: grid; grid-template-columns: 1fr auto; gap: var(--sp-5); align-items: end; padding-top: var(--sp-6); padding-bottom: var(--sp-6); }
+.contact-hero h2{ font-family: var(--font-display); font-weight: 400; font-size: 52px; line-height: 1.02; letter-spacing: -.02em; color: var(--text-hi); }
+.contact-hero h2 .dot{ color: var(--accent); }
+.contact-sub{ margin-top: var(--sp-3); color: var(--text-mid); max-width: 46ch; }
+.contact-actions{ display: flex; flex-direction: column; gap: var(--sp-2); }
+.contact-actions a{ display: flex; gap: var(--sp-3); justify-content: flex-end; align-items: center; font-family: var(--font-mono); font-size: var(--text-mono-lg); letter-spacing: .1em; text-transform: uppercase; color: var(--text-mid); transition: color .3s var(--ease); }
+.contact-actions a:hover{ color: var(--text-hi); }
+.contact-actions a .arr{ color: var(--text-low); }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- ══════════════ TOP BAR ══════════════ -->
+  <header class="pad">
+    <div class="brand">
+      <span class="name">ALISTAIR RODRIGUES</span>
+      <span class="role mono">UI/UX · AI&nbsp;ENG</span>
+    </div>
+    <nav class="mono" aria-label="Main navigation">
+      <a href="#work" class="active">Work</a>
+      <a href="#journey">Journey</a>
+      <a href="#resume">Résumé</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="meta-cluster mono">
+      <span>55.8617°N / 4.2583°W</span>
+      <span class="sep">|</span>
+      <span>GLASGOW · UTC+01</span>
+      <span class="sep">|</span>
+      <span class="status"><span class="dot"></span>OPEN&nbsp;TO&nbsp;WORK</span>
+    </div>
+  </header>
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="hero pad" aria-labelledby="hero-heading">
+    <div class="hero-copy">
+      <p class="hero-idx mono">00 <span>/ MISSION</span></p>
+      <h1 id="hero-heading">Interfaces,<br>engineered<span class="terminal">.</span></h1>
+      <p class="hero-intro">
+        <strong>UI/UX designer and AI engineer.</strong> Computer Science graduate,
+        MSc Advanced Computer Science at the University of Strathclyde. I moved from
+        data analysis into interface design, and now build AI systems &mdash; so every
+        screen I design is informed by how the system underneath actually behaves.
+      </p>
+      <div class="hero-actions">
+        <a class="action" href="#work">View selected work <span class="arr">&darr;</span></a>
+        <a class="action" href="#resume">Download résumé <span class="arr">&nearr;</span></a>
+      </div>
+    </div>
+
+    <!-- The single cosmic element: one orbital track, rendered as instrument data -->
+    <aside class="instrument" aria-label="Orbital track figure">
+      <div class="instrument-head mono">
+        <span class="fig">FIG. 00 / ORBITAL TRACK</span>
+        <span>SCALE 1:1</span>
+      </div>
+      <div class="instrument-plot">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Minimal orbital plot with one tracked object">
+          <!-- crosshair axes -->
+          <line x1="200" y1="8" x2="200" y2="392" stroke="#12151E" stroke-width="1"/>
+          <line x1="8" y1="200" x2="392" y2="200" stroke="#12151E" stroke-width="1"/>
+          <!-- outer ring with tick marks -->
+          <circle cx="200" cy="200" r="172" fill="none" stroke="#1B202B" stroke-width="1"/>
+          <g stroke="#2A3040" stroke-width="1">
+            <line x1="200" y1="24" x2="200" y2="32"/>
+            <line x1="200" y1="368" x2="200" y2="376"/>
+            <line x1="24" y1="200" x2="32" y2="200"/>
+            <line x1="368" y1="200" x2="376" y2="200"/>
+            <line x1="324.6" y1="76.4" x2="318.9" y2="82.1"/>
+            <line x1="75.4" y1="323.6" x2="81.1" y2="317.9"/>
+            <line x1="324.6" y1="323.6" x2="318.9" y2="317.9"/>
+            <line x1="75.4" y1="76.4" x2="81.1" y2="82.1"/>
+          </g>
+          <!-- inner orbits: hairline, one dashed -->
+          <circle cx="200" cy="200" r="118" fill="none" stroke="#1B202B" stroke-width="1"/>
+          <ellipse cx="200" cy="200" rx="146" ry="64" fill="none" stroke="#1B202B" stroke-width="1" stroke-dasharray="2 5" transform="rotate(-24 200 200)"/>
+          <!-- central body -->
+          <circle cx="200" cy="200" r="14" fill="none" stroke="#4A5163" stroke-width="1"/>
+          <circle cx="200" cy="200" r="2.5" fill="#8A90A0"/>
+          <!-- star field as plotted data points (graphite, not glitter) -->
+          <g fill="#4A5163">
+            <circle cx="86" cy="120" r="1.2"/>
+            <circle cx="298" cy="88" r="1.2"/>
+            <circle cx="332" cy="252" r="1.2"/>
+            <circle cx="130" cy="308" r="1.2"/>
+            <circle cx="252" cy="338" r="1"/>
+            <circle cx="66" cy="228" r="1"/>
+            <circle cx="230" cy="60" r="1"/>
+            <circle cx="152" cy="90" r="1"/>
+          </g>
+          <!-- two labelled reference points -->
+          <g font-family="IBM Plex Mono, monospace" font-size="8" letter-spacing="1" fill="#4A5163">
+            <text x="94" y="116">REF-2</text>
+            <text x="306" y="256">REF-1</text>
+          </g>
+          <!-- the tracked object: the plot's single accent (accent 6 of 6) -->
+          <g>
+            <circle cx="306" cy="141" r="10" fill="none" stroke="#7FD1A8" stroke-opacity="0.3" stroke-width="1"/>
+            <circle cx="306" cy="141" r="3" fill="#7FD1A8"/>
+            <line x1="306" y1="128" x2="306" y2="104" stroke="#2A3040" stroke-width="1"/>
+            <text x="298" y="96" font-family="IBM Plex Mono, monospace" font-size="8" letter-spacing="1" fill="#8A90A0">OBJ-A1 · TRACKING</text>
+          </g>
+        </svg>
+      </div>
+      <div class="readouts">
+        <div class="readout">
+          <span class="k mono">Education</span>
+          <span class="v">MSc Adv CS<br>Strathclyde</span>
+        </div>
+        <div class="readout">
+          <span class="k mono">Focus</span>
+          <span class="v">AI<br>Engineering</span>
+        </div>
+        <div class="readout">
+          <span class="k mono">Systems</span>
+          <span class="v">PY · KT<br>React · ML</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ══════════════ 01 / SELECTED WORK ══════════════ -->
+  <section class="section pad" id="work" aria-labelledby="work-heading">
+    <div class="sec-head">
+      <p class="idx mono" id="work-heading">01 <span>/ SELECTED WORK</span></p>
+      <p class="count mono">05 PROJECTS INDEXED</p>
+    </div>
+
+    <!-- Featured: HawkAI -->
+    <article class="featured">
+      <div class="featured-meta">
+        <div class="featured-idx mono">
+          <span>01</span>
+          <span class="tag">Featured</span>
+        </div>
+        <h3 class="featured-title">HawkAI</h3>
+        <p class="featured-desc">Flagship AI project — interface design and engineering, end to end. Full case study.</p>
+        <div class="spec-list mono">
+          <div class="spec-row"><span class="k">Year</span><span class="v">2024</span></div>
+          <div class="spec-row"><span class="k">Role</span><span class="v">Design · Eng</span></div>
+          <div class="spec-row"><span class="k">Stack</span><span class="v">Python · FastAPI · AI/ML</span></div>
+        </div>
+      </div>
+      <div class="featured-preview">
+        <span class="corner c-tl"></span><span class="corner c-tr"></span>
+        <span class="corner c-bl"></span><span class="corner c-br"></span>
+        <div class="wordmark">
+          <div class="wm">HawkAI</div>
+          <span class="wm-sub mono">CASE STUDY 01 — OPEN &nearr;</span>
+        </div>
+        <span class="preview-caption mono">FIG. 01 / INTERFACE</span>
+        <span class="preview-caption-r mono">GRID 48PX</span>
+      </div>
+    </article>
+
+    <!-- Index rows 02–05 -->
+    <div class="index-list">
+      <a class="project-row" href="#work">
+        <span class="p-idx mono">02</span>
+        <span class="p-name">Quantasphere</span>
+        <span class="p-stack mono">React · UI/UX</span>
+        <span class="p-year mono">2024</span>
+        <span class="p-arr">&nearr;</span>
+      </a>
+      <a class="project-row" href="#work">
+        <span class="p-idx mono">03</span>
+        <span class="p-name">RAGStar<small>Hybrid-search retrieval-augmented generation</small></span>
+        <span class="p-stack mono">Python · FastAPI · AI/ML</span>
+        <span class="p-year mono">2025</span>
+        <span class="p-arr">&nearr;</span>
+      </a>
+      <a class="project-row" href="#work">
+        <span class="p-idx mono">04</span>
+        <span class="p-name">Study Snippets</span>
+        <span class="p-stack mono">Kotlin · Jetpack Compose</span>
+        <span class="p-year mono">2025</span>
+        <span class="p-arr">&nearr;</span>
+      </a>
+      <a class="project-row" href="#work">
+        <span class="p-idx mono">05</span>
+        <span class="p-name">Health Weight App</span>
+        <span class="p-stack mono">Kotlin · Jetpack Compose</span>
+        <span class="p-year mono">2025</span>
+        <span class="p-arr">&nearr;</span>
+      </a>
+    </div>
+
+    <div class="work-foot mono">
+      <span>END OF INDEX</span>
+      <span>FULL ARCHIVE ON REQUEST</span>
+    </div>
+  </section>
+
+  <!-- ══════════════ 02 / JOURNEY ══════════════ -->
+  <section class="section pad" id="journey" aria-labelledby="traj-heading">
+    <div class="sec-head">
+      <p class="idx mono" id="traj-heading">02 <span>/ JOURNEY</span></p>
+      <p class="count mono">DATA &rarr; DESIGN &rarr; AI</p>
+    </div>
+    <p class="journey-statement">
+      Good interfaces are engineered, not decorated. <em>The path here was one move repeated &mdash; from analysing data, to designing the surface, to building the system underneath.</em>
+    </p>
+    <div class="timeline">
+      <div class="tl-row">
+        <span class="tl-year">2026 — now</span>
+        <div class="tl-main">
+          <h3>MSc Advanced Computer Science</h3>
+          <span class="tl-org">University of Strathclyde · Glasgow</span>
+          <p class="tl-note">Deepening systems and machine-learning foundations while shipping applied work.</p>
+        </div>
+        <span class="tl-kind">Education</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2025</span>
+        <div class="tl-main">
+          <h3>RAGStar</h3>
+          <span class="tl-org">Independent build</span>
+          <p class="tl-note">Hybrid-search retrieval-augmented generation — dense vectors and keyword precision, fused. Designed and engineered end to end.</p>
+        </div>
+        <span class="tl-kind"><span class="dot">◆</span> AI engineering</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2025</span>
+        <div class="tl-main">
+          <h3>HawkAI</h3>
+          <span class="tl-org">Independent build</span>
+          <p class="tl-note">Flagship AI product — interface design and engineering held by one hand, screen to system.</p>
+        </div>
+        <span class="tl-kind">AI · Product</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2025</span>
+        <div class="tl-main">
+          <h3>Study Snippets · Health Weight App</h3>
+          <span class="tl-org">Android · Kotlin &amp; Jetpack Compose</span>
+          <p class="tl-note">Two focused mobile products — a learning tool and a health tracker — shipped in native Android.</p>
+        </div>
+        <span class="tl-kind">Mobile</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2024</span>
+        <div class="tl-main">
+          <h3>Quantasphere</h3>
+          <span class="tl-org">Independent build · React</span>
+          <p class="tl-note">Interface design and front-end build — the move from analysis into designing the surface itself.</p>
+        </div>
+        <span class="tl-kind">Web</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">— 2024</span>
+        <div class="tl-main">
+          <h3>BSc Computer Science</h3>
+          <span class="tl-org">Foundations · data analysis</span>
+          <p class="tl-note">Where it started: data structures, systems, and the analytical habit that still underwrites the design work.</p>
+        </div>
+        <span class="tl-kind">Education</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 03 / OBSERVER ══════════════ -->
+  <section class="section pad" id="observer" aria-labelledby="obs-heading">
+    <div class="sec-head">
+      <p class="idx mono" id="obs-heading">03 <span>/ OBSERVER</span></p>
+      <p class="count mono">MOTION STUDY</p>
+    </div>
+    <p class="observer-lead">The one piece kept in motion — <b>a study in how an interface can watch, and be watched.</b> Framed here as a plate, not a backdrop.</p>
+    <figure class="plate">
+      <span class="corner c-tl"></span><span class="corner c-tr"></span>
+      <span class="corner c-bl"></span><span class="corner c-br"></span>
+      <div class="plate-media">
+        <!-- production: real Observer video wired in here -->
+        <span class="plate-holder">Observer — reel · 00:42</span>
+      </div>
+    </figure>
+    <div class="plate-cap">
+      <span class="mono">FIG. 03 / OBSERVER — MOTION STUDY</span>
+      <span class="mono">PLAY &nearr;</span>
+    </div>
+  </section>
+
+  <!-- ══════════════ CONTACT ══════════════ -->
+  <section class="section pad" id="contact" aria-labelledby="contact-heading">
+    <div class="contact-hero">
+      <div>
+        <h2 id="contact-heading">Let's make something worth keeping<span class="dot">.</span></h2>
+        <p class="contact-sub">Open to UI/UX design roles where design and engineering aren't two departments. Based in Glasgow, working anywhere.</p>
+      </div>
+      <div class="contact-actions">
+        <a href="mailto:hello@example.com">Email <span class="arr">&nearr;</span></a>
+        <a href="#">GitHub <span class="arr">&nearr;</span></a>
+        <a href="#">LinkedIn <span class="arr">&nearr;</span></a>
+        <a href="#" id="resume">Résumé (PDF) <span class="arr">&nearr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="section pad">
+    <span class="mono">© 2026 ALISTAIR RODRIGUES</span>
+    <div class="f-links mono">
+      <a href="#contact">Email</a>
+      <a href="#contact">GitHub</a>
+      <a href="#contact">LinkedIn</a>
+      <a href="#contact">Résumé (PDF)</a>
+    </div>
+    <span class="mono">BUILT ON A 12-COL GRID</span>
+  </footer>
+
+  <!-- ══════════════ DESIGN SYSTEM ══════════════ -->
+  <section class="section ds pad" aria-labelledby="ds-heading">
+    <div class="ds-head">
+      <p class="mono" id="ds-heading">DESIGN SYSTEM <span>/ CONCEPT B — MISSION CONSOLE</span></p>
+      <p class="mono" style="color:var(--text-low)">EVERY ELEMENT ACCOUNTED FOR</p>
+    </div>
+    <div class="ds-grid">
+      <div class="ds-col">
+        <h4>Type</h4>
+        <ul>
+          <li><span class="l">Space Grotesk 500</span><span class="r">Hero 96</span></li>
+          <li><span class="l">Space Grotesk 500</span><span class="r">H2 32</span></li>
+          <li><span class="l">Space Grotesk 400</span><span class="r">H3 24</span></li>
+          <li><span class="l">Space Grotesk 300</span><span class="r">Body 16</span></li>
+          <li><span class="l">IBM Plex Mono 400</span><span class="r">Label 11–12</span></li>
+        </ul>
+        <p style="margin-top:12px">Two families. Display carries voice; mono carries data — indices, coordinates, metadata. Never mixed roles.</p>
+      </div>
+      <div class="ds-col">
+        <h4>Palette</h4>
+        <div class="swatch-row"><span class="swatch" style="background:#05060A"></span><span class="use">Ink / ground</span><span class="hex">#05060A</span></div>
+        <div class="swatch-row"><span class="swatch" style="background:#0A0C12"></span><span class="use">Panel</span><span class="hex">#0A0C12</span></div>
+        <div class="swatch-row"><span class="swatch" style="background:#1B202B"></span><span class="use">Hairline</span><span class="hex">#1B202B</span></div>
+        <div class="swatch-row"><span class="swatch" style="background:#8A90A0"></span><span class="use">Text 2nd</span><span class="hex">#8A90A0</span></div>
+        <div class="swatch-row"><span class="swatch" style="background:#E8EAF0"></span><span class="use">Text 1st</span><span class="hex">#E8EAF0</span></div>
+        <div class="swatch-row"><span class="swatch" style="background:#7FD1A8"></span><span class="use">Accent — state only</span><span class="hex">#7FD1A8</span></div>
+      </div>
+      <div class="ds-col">
+        <h4>Grid &amp; Rhythm</h4>
+        <p>12 columns · 24px gutter · 1152px container, hairline-bounded with registration crosses at every section joint. 8px baseline; spacing scale 8 / 16 / 24 / 40 / 64 / 96. All rules are 1px #1B202B — no shadows, no glow.</p>
+      </div>
+      <div class="ds-col">
+        <h4>Accent Ration</h4>
+        <p>#7FD1A8 appears exactly six times per view: availability dot, active-nav marker, headline terminal, tracked object in FIG. 00, the Featured tag, and row-index hover. It signals state — never fills, never gradients, never decoration.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

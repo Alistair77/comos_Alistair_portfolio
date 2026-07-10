@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satellite — Venturi-style load &amp; ease-in (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400&family=Space+Mono:wght@400;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  :root{
+    --ink:#04050a; --hi:#f2f5fb; --mid:#8f98ad; --low:#4a5163; --accent:#7fd1a8;
+    --ease-expo:cubic-bezier(0.16,1,0.3,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--ink);color:var(--mid);font-family:'Space Mono',monospace;height:100vh;overflow:hidden;
+    background-image:radial-gradient(1200px 700px at 78% 42%,rgba(30,44,80,.28),transparent 60%),
+      radial-gradient(1px 1px at 12% 22%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 68% 12%,rgba(255,255,255,.25),transparent),
+      radial-gradient(1.4px 1.4px at 84% 60%,rgba(199,210,234,.3),transparent),radial-gradient(1px 1px at 32% 74%,rgba(255,255,255,.2),transparent),
+      radial-gradient(1px 1px at 92% 82%,rgba(255,255,255,.28),transparent),radial-gradient(1.3px 1.3px at 8% 88%,rgba(199,210,234,.22),transparent)}
+  .stage{position:relative;width:100%;height:100vh;overflow:hidden}
+
+  /* SATELLITE LAYER — sits at its final hero rest position; JS translates it to centre during load */
+  /* rest pose = left/top anchor + translateY(-50%); JS layers the centred intro offset via --to-* */
+  .sat-layer{position:absolute;left:clamp(22px,4vw,72px);top:50%;width:min(38vw,460px);height:min(38vw,460px);
+    transform:translateY(-50%) translate(var(--to-x,0px),var(--to-y,0px)) scale(var(--to-s,1));
+    opacity:0;will-change:transform,opacity;pointer-events:none}
+  .sat-layer.ready{opacity:1;transition:opacity .9s ease}
+  .sat-layer.settle{transition:transform 1.5s var(--ease-expo),opacity .8s ease;--to-x:0px;--to-y:0px;--to-s:1}
+  .sat-core{width:100%;height:100%;transform:rotate(45deg);filter:drop-shadow(0 32px 80px rgba(0,0,0,.72)) drop-shadow(0 0 40px rgba(127,209,168,.18))}
+  model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent;display:block}
+  .sat-orbit{position:absolute;inset:6%;border:1px solid rgba(199,210,234,.10);border-radius:50%;transform:rotateX(64deg) rotateZ(-18deg);pointer-events:none;opacity:0;transition:opacity 1s ease .4s}
+  .sat-layer.settle .sat-orbit{opacity:1}
+
+  /* LOADER CHROME — centred, over the satellite while it loads */
+  .loader{position:absolute;left:50%;bottom:calc(50% - min(19vw,230px) - 64px);transform:translateX(-50%);text-align:center;z-index:3;
+    transition:opacity .6s ease,transform .6s ease}
+  .loader.gone{opacity:0;transform:translateX(-50%) translateY(-8px);pointer-events:none}
+  .loader .k{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--low)}
+  .loader .pct{font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(28px,4vw,42px);color:var(--hi);letter-spacing:.04em;margin-top:10px;font-variant-numeric:tabular-nums}
+  .loader .bar{width:min(46vw,300px);height:1px;background:rgba(199,210,234,.14);margin:16px auto 0;position:relative;overflow:hidden}
+  .loader .bar i{position:absolute;left:0;top:0;height:100%;width:0%;background:linear-gradient(90deg,transparent,var(--accent));box-shadow:0 0 10px rgba(127,209,168,.6)}
+
+  /* HERO COPY — reveals as the satellite settles */
+  .hero{position:absolute;right:clamp(28px,7vw,120px);top:50%;transform:translateY(-50%);max-width:min(42vw,520px);z-index:2;text-align:right}
+  .reveal{opacity:0;transform:translateY(18px);filter:blur(6px)}
+  .hero.go .reveal{opacity:1;transform:none;filter:none;transition:opacity .9s var(--ease-expo),transform .9s var(--ease-expo),filter .9s var(--ease-expo)}
+  .hero.go .reveal:nth-child(1){transition-delay:.15s}
+  .hero.go .reveal:nth-child(2){transition-delay:.30s}
+  .hero.go .reveal:nth-child(3){transition-delay:.48s}
+  .hero .kick{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+  .hero h1{font-family:'Orbitron',sans-serif;font-weight:800;font-size:clamp(30px,4.6vw,68px);line-height:1.02;letter-spacing:-.01em;color:#fff;text-transform:uppercase;margin:16px 0 0}
+  .hero p{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:clamp(15px,1.3vw,19px);line-height:1.55;color:#c8cfdd;margin:20px 0 0;margin-left:auto}
+
+  .replay{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;display:inline-flex;align-items:center;gap:9px;
+    border:1px solid rgba(199,210,234,.2);border-radius:999px;background:rgba(6,9,16,.7);backdrop-filter:blur(10px);color:var(--mid);
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:10px 16px;cursor:pointer;transition:all .25s ease}
+  .replay:hover{border-color:rgba(127,209,168,.5);color:var(--hi)}
+  .tag{position:absolute;left:20px;top:18px;z-index:5;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--low)}
+  @media (max-width:760px){.hero{right:20px;left:20px;max-width:none;top:auto;bottom:12%;transform:none}.sat-layer{left:50%;top:38%}}
+  @media (prefers-reduced-motion:reduce){.sat-layer.settle{transition:opacity .4s ease}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <span class="tag">Mockup · satellite load → hero ease-in</span>
+
+  <div class="sat-layer" id="satLayer">
+    <div class="sat-core">
+      <model-viewer id="mv" src="uploads/satellite.glb"
+        camera-controls disable-zoom auto-rotate auto-rotate-delay="0" rotation-per-second="20deg"
+        camera-orbit="-35deg 72deg 115%" field-of-view="30deg"
+        min-camera-orbit="auto auto 115%" max-camera-orbit="auto auto 115%"
+        exposure="1.1" shadow-intensity=".45" interaction-prompt="none" reveal="auto"></model-viewer>
+    </div>
+    <div class="sat-orbit"></div>
+  </div>
+
+  <div class="loader" id="loader">
+    <div class="k">Establishing uplink</div>
+    <div class="pct" id="pct">000</div>
+    <div class="bar"><i id="barFill"></i></div>
+  </div>
+
+  <div class="hero" id="hero">
+    <div class="reveal kick">A Signal From The Void</div>
+    <h1 class="reveal">Alistair<br>Rodrigues</h1>
+    <p class="reveal">Computer Science graduate, MSc Advanced Computer Science at University of Strathclyde. Currently focused on AI engineering.</p>
+  </div>
+
+  <button class="replay" id="replay">↻ Replay intro</button>
+</div>
+
+<script>
+  const mv = document.getElementById('mv');
+  const satLayer = document.getElementById('satLayer');
+  const loader = document.getElementById('loader');
+  const hero = document.getElementById('hero');
+  const pctEl = document.getElementById('pct');
+  const barFill = document.getElementById('barFill');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const MIN_HOLD = 1300;         // keep the satellite centre-stage at least this long so the ease reads
+  let started = 0, settled = false, shownPct = 0, modelLoaded = false;
+
+  // place the satellite at screen-centre (measured), scaled up, for the loading pose
+  function toCentre(){
+    satLayer.classList.remove('settle','ready');
+    // measure rest centre with no intro transform applied
+    satLayer.style.setProperty('--to-x','0px');
+    satLayer.style.setProperty('--to-y','0px');
+    satLayer.style.setProperty('--to-s','1');
+    const r = satLayer.getBoundingClientRect();
+    const restCx = r.left + r.width/2, restCy = r.top + r.height/2;
+    const dx = window.innerWidth/2 - restCx;
+    const dy = window.innerHeight/2 - restCy;
+    satLayer.style.setProperty('--to-x', dx.toFixed(1)+'px');
+    satLayer.style.setProperty('--to-y', dy.toFixed(1)+'px');
+    satLayer.style.setProperty('--to-s','1.45');
+    // reflow so the centred pose is committed before we allow the transition
+    void satLayer.offsetWidth;
+    satLayer.classList.add('ready');
+  }
+
+  function settle(){
+    if(settled) return; settled = true;
+    loader.classList.add('gone');
+    satLayer.classList.add('settle');   // eases --to-x/y→0, --to-s→1  (centre → hero rest)
+    hero.classList.add('go');
+  }
+
+  function setPct(p){
+    p = Math.max(0, Math.min(1, p));
+    if(p < shownPct) return; shownPct = p;
+    pctEl.textContent = String(Math.round(p*100)).padStart(3,'0');
+    barFill.style.width = (p*100)+'%';
+  }
+
+  // real load progress from model-viewer
+  mv.addEventListener('progress', e => setPct(e.detail.totalProgress * 0.98));
+  mv.addEventListener('load', () => {
+    modelLoaded = true;
+    setPct(1);
+    const wait = Math.max(0, MIN_HOLD - (performance.now() - started));
+    setTimeout(settle, wait + 350);
+  });
+
+  function play(){
+    started = performance.now(); settled = false; shownPct = 0;
+    loader.classList.remove('gone'); hero.classList.remove('go');
+    setPct(0);
+    toCentre();
+    // if the model was already cached/loaded, 'load' won't refire — settle on the hold timer
+    if(modelLoaded){ setPct(1); setTimeout(settle, MIN_HOLD + 350); }
+  }
+
+  document.getElementById('replay').addEventListener('click', play);
+  window.addEventListener('resize', () => { if(!settled) toCentre(); });
+  // kick off once fonts/layout are ready
+  requestAnimationFrame(play);
+</script>
+</body>
+</html>

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alistair Rodrigues — UI/UX Designer × AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ---- palette : warm paper monochrome + one oxide accent ---- */
+    --paper:    #F4F1EA;
+    --ink:      #191712;
+    --muted:    #6F6A5C;
+    --hairline: #DAD5C6;
+    --panel:    #ECE8DD;
+    --oxide:    #96422A;
+
+    /* ---- type ---- */
+    --font-sans:  "Instrument Sans", sans-serif;
+    --font-serif: "Instrument Serif", serif;
+    --font-mono:  "Spline Sans Mono", monospace;
+
+    --text-hero:  6.5rem;      /* 104px */
+    --text-feat:  3.5rem;      /* 56px  */
+    --text-list:  2.125rem;    /* 34px  */
+    --text-body:  1.0625rem;   /* 17px  */
+    --text-nav:   0.8125rem;   /* 13px  */
+    --text-meta:  0.6875rem;   /* 11px  */
+
+    /* ---- rhythm : 8px base ---- */
+    --s-1: 0.5rem;   /* 8   */
+    --s-2: 1rem;     /* 16  */
+    --s-3: 1.5rem;   /* 24  */
+    --s-4: 2.5rem;   /* 40  */
+    --s-5: 4rem;     /* 64  */
+    --s-6: 6rem;     /* 96  */
+    --s-7: 10rem;    /* 160 */
+
+    --measure: 34rem;
+    --duration: 250ms;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { background: var(--paper); }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* faint paper grain — atmosphere, nearly invisible */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    z-index: 4;
+  }
+
+  .shell {
+    max-width: 80rem;   /* 1280 */
+    margin: 0 auto;
+    padding: 0 var(--s-5);
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  em, .serif-em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ HEADER ============ */
+  header {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 4.5rem;
+  }
+  .wordmark {
+    font-weight: 600;
+    font-size: var(--text-nav);
+    letter-spacing: 0.02em;
+  }
+  .topbar-role { text-align: center; }
+  nav[aria-label="Main navigation"] {
+    display: flex;
+    gap: var(--s-3);
+    justify-content: flex-end;
+    font-size: var(--text-nav);
+    font-weight: 500;
+  }
+  nav a {
+    position: relative;
+    padding-bottom: 2px;
+  }
+  nav a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration) var(--ease);
+  }
+  nav a:hover::after,
+  nav a:focus-visible::after { transform: scaleX(1); }
+  nav a:focus-visible { outline: 1px solid var(--oxide); outline-offset: 4px; }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+    position: relative;
+  }
+  .hero-kicker {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--s-5);
+  }
+  .hero-kicker .mono { color: var(--ink); }
+  .hero-kicker .coords { color: var(--muted); }
+
+  h1 {
+    font-size: var(--text-hero);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    max-width: 60rem;
+  }
+  h1 em {
+    font-size: 1.04em;
+    line-height: 0;
+  }
+
+  .hero-constellation {
+    position: absolute;
+    top: 11.5rem;
+    right: var(--s-5);
+    width: 19rem;
+    text-align: right;
+  }
+  .hero-constellation figcaption {
+    margin-top: var(--s-2);
+    text-align: right;
+  }
+
+  .hero-under {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--s-3);
+    margin-top: var(--s-6);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--hairline);
+  }
+  .hero-meta {
+    grid-column: 1 / span 4;
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+  }
+  .hero-meta div { display: grid; gap: 2px; }
+  .hero-meta dt { font-family: var(--font-mono); font-size: var(--text-meta); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+  .hero-meta dd { font-size: 0.9375rem; line-height: 1.5; }
+
+  .hero-intro {
+    grid-column: 6 / span 6;
+    max-width: var(--measure);
+    font-size: 1.1875rem;
+    line-height: 1.65;
+  }
+  .hero-intro p + p { margin-top: var(--s-2); }
+  .hero-intro .lede { color: var(--ink); }
+  .hero-intro .rest { color: var(--muted); font-size: 1rem; }
+
+  /* ============ SELECTED WORK ============ */
+  .work {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-7);
+  }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: var(--s-5);
+  }
+  .section-head h2 {
+    font-size: var(--text-nav);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    display: flex;
+    gap: var(--s-2);
+    align-items: baseline;
+  }
+  .section-head h2 .idx { font-family: var(--font-mono); font-weight: 400; color: var(--muted); }
+
+  /* --- featured project --- */
+  .featured {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--s-3);
+    align-items: stretch;
+    margin-bottom: var(--s-6);
+  }
+  .featured-copy {
+    grid-column: 1 / span 5;
+    display: flex;
+    flex-direction: column;
+    padding-right: var(--s-4);
+  }
+  .featured-tag {
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+    margin-bottom: var(--s-4);
+  }
+  .featured-tag .star { color: var(--oxide); font-size: 0.75rem; line-height: 1; }
+  .featured-tag .mono { color: var(--oxide); }
+
+  .featured h3 {
+    font-size: var(--text-feat);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: var(--s-3);
+  }
+  .featured h3 .serif-em { font-size: 1.04em; }
+  .featured-desc {
+    max-width: 26rem;
+    color: var(--ink);
+    margin-bottom: var(--s-3);
+  }
+  .featured-stack {
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: auto;
+  }
+  .featured-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-1);
+    margin-top: var(--s-4);
+    font-size: var(--text-nav);
+    font-weight: 600;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 3px;
+    width: fit-content;
+    transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+  }
+  .featured-link .arrow { display: inline-block; transition: transform var(--duration) var(--ease); }
+  .featured-link:hover { color: var(--oxide); border-color: var(--oxide); }
+  .featured-link:hover .arrow { transform: translate(2px, -2px); }
+
+  .featured-visual {
+    grid-column: 6 / span 7;
+  }
+  .featured-visual .frame {
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    padding: var(--s-4);
+  }
+  .featured-visual svg { display: block; width: 100%; height: auto; }
+  .featured-visual figcaption {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--s-2);
+  }
+
+  /* --- project index list --- */
+  .project-list { list-style: none; border-top: 1px solid var(--hairline); }
+  .project-row {
+    display: grid;
+    grid-template-columns: 5rem 1fr 16rem 3rem;
+    align-items: baseline;
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--hairline);
+    cursor: pointer;
+  }
+  .project-row .num {
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: 0.09em;
+    color: var(--muted);
+  }
+  .project-row .name {
+    font-size: var(--text-list);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    display: inline-block;
+    transition: transform var(--duration) var(--ease);
+  }
+  .project-row .name .ghost {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.04em;
+    display: none;
+  }
+  .project-row .label {
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .project-row .go {
+    text-align: right;
+    font-size: 1.125rem;
+    display: inline-block;
+    transition: transform var(--duration) var(--ease), color var(--duration) var(--ease);
+  }
+  .project-row:hover .name { transform: translateX(0.75rem); }
+  .project-row:hover .name .plain { display: none; }
+  .project-row:hover .name .ghost { display: inline; }
+  .project-row:hover .go { transform: translate(3px, -3px); color: var(--oxide); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--ink);
+  }
+  .footbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4.5rem;
+  }
+  .footbar .mono { color: var(--muted); }
+
+  /* ============ DESIGN SYSTEM PANEL (meta — for review only) ============ */
+  .ds {
+    background: var(--ink);
+    color: var(--paper);
+    padding: var(--s-6) 0;
+  }
+  .ds .shell > * + * { margin-top: var(--s-5); }
+  .ds-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(244,241,234,0.25);
+    padding-bottom: var(--s-2);
+  }
+  .ds-head h2 { font-size: var(--text-nav); font-weight: 600; letter-spacing: 0.02em; }
+  .ds .mono { color: rgba(244,241,234,0.55); }
+
+  .ds-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--s-4) var(--s-3);
+  }
+  .ds-block h3 {
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: rgba(244,241,234,0.55);
+    margin-bottom: var(--s-3);
+  }
+
+  .ds-type { grid-column: 1 / span 7; }
+  .ds-type-row {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    align-items: baseline;
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid rgba(244,241,234,0.12);
+  }
+  .ds-type-row .spec { font-family: var(--font-mono); font-size: var(--text-meta); letter-spacing: 0.06em; color: rgba(244,241,234,0.65); line-height: 1.7; }
+  .ds-type-row .sample { overflow: hidden; white-space: nowrap; }
+  .sample-hero  { font-size: 2.75rem; font-weight: 500; letter-spacing: -0.035em; line-height: 1; }
+  .sample-hero em { font-size: 1.04em; }
+  .sample-feat  { font-size: 1.75rem; font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+  .sample-body  { font-size: 1.0625rem; line-height: 1.6; }
+  .sample-meta  { font-family: var(--font-mono); font-size: var(--text-meta); letter-spacing: 0.09em; text-transform: uppercase; }
+
+  .ds-palette { grid-column: 9 / span 4; }
+  .swatches { display: grid; gap: var(--s-1); }
+  .swatch {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr auto;
+    gap: var(--s-2);
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: 0.06em;
+  }
+  .swatch .chip { width: 2.25rem; height: 2.25rem; border: 1px solid rgba(244,241,234,0.3); }
+  .swatch .hex { color: rgba(244,241,234,0.55); }
+
+  .ds-rhythm { grid-column: 1 / span 7; }
+  .rhythm-bars { display: flex; align-items: flex-end; gap: var(--s-2); }
+  .rhythm-bar { background: rgba(244,241,234,0.85); width: 2.5rem; }
+  .rhythm-labels { display: flex; gap: var(--s-2); margin-top: var(--s-1); }
+  .rhythm-labels span { width: 2.5rem; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.06em; color: rgba(244,241,234,0.55); text-align: center; }
+
+  .ds-rules { grid-column: 9 / span 4; }
+  .ds-rules ul { list-style: none; display: grid; gap: var(--s-2); }
+  .ds-rules li {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    padding-left: var(--s-3);
+    position: relative;
+    color: rgba(244,241,234,0.85);
+  }
+  .ds-rules li::before {
+    content: "✳";
+    position: absolute;
+    left: 0;
+    color: var(--oxide);
+    filter: brightness(1.6);
+    font-size: 0.7rem;
+    top: 0.2rem;
+  }
+  /* ============ JOURNEY — editorial timeline ============ */
+  .journey.shell { padding-top: var(--s-7); padding-bottom: var(--s-6); }
+  .timeline { border-top: 1px solid var(--ink); margin-top: var(--s-4); }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr auto;
+    gap: var(--s-4);
+    align-items: baseline;
+    padding: var(--s-4) 0;
+    border-bottom: 1px solid var(--hairline);
+    transition: background var(--duration) var(--ease);
+  }
+  .tl-row:hover { background: var(--panel); }
+  .tl-year { font-family: var(--font-mono); font-size: var(--text-meta); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); padding-top: 0.4rem; }
+  .tl-main h3 { font-weight: 500; font-size: var(--text-list); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 0.35rem; }
+  .tl-main h3 .serif-em { font-size: 1.05em; }
+  .tl-org { color: var(--muted); font-size: var(--text-body); }
+  .tl-note { max-width: 30rem; margin-top: var(--s-1); color: var(--ink); }
+  .tl-kind { font-family: var(--font-mono); font-size: var(--text-meta); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); white-space: nowrap; padding-top: 0.5rem; }
+  .tl-kind .dot { color: var(--oxide); }
+
+  /* ============ OBSERVER — the one kept video, framed like a plate ============ */
+  .observer.shell { padding-top: var(--s-6); padding-bottom: var(--s-7); }
+  .observer-lead { max-width: 40rem; margin-top: var(--s-3); }
+  .observer-lead .lede { font-size: var(--text-list); line-height: 1.18; letter-spacing: -0.02em; font-weight: 400; }
+  .observer-lead .lede em { font-size: 1.04em; }
+  .plate {
+    margin-top: var(--s-5);
+    border: 1px solid var(--ink);
+    padding: var(--s-1);
+    background: var(--panel);
+  }
+  .plate-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #12100c;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+  .plate-media video, .plate-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .plate-placeholder { font-family: var(--font-mono); font-size: var(--text-meta); letter-spacing: 0.18em; text-transform: uppercase; color: #6b6456; }
+  .plate-cap { display: flex; justify-content: space-between; padding: var(--s-2) var(--s-1) 0; }
+
+  /* ============ CONTACT ============ */
+  .contact.shell { padding: var(--s-7) var(--s-5); border-top: 1px solid var(--ink); }
+  .contact-grid { display: grid; grid-template-columns: 1fr auto; gap: var(--s-5); align-items: end; }
+  .contact h2 { font-weight: 500; font-size: 4rem; line-height: 0.98; letter-spacing: -0.03em; }
+  .contact h2 em { font-size: 1.03em; }
+  .contact-sub { margin-top: var(--s-3); color: var(--muted); max-width: 30rem; }
+  .contact-links { display: flex; flex-direction: column; gap: var(--s-2); text-align: right; }
+  .contact-links a { display: inline-flex; gap: var(--s-2); align-items: baseline; justify-content: flex-end; font-weight: 500; }
+  .contact-links a .ml { font-family: var(--font-mono); font-size: var(--text-meta); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+  .contact-links a:hover .lbl { font-family: var(--font-serif); font-style: italic; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shell topbar">
+    <a class="wordmark" href="#">Alistair&nbsp;Rodrigues</a>
+    <div class="topbar-role mono">UI/UX Designer&nbsp;&nbsp;×&nbsp;&nbsp;AI Engineer</div>
+    <nav aria-label="Main navigation">
+      <a href="#work">Work</a>
+      <a href="#">Journey</a>
+      <a href="#">Résumé</a>
+      <a href="#">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero shell" aria-labelledby="hero-heading">
+    <div class="hero-kicker">
+      <span class="mono">Portfolio — 2026</span>
+      <span class="mono coords">Glasgow&nbsp;&nbsp;55.8617° N&nbsp;/&nbsp;4.2583° W</span>
+    </div>
+
+    <h1 id="hero-heading">
+      I <em>design</em> and<br>
+      engineer products<br>
+      <em>worth keeping.</em>
+    </h1>
+
+    <figure class="hero-constellation" aria-hidden="true">
+      <svg viewBox="0 0 304 150" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <!-- one hairline constellation — all that remains of the cosmic theme -->
+        <polyline points="14,118 66,44 138,78 202,22 258,60 290,116"
+                  stroke="#191712" stroke-width="1" opacity="0.5"/>
+        <circle cx="14"  cy="118" r="2"   fill="#191712"/>
+        <circle cx="66"  cy="44"  r="2.5" fill="#191712"/>
+        <circle cx="138" cy="78"  r="2"   fill="#191712"/>
+        <circle cx="202" cy="22"  r="3"   fill="#96422A"/>
+        <circle cx="258" cy="60"  r="2"   fill="#191712"/>
+        <circle cx="290" cy="116" r="2.5" fill="#191712"/>
+        <!-- stray faint stars -->
+        <circle cx="104" cy="18"  r="1.2" fill="#191712" opacity="0.35"/>
+        <circle cx="236" cy="128" r="1.2" fill="#191712" opacity="0.35"/>
+        <circle cx="42"  cy="140" r="1.2" fill="#191712" opacity="0.35"/>
+      </svg>
+      <figcaption class="mono">fig. 01 — the old sky, reduced to a line</figcaption>
+    </figure>
+
+    <div class="hero-under">
+      <dl class="hero-meta">
+        <div>
+          <dt>Currently</dt>
+          <dd>MSc Advanced Computer Science<br>University of Strathclyde</dd>
+        </div>
+        <div>
+          <dt>Previously</dt>
+          <dd>Data analysis · UI/UX design</dd>
+        </div>
+        <div>
+          <dt>Focus</dt>
+          <dd>AI engineering</dd>
+        </div>
+      </dl>
+      <div class="hero-intro">
+        <p class="lede">Computer Science graduate designing interfaces and engineering the AI systems behind them — one person, both halves of the product.</p>
+        <p class="rest">Python · Kotlin · FastAPI · Jetpack Compose · React · AI/ML</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="work shell" id="work" aria-labelledby="work-heading">
+    <div class="section-head">
+      <h2 id="work-heading"><span class="idx">01</span> Selected Work</h2>
+      <span class="mono">( 05 projects )</span>
+    </div>
+
+    <article class="featured">
+      <div class="featured-copy">
+        <div class="featured-tag">
+          <span class="star" aria-hidden="true">✳</span>
+          <span class="mono">Featured — AI Engineering</span>
+        </div>
+        <h3>RAG<span class="serif-em">Star</span></h3>
+        <p class="featured-desc">A retrieval-augmented generation system built on hybrid search — dense vectors for meaning, keyword precision for accuracy. Designed and engineered end to end.</p>
+        <p class="featured-stack">Python / FastAPI / AI·ML</p>
+        <a class="featured-link" href="#">View case study <span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+
+      <figure class="featured-visual">
+        <div class="frame">
+          <svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="Diagram of hybrid retrieval: dense and sparse signals fused into a ranked result">
+            <!-- dense vector cluster -->
+            <text x="48" y="52" font-family="Spline Sans Mono, monospace" font-size="11" letter-spacing="1" fill="#6F6A5C">DENSE — VECTORS</text>
+            <circle cx="72"  cy="120" r="2.5" fill="#191712"/>
+            <circle cx="112" cy="96"  r="2.5" fill="#191712"/>
+            <circle cx="96"  cy="168" r="2.5" fill="#191712"/>
+            <circle cx="148" cy="140" r="2.5" fill="#191712"/>
+            <circle cx="60"  cy="200" r="2.5" fill="#191712"/>
+            <circle cx="132" cy="212" r="2.5" fill="#191712"/>
+            <circle cx="88"  cy="252" r="2.5" fill="#191712"/>
+            <circle cx="156" cy="184" r="2.5" fill="#191712" opacity="0.4"/>
+            <circle cx="52"  cy="152" r="2.5" fill="#191712" opacity="0.4"/>
+            <!-- sparse keyword ticks -->
+            <text x="48" y="312" font-family="Spline Sans Mono, monospace" font-size="11" letter-spacing="1" fill="#6F6A5C">SPARSE — KEYWORDS</text>
+            <line x1="52"  y1="336" x2="92"  y2="336" stroke="#191712" stroke-width="1"/>
+            <line x1="104" y1="336" x2="132" y2="336" stroke="#191712" stroke-width="1"/>
+            <line x1="144" y1="336" x2="196" y2="336" stroke="#191712" stroke-width="1"/>
+            <line x1="52"  y1="352" x2="76"  y2="352" stroke="#191712" stroke-width="1" opacity="0.4"/>
+            <line x1="88"  y1="352" x2="150" y2="352" stroke="#191712" stroke-width="1" opacity="0.4"/>
+            <!-- convergence lines to fuse node -->
+            <line x1="148" y1="140" x2="356" y2="196" stroke="#191712" stroke-width="1" opacity="0.45"/>
+            <line x1="132" y1="212" x2="356" y2="200" stroke="#191712" stroke-width="1" opacity="0.45"/>
+            <line x1="112" y1="96"  x2="354" y2="192" stroke="#191712" stroke-width="1" opacity="0.3"/>
+            <line x1="196" y1="336" x2="358" y2="208" stroke="#191712" stroke-width="1" opacity="0.45"/>
+            <line x1="132" y1="336" x2="356" y2="206" stroke="#191712" stroke-width="1" opacity="0.3"/>
+            <!-- fuse node -->
+            <circle cx="368" cy="200" r="13" stroke="#191712" stroke-width="1"/>
+            <circle cx="368" cy="200" r="3"  fill="#191712"/>
+            <text x="368" y="240" font-family="Spline Sans Mono, monospace" font-size="11" letter-spacing="1" fill="#6F6A5C" text-anchor="middle">FUSE</text>
+            <!-- ranked results -->
+            <line x1="381" y1="200" x2="452" y2="140" stroke="#191712" stroke-width="1" opacity="0.45"/>
+            <line x1="381" y1="200" x2="452" y2="200" stroke="#191712" stroke-width="1" opacity="0.45"/>
+            <line x1="381" y1="200" x2="452" y2="260" stroke="#191712" stroke-width="1" opacity="0.45"/>
+            <rect x="452" y="128" width="140" height="24" stroke="#96422A" stroke-width="1"/>
+            <text x="464" y="144" font-family="Spline Sans Mono, monospace" font-size="11" letter-spacing="1" fill="#96422A">RANK 01</text>
+            <rect x="452" y="188" width="112" height="24" stroke="#191712" stroke-width="1" opacity="0.55"/>
+            <text x="464" y="204" font-family="Spline Sans Mono, monospace" font-size="11" letter-spacing="1" fill="#6F6A5C">RANK 02</text>
+            <rect x="452" y="248" width="88" height="24" stroke="#191712" stroke-width="1" opacity="0.35"/>
+            <text x="464" y="264" font-family="Spline Sans Mono, monospace" font-size="11" letter-spacing="1" fill="#6F6A5C" opacity="0.7">RANK 03</text>
+          </svg>
+        </div>
+        <figcaption>
+          <span class="mono">fig. 02 — hybrid retrieval, fused rank</span>
+          <span class="mono">RAGStar / system sketch</span>
+        </figcaption>
+      </figure>
+    </article>
+
+    <ul class="project-list">
+      <li>
+        <a class="project-row" href="#">
+          <span class="num">02</span>
+          <span class="name"><span class="plain">HawkAI</span><span class="ghost">HawkAI</span></span>
+          <span class="label">AI · Design &amp; build</span>
+          <span class="go" aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-row" href="#">
+          <span class="num">03</span>
+          <span class="name"><span class="plain">Quantasphere</span><span class="ghost">Quantasphere</span></span>
+          <span class="label">Design &amp; build</span>
+          <span class="go" aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-row" href="#">
+          <span class="num">04</span>
+          <span class="name"><span class="plain">Study Snippets</span><span class="ghost">Study Snippets</span></span>
+          <span class="label">Learning tool</span>
+          <span class="go" aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-row" href="#">
+          <span class="num">05</span>
+          <span class="name"><span class="plain">Health Weight App</span><span class="ghost">Health Weight App</span></span>
+          <span class="label">Health tracking</span>
+          <span class="go" aria-hidden="true">↗</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="journey shell" id="journey" aria-labelledby="journey-heading">
+    <div class="section-head">
+      <h2 id="journey-heading"><span class="idx">02</span> Journey</h2>
+      <span class="mono">( the path so far )</span>
+    </div>
+    <p class="lede" style="max-width:38rem;margin-top:var(--s-2)">From data analysis, to interface design, to the AI underneath — the same instinct each time: make the <em>complicated</em> feel handled.</p>
+
+    <div class="timeline">
+      <div class="tl-row">
+        <span class="tl-year">2026 — now</span>
+        <div class="tl-main">
+          <h3>MSc Advanced Computer Science</h3>
+          <span class="tl-org">University of Strathclyde · Glasgow</span>
+          <p class="tl-note">Deepening systems and machine-learning foundations while shipping applied work.</p>
+        </div>
+        <span class="tl-kind">Education</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2025</span>
+        <div class="tl-main">
+          <h3>RAG<span class="serif-em">Star</span></h3>
+          <span class="tl-org">Independent build</span>
+          <p class="tl-note">Hybrid-search retrieval-augmented generation — dense vectors and keyword precision, fused. Designed and engineered end to end.</p>
+        </div>
+        <span class="tl-kind"><span class="dot">◆</span> AI engineering</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2025</span>
+        <div class="tl-main">
+          <h3>HawkAI</h3>
+          <span class="tl-org">Independent build</span>
+          <p class="tl-note">Flagship AI product — interface design and engineering held by one hand, screen to system.</p>
+        </div>
+        <span class="tl-kind">AI · Product</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2025</span>
+        <div class="tl-main">
+          <h3>Study Snippets · Health Weight App</h3>
+          <span class="tl-org">Android · Kotlin &amp; Jetpack Compose</span>
+          <p class="tl-note">Two focused mobile products — a learning tool and a health tracker — shipped in native Android.</p>
+        </div>
+        <span class="tl-kind">Mobile</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">2024</span>
+        <div class="tl-main">
+          <h3>Quantasphere</h3>
+          <span class="tl-org">Independent build · React</span>
+          <p class="tl-note">Interface design and front-end build — the move from analysis into designing the surface itself.</p>
+        </div>
+        <span class="tl-kind">Web</span>
+      </div>
+      <div class="tl-row">
+        <span class="tl-year">— 2024</span>
+        <div class="tl-main">
+          <h3>BSc Computer Science</h3>
+          <span class="tl-org">Foundations · data analysis</span>
+          <p class="tl-note">Where it started: data structures, systems, and the analytical habit that still underwrites the design work.</p>
+        </div>
+        <span class="tl-kind">Education</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="observer shell" id="observer" aria-labelledby="observer-heading">
+    <div class="section-head">
+      <h2 id="observer-heading"><span class="idx">03</span> Observer</h2>
+      <span class="mono">( selected motion )</span>
+    </div>
+    <div class="observer-lead">
+      <p class="lede">The one piece kept <em>in motion</em> — a study in how an interface can watch, and be watched.</p>
+    </div>
+    <figure class="plate">
+      <div class="plate-media">
+        <!-- production: real Observer video wired in here -->
+        <span class="plate-placeholder">Observer — reel · 00:42</span>
+      </div>
+    </figure>
+    <div class="plate-cap">
+      <span class="mono">fig. 03 — observer / motion study</span>
+      <span class="mono">play ↗</span>
+    </div>
+  </section>
+</main>
+
+<section class="contact shell" id="contact" aria-labelledby="contact-heading">
+  <div class="contact-grid">
+    <div>
+      <h2 id="contact-heading">Let's make something<br><em>worth keeping.</em></h2>
+      <p class="contact-sub">Open to UI/UX design roles where design and engineering aren't two departments. Currently in Glasgow, working anywhere.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:hello@example.com"><span class="lbl">Email</span> <span class="ml">→</span></a>
+      <a href="#"><span class="lbl">GitHub</span> <span class="ml">→</span></a>
+      <a href="#"><span class="lbl">LinkedIn</span> <span class="ml">→</span></a>
+      <a href="#"><span class="lbl">Résumé</span> <span class="ml">PDF</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="shell footbar">
+    <span class="mono">© 2026 Alistair Rodrigues</span>
+    <span class="mono">55.8617° N / 4.2583° W</span>
+    <span class="mono">Work · Journey · Observer · Contact</span>
+  </div>
+</footer>
+
+<!-- ==================== DESIGN SYSTEM — reviewer panel, not part of the site ==================== -->
+<section class="ds" aria-label="Design system documentation">
+  <div class="shell">
+    <div class="ds-head">
+      <h2>Design System — Concept A</h2>
+      <span class="mono">Editorial Restraint / for review</span>
+    </div>
+
+    <div class="ds-grid">
+      <div class="ds-block ds-type">
+        <h3>Type Scale</h3>
+        <div class="ds-type-row">
+          <span class="spec">HERO — Instrument Sans 500<br>104 / 106 · −3.5% · italics: Instrument Serif</span>
+          <span class="sample sample-hero">Worth <em>keeping.</em></span>
+        </div>
+        <div class="ds-type-row">
+          <span class="spec">FEATURE — Instrument Sans 500<br>56 / 56 · −3%</span>
+          <span class="sample sample-feat">RAGStar</span>
+        </div>
+        <div class="ds-type-row">
+          <span class="spec">BODY — Instrument Sans 400<br>17 / 28</span>
+          <span class="sample sample-body">Dense vectors for meaning, keywords for accuracy.</span>
+        </div>
+        <div class="ds-type-row">
+          <span class="spec">META — Spline Sans Mono 400<br>11 / 16 · +9% tracking · caps</span>
+          <span class="sample sample-meta">Fig. 01 — Glasgow 55.8617° N</span>
+        </div>
+      </div>
+
+      <div class="ds-block ds-palette">
+        <h3>Palette</h3>
+        <div class="swatches">
+          <div class="swatch"><span class="chip" style="background:#F4F1EA"></span><span>Paper</span><span class="hex">#F4F1EA</span></div>
+          <div class="swatch"><span class="chip" style="background:#ECE8DD"></span><span>Panel</span><span class="hex">#ECE8DD</span></div>
+          <div class="swatch"><span class="chip" style="background:#DAD5C6"></span><span>Hairline</span><span class="hex">#DAD5C6</span></div>
+          <div class="swatch"><span class="chip" style="background:#6F6A5C"></span><span>Muted</span><span class="hex">#6F6A5C</span></div>
+          <div class="swatch"><span class="chip" style="background:#191712"></span><span>Ink</span><span class="hex">#191712</span></div>
+          <div class="swatch"><span class="chip" style="background:#96422A"></span><span>Oxide — accent, 3 uses max</span><span class="hex">#96422A</span></div>
+        </div>
+      </div>
+
+      <div class="ds-block ds-rhythm">
+        <h3>Spacing Rhythm — 8px base</h3>
+        <div class="rhythm-bars">
+          <div class="rhythm-bar" style="height:4px"></div>
+          <div class="rhythm-bar" style="height:8px"></div>
+          <div class="rhythm-bar" style="height:12px"></div>
+          <div class="rhythm-bar" style="height:20px"></div>
+          <div class="rhythm-bar" style="height:32px"></div>
+          <div class="rhythm-bar" style="height:48px"></div>
+          <div class="rhythm-bar" style="height:80px"></div>
+        </div>
+        <div class="rhythm-labels">
+          <span>8</span><span>16</span><span>24</span><span>40</span><span>64</span><span>96</span><span>160</span>
+        </div>
+      </div>
+
+      <div class="ds-block ds-rules">
+        <h3>Rules of the System</h3>
+        <ul>
+          <li>One cosmic signature only: a hairline constellation + celestial coordinates. Nothing else glows.</li>
+          <li>One accent (Oxide), three uses maximum per view — always marking a point of attention, never decoration.</li>
+          <li>Motion: a single 600ms rise-and-settle on the headline lines at load. Everything else is still.</li>
+          <li>Italics (Instrument Serif) are reserved for emphasis inside headlines — the voice, not a style.</li>
+          <li>12-column grid, 64px margins, hairline rules carry the structure. Low density is the point.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-2026-06-29T19:51:26.165Z launch: Executable doesn't exist at /Users/obito/Library/Caches/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-mac-arm64/chrome-headless-shell
+2026-06-30T17:34:44.149Z launch: Executable doesn't exist at /Users/obito/Library/Caches/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-mac-arm64/chrome-headless-shell
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║ Looks like Playwright Test or Playwright was just installed or updated. ║
 ║ Please run the following command to download new browsers:              ║
