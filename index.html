@@ -503,6 +503,165 @@
 
     /* ── FOOTER (original layout) ── */
   }
+
+  /* --- macOS Quick Look Modal & Galleries --- */
+  .quick-look-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+  }
+  .quick-look-window {
+    background: #1c1c1f;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    width: min(900px, 95vw);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    animation: qlReveal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .quick-look-header {
+    height: 38px;
+    background: #2d2d30;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    position: relative;
+    user-select: none;
+  }
+  .quick-look-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .quick-look-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 .5px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+  }
+  .quick-look-dot--close { background: #ff5f57; cursor: pointer; }
+  .quick-look-dot--min { background: #febc2e; opacity: 0.6; }
+  .quick-look-dot--max { background: #28c840; opacity: 0.6; }
+  
+  .quick-look-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e3e3e7;
+  }
+  .quick-look-link {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+    color: #7fd1a8 !important;
+    text-decoration: none;
+    border: 1px solid rgba(127, 209, 168, 0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    background: rgba(127, 209, 168, 0.06);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .quick-look-link:hover {
+    background: rgba(127, 209, 168, 0.15);
+    border-color: rgba(127, 209, 168, 0.6);
+  }
+  .quick-look-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0d0d0f;
+    overflow: auto;
+  }
+  .quick-look-img {
+    max-width: 100%;
+    max-height: 65vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+  
+  @keyframes qlReveal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* --- Screenshot Gallery in Journey Cards --- */
+  .project-gallery {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+  }
+  .project-gallery::-webkit-scrollbar {
+    height: 4px;
+  }
+  .project-gallery::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 99px;
+  }
+  .project-gallery::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 99px;
+  }
+  .gallery-item {
+    flex-shrink: 0;
+    width: 130px;
+    aspect-ratio: 16/10;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s;
+  }
+  .gallery-item:hover {
+    transform: scale(1.05) translateY(-2px);
+    border-color: #7fd1a8;
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* --- Custom Finder navigation & styles --- */
+  .desktop-file.is-selected {
+    background: rgba(10, 132, 255, 0.25) !important;
+    border: 1px solid rgba(10, 132, 255, 0.5) !important;
+    padding: 8px 3px !important; /* adjust for border */
+  }
+  #finderBackBtn:hover {
+    opacity: 1 !important;
+    color: #fff;
+  }
+  .desktop-status-bar {
+    height: 22px;
+    background: rgba(30,30,36,0.3);
+    border-top: 1px solid rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+    color: #8a8a92;
+    padding: 0 10px;
+    user-select: none;
+  }
 </style>
 </helmet>
 
@@ -661,7 +820,10 @@
     <div class="desktop-window">
       <div class="desktop-bar">
         <div class="desktop-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-        <div class="desktop-nav" aria-hidden="true"><span>‹</span><span>›</span></div>
+        <div class="desktop-nav">
+          <span id="finderBackBtn" style="cursor:default;opacity:0.3;user-select:none;transition:opacity 0.2s" title="Back">‹</span>
+          <span id="finderForwardBtn" style="cursor:default;opacity:0.3;user-select:none" title="Forward">›</span>
+        </div>
         <span class="desktop-title">Alistair Rodrigues</span>
         <span class="desktop-spacer"></span>
         <div class="desktop-search" aria-hidden="true"><span>⌕</span>Search</div>
@@ -681,18 +843,19 @@
             <small id="desktopMeta">9 items · updated today</small>
           </div>
           <div class="desktop-files" id="desktopFiles">
-            <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
-            <div class="desktop-file"><div class="ico ico--folder p"></div><span class="label">Quantasphere</span></div>
-            <div class="desktop-file"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
-            <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Study Snippets</span></div>
-            <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Health Weight</span></div>
-            <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
-            <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Cosmos Hero.png</span></div>
-            <a class="desktop-file" href="uploads/resume.pdf" download style="text-decoration:none;color:inherit"><div class="ico ico--doc"></div><span class="label">Résumé.pdf</span></a>
-            <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Education</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="hawkai"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="quantasphere"><div class="ico ico--folder p"></div><span class="label">Quantasphere</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="ragstar"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="study_snippets"><div class="ico ico--folder g"></div><span class="label">Study Snippets</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="health_weight"><div class="ico ico--folder p"></div><span class="label">Health Weight</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="experiments"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
+            <div class="desktop-file" data-action="quick-look" data-file="uploads/mac-space-reference.jpeg" data-name="Cosmos Hero.png"><div class="ico ico--img"></div><span class="label">Cosmos Hero.png</span></div>
+            <div class="desktop-file" data-action="open-link" data-url="uploads/resume.pdf"><div class="ico ico--doc"></div><span class="label">Résumé.pdf</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="education"><div class="ico ico--folder g"></div><span class="label">Education</span></div>
           </div>
         </div>
       </div>
+      <div class="desktop-status-bar" id="desktopStatusBar">Select a folder or file to explore</div>
       <div class="desktop-dock" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     </div>
   </section>
@@ -734,7 +897,7 @@
             <span class="display-cluster__count">3 projects</span>
           </div>
           <div class="display-cluster__cards">
-            <a class="display-card" href="#" style="text-decoration:none;color:inherit">
+            <a class="display-card" href="https://github.com/Alistair77" target="_blank" style="text-decoration:none;color:inherit">
               <div class="display-card__row"><span class="display-card__icon" style="background:#1e3a8a;color:#93c5fd">C</span><p class="display-card__title">Cosmos Portfolio</p><span class="display-card__tag display-card__tag--web">WEB</span></div>
               <p class="display-card__desc">3D satellite portfolio with Three.js</p>
               <p class="display-card__date">2026 · Featured</p>
@@ -758,7 +921,7 @@
             <span class="display-cluster__count">1 project</span>
           </div>
           <div class="display-cluster__cards">
-            <a class="display-card" href="work/ragstar-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+            <a class="display-card" href="https://github.com/Alistair77/ragstar" target="_blank" style="text-decoration:none;color:inherit">
               <div class="display-card__row"><span class="display-card__icon" style="background:#0a4a3a;color:#6ee7b7">R</span><p class="display-card__title">RAGStar</p><span class="display-card__tag display-card__tag--ai">AI</span></div>
               <p class="display-card__desc">Hybrid search RAG pipeline</p>
               <p class="display-card__date">2026 · AI</p>
@@ -772,12 +935,12 @@
             <span class="display-cluster__count">2 projects</span>
           </div>
           <div class="display-cluster__cards">
-            <a class="display-card" href="work/study-snipp-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+            <a class="display-card" href="https://github.com/Alistair77/study_snipp" target="_blank" style="text-decoration:none;color:inherit">
               <div class="display-card__row"><span class="display-card__icon" style="background:#5b21b6;color:#c4b5fd">S</span><p class="display-card__title">Study Snippets</p><span class="display-card__tag display-card__tag--fullstack">FULL-STACK</span></div>
               <p class="display-card__desc">Android + FastAPI monorepo</p>
               <p class="display-card__date">2026 · Full-Stack</p>
             </a>
-            <a class="display-card" href="work/health-weight-app-showcase/" target="_blank" style="text-decoration:none;color:inherit">
+            <a class="display-card" href="https://github.com/Alistair77/health-weight-app-compose" target="_blank" style="text-decoration:none;color:inherit">
               <div class="display-card__row"><span class="display-card__icon" style="background:#a21caf;color:#e9d5ff">W</span><p class="display-card__title">Health Weight</p><span class="display-card__tag display-card__tag--mobile">MOBILE</span></div>
               <p class="display-card__desc">Android health tracker in Compose</p>
               <p class="display-card__date">2026 · Mobile</p>
@@ -970,6 +1133,20 @@
           <li>Wrote custom GLSL shaders for animated data-flow ribbons and built a particle system with 600+ floating dust points for cinematic atmosphere.</li>
           <li>Delivered responsive, optimized 3D rendering with dynamic viewport adaptation and transparent WebGL overlay composited with Ant Design form UI.</li>
         </ul>
+        <div class="project-gallery">
+          <div class="gallery-item" data-action="quick-look" data-file="projects/Screenshot 2026-05-25 at 2.12.59 PM.png" data-name="HawkAI Login Screen" title="Click to preview HawkAI Login Screen">
+            <img src="projects/Screenshot 2026-05-25 at 2.12.59 PM.png" alt="HawkAI Login Screen">
+          </div>
+          <div class="gallery-item" data-action="quick-look" data-file="projects/Screenshot 2026-06-23 at 4.38.38 PM.png" data-name="HawkAI Device Dashboard (Rack)" title="Click to preview HawkAI Device Dashboard">
+            <img src="projects/Screenshot 2026-06-23 at 4.38.38 PM.png" alt="HawkAI Device Dashboard">
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Profile
+          </a>
+        </div>
       </article></div>
       <div class="journey-card" data-category="web"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M106 32 L80 86 L42 60 L106 118 L170 60 L132 86 L106 32 M106 118 L82 164 L44 148 L106 208 L168 148 L130 164 L106 118"/>
@@ -996,6 +1173,17 @@
           <li>Implemented CSS mask-image gradients for seamless video-to-background blending and frosted-glass navigation with backdrop-filter.</li>
           <li>Designed with accessibility in mind — respects prefers-reduced-motion and requires zero frameworks or build tooling.</li>
         </ul>
+        <div class="project-gallery">
+          <div class="gallery-item" data-action="quick-look" data-file="projects/WhatsApp Image 2026-06-25 at 05.29.21.jpeg" data-name="Quantasphere Landing Page" title="Click to preview Quantasphere Landing Page">
+            <img src="projects/WhatsApp Image 2026-06-25 at 05.29.21.jpeg" alt="Quantasphere Landing Page">
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Profile
+          </a>
+        </div>
       </article></div>
       <div class="journey-card" data-category="all"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M24 78 L70 92 L116 98 L160 84 L168 138 L122 150 L112 100"/>
@@ -1026,6 +1214,12 @@
           <li>Implemented Cohere cross-encoder reranking over the top-20 candidates for precision, with a local Ollama LLM for private, citation-grounded generation.</li>
           <li>Designed a FastAPI layer with Pydantic validation, deterministic MD5-hashed chunk IDs to prevent duplicate ingestion, and comprehensive unit tests.</li>
         </ul>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77/ragstar" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Repository
+          </a>
+        </div>
       </article></div>
       <div class="journey-card" data-category="app"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M36 48 L82 38 L124 54 L172 42 L124 94 L82 124 L36 96 M124 54 L124 94 L156 150"/>
@@ -1042,6 +1236,12 @@
           <li>Containerized the backend with Docker Compose for reproducible environments and set up GitHub Actions CI/CD pipelines.</li>
           <li>Implemented rate limiting, JWT auth middleware, and structured database migrations for production-ready backend practices.</li>
         </ul>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77/study_snipp" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Repository
+          </a>
+        </div>
       </article></div>
       <div class="journey-card" data-category="app"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
         <path d="M26 90 L72 64 L116 82 L160 58 M72 64 L100 128 L116 82 M100 128 L134 168 L72 182"/>
@@ -1058,6 +1258,12 @@
           <li>Structured the project with clean architecture patterns, Kotlin DSL Gradle build scripts, and proper separation of concerns.</li>
           <li>Implemented reactive state management with Compose for smooth, modern Android UX with intuitive input and tracking flows.</li>
         </ul>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77/health-weight-app-compose" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Repository
+          </a>
+        </div>
       </article></div>
     </div>
   </section>
@@ -1136,6 +1342,25 @@
       </div>
     </footer>
   </section>
+
+  <!-- macOS Quick Look Modal -->
+  <div id="quickLookModal" class="quick-look-overlay">
+    <div class="quick-look-window">
+      <div class="quick-look-header">
+        <div class="quick-look-dots">
+          <span class="quick-look-dot quick-look-dot--close" id="quickLookCloseBtn" title="Close (Esc)"></span>
+          <span class="quick-look-dot quick-look-dot--min"></span>
+          <span class="quick-look-dot quick-look-dot--max"></span>
+        </div>
+        <span class="quick-look-title" id="quickLookTitle">File Preview</span>
+        <div style="flex:1"></div>
+        <a class="quick-look-link" id="quickLookActionLink" href="#" target="_blank" style="display:none">Open Demo &rarr;</a>
+      </div>
+      <div class="quick-look-content">
+        <img class="quick-look-img" id="quickLookImg" src="" alt="Quick Look Preview">
+      </div>
+    </div>
+  </div>
 
 </main>
 </x-dc>
@@ -1556,30 +1781,62 @@ class Component extends DCLogic {
       });
       this._pjSwiper = pjSwiper;
     }
-    // ---- desktop sidebar tab switching ----
+    // ---- desktop sidebar and filesystem navigation ----
+    const fileSystem = {
+      all: [
+        { name: 'HawkAI Login', type: 'folder', color: '', proj: 'hawkai' },
+        { name: 'Quantasphere', type: 'folder', color: 'p', proj: 'quantasphere' },
+        { name: 'RAGStar', type: 'folder', color: 'o', proj: 'ragstar' },
+        { name: 'Study Snippets', type: 'folder', color: 'g', proj: 'study_snippets' },
+        { name: 'Health Weight', type: 'folder', color: 'p', proj: 'health_weight' },
+        { name: 'Experiments', type: 'folder', color: '', proj: 'experiments' },
+        { name: 'Cosmos Hero.png', type: 'image', file: 'uploads/mac-space-reference.jpeg', size: '57 KB' },
+        { name: 'Résumé.pdf', type: 'pdf', file: 'uploads/resume.pdf', size: '142 KB' },
+        { name: 'Education', type: 'folder', color: 'g', proj: 'education' }
+      ],
+      projects: [
+        { name: 'HawkAI Login', type: 'project', icon: 'uploads/hawkai-thumb.svg', proj: 'hawkai' },
+        { name: 'Quantasphere', type: 'project', icon: 'uploads/quantasphere-thumb.jpg', proj: 'quantasphere' },
+        { name: 'RAGStar', type: 'project', icon: 'uploads/ragstar-thumb.svg', proj: 'ragstar' },
+        { name: 'Study Snippets', type: 'project', icon: 'uploads/study-snippets-thumb.svg', proj: 'study_snippets' },
+        { name: 'Health Weight', type: 'project', icon: 'uploads/health-weight-thumb.svg', proj: 'health_weight' }
+      ],
+      hawkai: [
+        { name: 'Login Screen.png', type: 'image', file: 'projects/Screenshot 2026-05-25 at 2.12.59 PM.png', size: '3.0 MB' },
+        { name: 'Device Dashboard.png', type: 'image', file: 'projects/Screenshot 2026-06-23 at 4.38.38 PM.png', size: '751 KB' },
+        { name: 'Launch Live Demo.app', type: 'link', url: 'work/hawkai-login-showcase/', target: '_blank', size: 'Live App' },
+        { name: 'GitHub Profile.lnk', type: 'link', url: 'https://github.com/Alistair77', target: '_blank', size: 'GitHub' }
+      ],
+      quantasphere: [
+        { name: 'Quantasphere Landing.png', type: 'image', file: 'projects/WhatsApp Image 2026-06-25 at 05.29.21.jpeg', size: '41 KB' },
+        { name: 'Launch Live Demo.app', type: 'link', url: 'work/quantasphere-hero-export/', target: '_blank', size: 'Live App' },
+        { name: 'GitHub Profile.lnk', type: 'link', url: 'https://github.com/Alistair77', target: '_blank', size: 'GitHub' }
+      ],
+      ragstar: [
+        { name: 'Launch Live Demo.app', type: 'link', url: 'work/ragstar-showcase/', target: '_blank', size: 'Live App' },
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/ragstar', target: '_blank', size: 'GitHub' },
+        { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/ragstar/blob/main/README.md', target: '_blank', size: 'Doc Link' }
+      ],
+      study_snippets: [
+        { name: 'Launch Live Demo.app', type: 'link', url: 'work/study-snipp-showcase/', target: '_blank', size: 'Live App' },
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/study_snipp', target: '_blank', size: 'GitHub' }
+      ],
+      health_weight: [
+        { name: 'Launch Live Demo.app', type: 'link', url: 'work/health-weight-app-showcase/', target: '_blank', size: 'Live App' },
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/health-weight-app-compose', target: '_blank', size: 'GitHub' }
+      ],
+      experiments: [
+        { name: 'Cosmos Hero.png', type: 'image', file: 'uploads/mac-space-reference.jpeg', size: '57 KB' },
+        { name: 'Satellite Model.glb', type: 'model', file: 'uploads/satellite.glb', size: '522 KB' }
+      ],
+      education: [
+        { name: 'Education Info.lnk', type: 'link', url: '#journey', target: '_self', size: 'Scroll Link' }
+      ]
+    };
+
     const desktopSections = {
-      all: {
-        title: 'All Work',
-        meta: '9 items · updated today',
-        html: `<div class="desktop-file"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
-               <div class="desktop-file"><div class="ico ico--folder p"></div><span class="label">Quantasphere</span></div>
-               <div class="desktop-file"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
-               <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Study Snippets</span></div>
-               <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Health Weight</span></div>
-               <div class="desktop-file"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
-               <div class="desktop-file"><div class="ico ico--img"></div><span class="label">Cosmos Hero.png</span></div>
-               <div class="desktop-file"><div class="ico ico--doc"></div><span class="label">Resume.pdf</span></div>
-               <div class="desktop-file"><div class="ico ico--folder g"></div><span class="label">Education</span></div>`
-      },
-      projects: {
-        title: 'Projects',
-        meta: '5 projects · click to explore',
-        html: `<div class="desktop-file"><div class="df-thumb"><img src="uploads/hawkai-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">HawkAI Login</span></div>
-               <div class="desktop-file"><div class="df-thumb"><img src="uploads/quantasphere-thumb.jpg" loading="lazy" draggable="false"/></div><span class="label">Quantasphere</span></div>
-               <div class="desktop-file"><div class="df-thumb"><img src="uploads/ragstar-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">RAGStar</span></div>
-               <div class="desktop-file"><div class="df-thumb"><img src="uploads/study-snippets-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">Study Snippets</span></div>
-               <div class="desktop-file"><div class="df-thumb"><img src="uploads/health-weight-thumb.svg" loading="lazy" draggable="false"/></div><span class="label">Health Weight</span></div>`
-      },
+      all: { title: 'All Work', meta: '9 items · updated today', folderKey: 'all' },
+      projects: { title: 'Projects', meta: '5 projects · click to explore', folderKey: 'projects' },
       agents: {
         title: 'AI Agents',
         meta: 'pipeline flows · reasoning chains',
@@ -1623,23 +1880,230 @@ class Component extends DCLogic {
                 </div></div>`
       }
     };
+
     const sbItems = [...document.querySelectorAll('.desktop-sidebar .sb-item[data-section]')];
     const desktopTitle = document.querySelector('#desktopTitle');
     const desktopMeta = document.querySelector('#desktopMeta');
     const desktopFiles = document.querySelector('#desktopFiles');
-    if(sbItems.length && desktopFiles){
+    const finderBackBtn = document.querySelector('#finderBackBtn');
+    const desktopStatusBar = document.querySelector('#desktopStatusBar');
+
+    // Quick Look Modal elements
+    const qlModal = document.querySelector('#quickLookModal');
+    const qlImg = document.querySelector('#quickLookImg');
+    const qlTitle = document.querySelector('#quickLookTitle');
+    const qlCloseBtn = document.querySelector('#quickLookCloseBtn');
+    const qlActionLink = document.querySelector('#quickLookActionLink');
+
+    let finderHistory = [];
+    let currentFolderKey = 'all';
+
+    // Helper to open Quick Look Modal
+    window.openQuickLook = (fileUrl, title, demoUrl) => {
+      qlImg.src = fileUrl;
+      qlTitle.textContent = title;
+      if (demoUrl) {
+        qlActionLink.href = demoUrl;
+        qlActionLink.style.display = 'inline-flex';
+      } else {
+        qlActionLink.style.display = 'none';
+      }
+      qlModal.style.display = 'flex';
+      if (this._lenis) this._lenis.stop();
+    };
+
+    const closeQuickLook = () => {
+      qlModal.style.display = 'none';
+      if (this._lenis) this._lenis.start();
+    };
+
+    if (qlCloseBtn) qlCloseBtn.addEventListener('click', closeQuickLook);
+    if (qlModal) qlModal.addEventListener('click', (e) => { if (e.target === qlModal) closeQuickLook(); });
+
+    // Esc key support to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && qlModal && qlModal.style.display === 'flex') {
+        closeQuickLook();
+      }
+    });
+
+    const getFolderHtml = (key) => {
+      const items = fileSystem[key];
+      if (!items) return '';
+      return items.map(item => {
+        if (item.type === 'folder') {
+          return `<div class="desktop-file" data-action="open-folder" data-folder="${item.proj}" data-name="${item.name}">
+                    <div class="ico ico--folder ${item.color || ''}"></div>
+                    <span class="label">${item.name}</span>
+                  </div>`;
+        } else if (item.type === 'project') {
+          return `<div class="desktop-file" data-action="open-folder" data-folder="${item.proj}" data-name="${item.name}">
+                    <div class="df-thumb"><img src="${item.icon}" loading="lazy" draggable="false"/></div>
+                    <span class="label">${item.name}</span>
+                  </div>`;
+        } else if (item.type === 'image') {
+          return `<div class="desktop-file" data-action="quick-look" data-file="${item.file}" data-name="${item.name}" data-size="${item.size}">
+                    <div class="ico ico--img"></div>
+                    <span class="label">${item.name}</span>
+                  </div>`;
+        } else if (item.type === 'pdf' || item.type === 'doc') {
+          return `<div class="desktop-file" data-action="open-link" data-url="${item.file}" data-name="${item.name}" data-size="${item.size}">
+                    <div class="ico ico--doc"></div>
+                    <span class="label">${item.name}</span>
+                  </div>`;
+        } else if (item.type === 'link') {
+          return `<div class="desktop-file" data-action="open-link" data-url="${item.url}" data-target="${item.target || '_self'}" data-name="${item.name}" data-size="${item.size}">
+                    <div class="ico ico--doc" style="background:linear-gradient(#4cb9ff,#0068d8)"></div>
+                    <span class="label">${item.name}</span>
+                  </div>`;
+        } else if (item.type === 'model') {
+          return `<div class="desktop-file" data-action="open-link" data-url="${item.file}" data-name="${item.name}" data-size="${item.size}">
+                    <div class="ico ico--folder" style="background:linear-gradient(#fbc2eb,#a6c1ee)"></div>
+                    <span class="label">${item.name}</span>
+                  </div>`;
+        }
+        return '';
+      }).join('');
+    };
+
+    const renderFolder = (folderKey, title, isNested) => {
+      currentFolderKey = folderKey;
+      desktopTitle.textContent = title;
+      
+      const items = fileSystem[folderKey] || [];
+      desktopMeta.textContent = `${items.length} items · click to explore`;
+      desktopFiles.innerHTML = getFolderHtml(folderKey);
+      
+      // Update Back Button
+      if (isNested && finderHistory.length > 0) {
+        finderBackBtn.style.opacity = '1';
+        finderBackBtn.style.cursor = 'pointer';
+      } else {
+        finderBackBtn.style.opacity = '0.3';
+        finderBackBtn.style.cursor = 'default';
+      }
+      
+      if (desktopStatusBar) {
+        desktopStatusBar.textContent = `Path: Alistair Rodrigues / ${isNested ? finderHistory.map(h => h.title).concat(title).join(' / ') : title} · ${items.length} items`;
+      }
+    };
+
+    // Event delegation on the files container
+    if (desktopFiles) {
+      let lastClickedNode = null;
+      let lastClickedTime = 0;
+
+      desktopFiles.addEventListener('click', (e) => {
+        const fileNode = e.target.closest('.desktop-file');
+        if (!fileNode) {
+          document.querySelectorAll('.desktop-file').forEach(f => f.classList.remove('is-selected'));
+          if (desktopStatusBar) {
+            desktopStatusBar.textContent = `Path: Alistair Rodrigues / ${finderHistory.map(h => h.title).concat(desktopTitle.textContent).join(' / ')}`;
+          }
+          return;
+        }
+
+        document.querySelectorAll('.desktop-file').forEach(f => f.classList.remove('is-selected'));
+        fileNode.classList.add('is-selected');
+
+        const name = fileNode.getAttribute('data-name') || fileNode.querySelector('.label').textContent;
+        const action = fileNode.getAttribute('data-action');
+        const size = fileNode.getAttribute('data-size') || '';
+        
+        let typeText = 'File';
+        if (action === 'open-folder') typeText = 'Folder';
+        else if (action === 'quick-look') typeText = 'Image';
+        else if (action === 'open-link') typeText = 'Link';
+
+        if (desktopStatusBar) {
+          desktopStatusBar.textContent = `Selected: "${name}" · ${typeText} ${size ? `(${size})` : ''} · Double-click to open`;
+        }
+
+        const currentTime = new Date().getTime();
+        const tapDelay = 300; 
+        if (lastClickedNode === fileNode && (currentTime - lastClickedTime) < tapDelay) {
+          handleOpenFile(fileNode);
+          lastClickedNode = null; 
+        } else {
+          lastClickedNode = fileNode;
+        }
+        lastClickedTime = currentTime;
+      });
+    }
+
+    // Attach click listener globally to also handle galleries in journey
+    document.addEventListener('click', (e) => {
+      const galleryItem = e.target.closest('.gallery-item[data-action="quick-look"]');
+      if (galleryItem) {
+        const file = galleryItem.getAttribute('data-file');
+        const name = galleryItem.getAttribute('data-name');
+        let showcaseUrl = null;
+        if (name.includes('HawkAI')) showcaseUrl = 'work/hawkai-login-showcase/';
+        else if (name.includes('Quantasphere')) showcaseUrl = 'work/quantasphere-hero-export/';
+        window.openQuickLook(file, name, showcaseUrl);
+      }
+    });
+
+    const handleOpenFile = (fileNode) => {
+      const action = fileNode.getAttribute('data-action');
+      if (action === 'open-folder') {
+        const folder = fileNode.getAttribute('data-folder');
+        const name = fileNode.querySelector('.label').textContent;
+        finderHistory.push({ key: currentFolderKey, title: desktopTitle.textContent });
+        renderFolder(folder, name, true);
+      } else if (action === 'quick-look') {
+        const file = fileNode.getAttribute('data-file');
+        const name = fileNode.getAttribute('data-name');
+        let showcaseUrl = null;
+        if (name.includes('HawkAI')) showcaseUrl = 'work/hawkai-login-showcase/';
+        else if (name.includes('Quantasphere')) showcaseUrl = 'work/quantasphere-hero-export/';
+        window.openQuickLook(file, name, showcaseUrl);
+      } else if (action === 'open-link') {
+        const url = fileNode.getAttribute('data-url');
+        const target = fileNode.getAttribute('data-target') || '_blank';
+        if (url && url !== '#') {
+          window.open(url, target);
+        }
+      }
+    };
+
+    // Sidebar navigation
+    if (sbItems.length && desktopFiles) {
       sbItems.forEach(item => {
-        const handler = ()=>{
-          sbItems.forEach(s=>s.classList.remove('is-active'));
+        const handler = () => {
+          sbItems.forEach(s => s.classList.remove('is-active'));
           item.classList.add('is-active');
           const sec = item.dataset.section;
+          finderHistory = [];
+          
           const data = desktopSections[sec];
-          if(!data) return;
-          desktopTitle.textContent = data.title;
-          desktopMeta.textContent = data.meta;
-          desktopFiles.innerHTML = data.html;
+          if (!data) return;
+          
+          if (data.folderKey) {
+            renderFolder(data.folderKey, data.title, false);
+          } else {
+            currentFolderKey = sec;
+            desktopTitle.textContent = data.title;
+            desktopMeta.textContent = data.meta;
+            desktopFiles.innerHTML = data.html;
+            finderBackBtn.style.opacity = '0.3';
+            finderBackBtn.style.cursor = 'default';
+            if (desktopStatusBar) {
+              desktopStatusBar.textContent = `Path: Alistair Rodrigues / ${data.title}`;
+            }
+          }
         };
         item.addEventListener('click', handler);
+      });
+    }
+
+    // Finder Back button handler
+    if (finderBackBtn) {
+      finderBackBtn.addEventListener('click', () => {
+        if (finderHistory.length > 0) {
+          const prev = finderHistory.pop();
+          renderFolder(prev.key, prev.title, finderHistory.length > 0);
+        }
       });
     }
 
