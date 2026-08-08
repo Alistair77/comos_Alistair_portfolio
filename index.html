@@ -1159,7 +1159,7 @@
         <div class="desktop-pane">
           <div class="desktop-pane-head">
             <h2 id="desktopTitle">All Work</h2>
-            <small id="desktopMeta">9 items · updated today</small>
+            <small id="desktopMeta">11 items · updated today</small>
           </div>
           <div class="desktop-files" id="desktopFiles">
             <div class="desktop-file" data-action="open-folder" data-folder="hawkai"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
@@ -3402,7 +3402,9 @@ void main() {
       quantasphere: { letter:'Q', bg:'#4a1d6e', fg:'#c084fc', tag:'WEB', tagClass:'web', desc:'Cursor-driven video scrub hero', date:'2026 · Interactive' },
       ragstar: { letter:'R', bg:'#0a4a3a', fg:'#6ee7b7', tag:'AI', tagClass:'ai', desc:'Hybrid search RAG pipeline', date:'2026 · AI' },
       study_snippets: { letter:'S', bg:'#5b21b6', fg:'#c4b5fd', tag:'FULL-STACK', tagClass:'fullstack', desc:'Android + FastAPI monorepo', date:'2026 · Full-Stack' },
-      health_weight: { letter:'W', bg:'#a21caf', fg:'#e9d5ff', tag:'MOBILE', tagClass:'mobile', desc:'Android health tracker in Compose', date:'2026 · Mobile' }
+      health_weight: { letter:'W', bg:'#a21caf', fg:'#e9d5ff', tag:'MOBILE', tagClass:'mobile', desc:'Android health tracker in Compose', date:'2026 · Mobile' },
+      agent_orchestrator: { letter:'A', bg:'#0a4a3a', fg:'#6ee7b7', tag:'AI', tagClass:'ai', desc:'Multi-step agent: Plan → Act → Reflect, human-in-the-loop, LangGraph + Claude', date:'2026 · AI' },
+      agent_evals: { letter:'E', bg:'#155e75', fg:'#67e8f9', tag:'AI', tagClass:'ai', desc:'Eval dataset generator & scoring pipeline — Claude-as-judge, DuckDB, Streamlit', date:'2026 · AI' }
     };
 
     const fileSystem = {
@@ -3412,6 +3414,8 @@ void main() {
         { name: 'RAGStar', type: 'folder', color: 'o', proj: 'ragstar' },
         { name: 'Study Snippets', type: 'folder', color: 'g', proj: 'study_snippets' },
         { name: 'Health Weight', type: 'folder', color: 'p', proj: 'health_weight' },
+        { name: 'Agent Orchestrator', type: 'folder', color: '', proj: 'agent_orchestrator' },
+        { name: 'Agent Evals', type: 'folder', color: 'o', proj: 'agent_evals' },
         { name: 'Experiments', type: 'folder', color: '', proj: 'experiments' },
         { name: 'Cosmos Hero.png', type: 'image', file: 'uploads/mac-space-reference.jpeg', size: '57 KB' },
         { name: 'Résumé.pdf', type: 'pdf', file: 'uploads/resume.pdf', size: '142 KB' },
@@ -3422,7 +3426,9 @@ void main() {
         { name: 'Quantasphere', type: 'project', icon: 'uploads/quantasphere-thumb.jpg', proj: 'quantasphere' },
         { name: 'RAGStar', type: 'project', icon: 'uploads/ragstar-thumb.svg', proj: 'ragstar' },
         { name: 'Study Snippets', type: 'project', icon: 'uploads/study-snippets-thumb.svg', proj: 'study_snippets' },
-        { name: 'Health Weight', type: 'project', icon: 'uploads/health-weight-thumb.svg', proj: 'health_weight' }
+        { name: 'Health Weight', type: 'project', icon: 'uploads/health-weight-thumb.svg', proj: 'health_weight' },
+        { name: 'Agent Orchestrator', type: 'project', icon: '', proj: 'agent_orchestrator' },
+        { name: 'Agent Evals', type: 'project', icon: '', proj: 'agent_evals' }
       ],
       hawkai: [
         { name: 'Login Screen.png', type: 'image', file: 'projects/Screenshot 2026-05-25 at 2.12.59 PM.png', size: '3.0 MB' },
@@ -3448,6 +3454,14 @@ void main() {
         { name: 'Launch Live Demo.app', type: 'link', url: 'work/health-weight-app-showcase/', target: '_blank', size: 'Live App' },
         { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/health-weight-app-compose', target: '_blank', size: 'GitHub' }
       ],
+      agent_orchestrator: [
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/agent-orchestrator', target: '_blank', size: 'GitHub' },
+        { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/agent-orchestrator/blob/main/README.md', target: '_blank', size: 'Doc Link' }
+      ],
+      agent_evals: [
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/agent-evals', target: '_blank', size: 'GitHub' },
+        { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/agent-evals/blob/main/README.md', target: '_blank', size: 'Doc Link' }
+      ],
       experiments: [
         { name: 'Cosmos Hero.png', type: 'image', file: 'uploads/mac-space-reference.jpeg', size: '57 KB' },
         { name: 'Satellite Model.glb', type: 'model', file: 'uploads/satellite.glb', size: '522 KB' }
@@ -3458,8 +3472,8 @@ void main() {
     };
 
     const desktopSections = {
-      all: { title: 'All Work', meta: '9 items · updated today', folderKey: 'all' },
-      projects: { title: 'Projects', meta: '5 projects · click to explore', folderKey: 'projects' },
+      all: { title: 'All Work', meta: '11 items · updated today', folderKey: 'all' },
+      projects: { title: 'Projects', meta: '7 projects · click to explore', folderKey: 'projects' },
       agents: {
         title: 'AI Agents',
         meta: 'architecture map · reasoning chains',
@@ -4022,6 +4036,89 @@ void main() {
       obsVid.addEventListener('canplay', kickObs, { once: true });
       kickObs();
     }
+
+    // ---- GitHub auto-sync: projects tagged with the `portfolio` topic appear
+    //      automatically in the Finder. Fetched client-side, cached for 15 min. ----
+    // Render the All Work view once so curated additions show immediately (offline-safe)
+    if (currentFolderKey === 'all' && !finderHistory.length && desktopFiles.querySelector('.desktop-file, .df-card')) {
+      renderFolder('all', 'All Work', false);
+    }
+    const SYNC_CACHE_KEY = 'cosmos_gh_projects_v1';
+    const SYNC_CACHE_TTL = 15 * 60 * 1000;
+    const syncProjectsFromGitHub = async () => {
+      try {
+        let repos = null;
+        try {
+          const cached = localStorage.getItem(SYNC_CACHE_KEY);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed && parsed.ts && Date.now() - parsed.ts < SYNC_CACHE_TTL) repos = parsed.repos;
+          }
+        } catch (e) { /* ignore corrupt cache */ }
+        if (!repos) {
+          const res = await fetch('https://api.github.com/users/Alistair77/repos?per_page=100&sort=updated');
+          if (!res.ok) throw new Error('GitHub API ' + res.status);
+          repos = await res.json();
+          if (!Array.isArray(repos)) throw new Error('Unexpected GitHub response');
+          try { localStorage.setItem(SYNC_CACHE_KEY, JSON.stringify({ ts: Date.now(), repos })); }
+          catch (e) { /* storage full/unavailable */ }
+        }
+
+        const slug = name => (name || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+        const title = name => (name || '').split(/[-_]+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        const palettes = {
+          ai:      { bg: '#0a4a3a', fg: '#6ee7b7' },
+          fullstack:{ bg: '#5b21b6', fg: '#c4b5fd' },
+          mobile:  { bg: '#a21caf', fg: '#e9d5ff' },
+          web:     { bg: '#1e3a8a', fg: '#93c5fd' }
+        };
+        const tagFor = lang => {
+          if (lang === 'Python') return { tag: 'AI', tagClass: 'ai' };
+          if (lang === 'Kotlin') return { tag: 'MOBILE', tagClass: 'mobile' };
+          if (lang === 'TypeScript' || lang === 'JavaScript') return { tag: 'FULL-STACK', tagClass: 'fullstack' };
+          return { tag: 'WEB', tagClass: 'web' };
+        };
+
+        const existing = new Set(Object.keys(projectMeta));
+        const added = [];
+        repos.forEach(repo => {
+          if (!repo || repo.fork) return;
+          if (!Array.isArray(repo.topics) || !repo.topics.includes('portfolio')) return;
+          const key = slug(repo.name);
+          if (!key || existing.has(key)) return;
+          existing.add(key);
+          const t = tagFor(repo.language);
+          const pal = palettes[t.tagClass] || palettes.web;
+          const yr = (repo.updated_at || '').slice(0, 4) || '2026';
+          projectMeta[key] = {
+            letter: (repo.name || 'P').charAt(0).toUpperCase(),
+            bg: pal.bg, fg: pal.fg,
+            tag: t.tag, tagClass: t.tagClass,
+            desc: (repo.description || repo.name || 'Open-source project').trim(),
+            date: yr + ' · GitHub'
+          };
+          const display = title(repo.name);
+          fileSystem.projects.push({ name: display, type: 'project', icon: '', proj: key });
+          fileSystem.all.push({ name: display, type: 'folder', color: '', proj: key });
+          fileSystem[key] = [
+            { name: 'GitHub Repository.lnk', type: 'link', url: repo.html_url, target: '_blank', size: 'GitHub' },
+            { name: 'Documentation.lnk', type: 'link', url: repo.html_url + '/blob/' + (repo.default_branch || 'main') + '/README.md', target: '_blank', size: 'Doc Link' }
+          ];
+          added.push(key);
+        });
+
+        if (added.length) {
+          desktopSections.all.meta = `${fileSystem.all.length} items · updated today`;
+          desktopSections.projects.meta = `${fileSystem.projects.length} projects · click to explore`;
+          if (currentFolderKey === 'all' || currentFolderKey === 'projects') {
+            renderFolder(currentFolderKey, desktopTitle.textContent, finderHistory.length > 0);
+          }
+        }
+      } catch (err) {
+        if (window.console && console.warn) console.warn('GitHub sync skipped:', err && err.message);
+      }
+    };
+    this._ghSync = syncProjectsFromGitHub();
   }
 
   componentWillUnmount(){
