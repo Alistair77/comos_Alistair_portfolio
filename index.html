@@ -132,7 +132,7 @@
 
 
   /* HERO copy — positioned to avoid overlap with header */
-  .hero-copy{position:absolute;top:52px;left:28px;transform:none;text-align:left;z-index:4;width:min(44vw,480px)}
+  .hero-copy{position:absolute;top:52px;left:28px;transform:none;text-align:left;z-index:4;width:min(44vw,480px);text-transform:uppercase}
   .hero-copy .hero-kicker{font-family:'Orbitron','Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-kicker);color:#7f8ba3;margin:0 0 10px}
   .hero-copy .hero-name{font-family:'Orbitron','Archivo Black',sans-serif;font-style:normal;font-weight:800;text-transform:uppercase;font-size:var(--text-4xl);line-height:.9;letter-spacing:var(--tr-normal);color:#fff;margin:0;text-shadow:0 4px 40px rgba(0,0,0,.45);white-space:nowrap}
   .hero-copy .hero-sub{font-family:'Space Mono',ui-monospace,monospace;font-style:normal;font-weight:400;font-size:clamp(12.5px,.72rem + .22vw,15px);color:#c3cee1;letter-spacing:.015em;line-height:1.7;max-width:46ch;margin:14px 0 2px;text-shadow:0 1px 10px rgba(0,0,0,.5)}
@@ -184,7 +184,7 @@
   .groot-playme:hover .groot-playme__model{transform:scale(1.07)}
   @media (max-width:600px){.groot-playme{display:none}}
   /* subtle Aurora light in the hero's galaxy fade — barely-there, screen-blended */
-  #heroAurora{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.2;mix-blend-mode:screen}
+  #heroAurora{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.6;mix-blend-mode:screen}
   #heroAurora canvas{display:block;width:100%;height:100%}
   /* subtle Prism glow behind the Event Horizon (contact) section only */
   #footerPrism{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.16}
@@ -457,8 +457,8 @@
   .journey-track{display:flex;gap:clamp(150px,16vw,260px);align-items:center;padding-inline:max(24px,calc(50vw - 320px));will-change:transform}
   .journey-card{position:relative;top:auto;height:min(80vh,660px);flex:0 0 auto;width:min(640px,86vw);display:block}
   /* W / zigzag flow — panels rise and fall instead of sitting in a flat line */
-  .journey-card:nth-child(odd){transform:translateY(-36px)}
-  .journey-card:nth-child(even){transform:translateY(40px)}
+  .journey-card:nth-child(odd){translate:0 -36px}
+  .journey-card:nth-child(even){translate:0 40px}
   /* no inner scroll — content is sized to fit the card */
   .journey-card__inner{position:relative;top:0;height:100%;overflow:hidden;--js:1;padding:clamp(20px,2.5vw,38px);display:flex;flex-direction:column}
   .journey-card__inner .journey-card__top{margin-bottom:clamp(10px,1.5vw,16px)}
@@ -492,7 +492,7 @@
   /* journey tabs — deep-space galaxy orbs (mirrors hero planet nav: orb above, label below) */
   .journey-tabs{display:flex;justify-content:center;align-items:flex-start;gap:clamp(16px,4.5vw,52px);margin:30px auto 38px;flex-wrap:wrap;position:relative;z-index:2}
   .journey-tab{display:flex;flex-direction:column;align-items:center;gap:var(--space-3);background:none;border:0;padding:6px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .journey-tab .jgal{position:relative;display:block;width:clamp(80px,9.5vw,116px);aspect-ratio:1;filter:saturate(.72) brightness(.78);transition:filter .5s ease,transform .5s cubic-bezier(.16,1,.3,1)}
+  .journey-tab .jgal{position:relative;display:block;width:clamp(80px,9.5vw,116px);aspect-ratio:1;filter:saturate(.72) brightness(.78);transition:filter .5s ease,transform .5s cubic-bezier(.16,1,.3,1),width .9s cubic-bezier(.16,1,.3,1)}
   .journey-tab .jgal::before{content:"";position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(circle,var(--jgal-glow,rgba(199,210,234,.16)),transparent 66%);opacity:0;transition:opacity .5s ease}
   .journey-tab .jgal svg{position:relative;display:block;width:100%;height:100%;overflow:visible}
   .journey-tab:hover .jgal{transform:translateY(-5px) scale(1.06);filter:saturate(.95) brightness(1.02)}
@@ -513,6 +513,48 @@
   @keyframes jgalCore{0%,100%{opacity:.82}50%{opacity:1}}
   @media (max-width:640px){.journey-tab .jgal{width:64px}.journey-tab__lbl{font-size:var(--text-2xs);letter-spacing:var(--tr-label)}.journey-tabs{gap:var(--space-3) 20px}}
   @media (prefers-reduced-motion:reduce){.jgal .tw,.jgal .tw2,.jgal .tw3,.jgal .jcorepulse{animation:none}}
+
+  /* ---- journey IDLE state — three galaxy orbs huge + centered until one is chosen ---- */
+  .journey-viewport.is-idle{padding-top:0}
+  .journey-viewport.is-idle .journey-head{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .journey-viewport.is-idle .journey-intro{padding:3vh clamp(18px,4vw,40px) 0}
+  .journey-viewport.is-idle .journey-hint{display:none}
+  .journey-viewport.is-idle .journey-track{display:none}
+  .journey-viewport.is-idle .journey-tabs{flex:0 0 auto;align-items:center;margin:0;gap:clamp(30px,6.5vw,90px)}
+  .journey-viewport.is-idle .journey-tab .jgal{width:min(23vw,248px);filter:saturate(1.05) brightness(1.08);animation:jgalIn 1s cubic-bezier(.16,1,.3,1) both,jgalFloat 6s ease-in-out 1.2s infinite}
+  .journey-viewport.is-idle .journey-tab:nth-child(2) .jgal{animation-delay:.15s,1.5s}
+  .journey-viewport.is-idle .journey-tab:nth-child(3) .jgal{animation-delay:.3s,1.8s}
+  .journey-viewport.is-idle .journey-tab .jgal::before{opacity:1;inset:-26%;animation:jgalGlowPulse 4.2s ease-in-out infinite}
+  .journey-viewport.is-idle .journey-tab:nth-child(2) .jgal::before{animation-delay:.8s}
+  .journey-viewport.is-idle .journey-tab:nth-child(3) .jgal::before{animation-delay:1.6s}
+  .journey-viewport.is-idle .journey-tab .jgal::after{content:"";position:absolute;inset:-17%;border:1px dashed var(--jgal-ring,rgba(180,205,255,.34));border-radius:50%;opacity:1;animation:jgalSpin 30s linear infinite}
+  .journey-viewport.is-idle .journey-tab:nth-child(2) .jgal::after{--jgal-ring:rgba(179,196,255,.34);animation-duration:38s}
+  .journey-viewport.is-idle .journey-tab:nth-child(3) .jgal::after{--jgal-ring:rgba(159,240,200,.34);animation-duration:26s}
+  .journey-viewport.is-idle .journey-tab:hover .jgal{filter:saturate(1.15) brightness(1.18)}
+  .journey-viewport.is-idle .journey-tab:hover .jgal::before{animation-duration:1.6s}
+  .journey-viewport.is-idle .journey-tab__lbl{font-size:var(--text-sm);letter-spacing:.22em;color:#aeb6c8}
+  @keyframes jgalIn{from{opacity:0;transform:scale(.6) translateY(46px)}to{opacity:1;transform:none}}
+  @keyframes jgalFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  @keyframes jgalGlowPulse{0%,100%{opacity:.55}50%{opacity:1}}
+  @keyframes jgalSpin{to{transform:rotate(360deg)}}
+  @media (max-width:640px){
+    .journey-viewport.is-idle .journey-tabs{gap:24px}
+    .journey-viewport.is-idle .journey-tab .jgal{width:clamp(84px,22vw,150px)}
+    .journey-viewport.is-idle .journey-tab__lbl{font-size:var(--text-xs)}
+    .journey-viewport.is-idle .journey-intro h2{font-size:var(--text-3xl)}
+  }
+
+  /* ---- journey OPEN state — panels sweep in with a stagger when a tab is picked ---- */
+  .journey-viewport.is-open .journey-card{animation:jcardIn .8s cubic-bezier(.16,1,.3,1) both}
+  .journey-viewport.is-open .journey-card:nth-child(2){animation-delay:.07s}
+  .journey-viewport.is-open .journey-card:nth-child(3){animation-delay:.14s}
+  .journey-viewport.is-open .journey-card:nth-child(4){animation-delay:.21s}
+  .journey-viewport.is-open .journey-card:nth-child(5){animation-delay:.28s}
+  .journey-viewport.is-open .journey-card:nth-child(6){animation-delay:.35s}
+  .journey-viewport.is-open .journey-card:nth-child(7){animation-delay:.42s}
+  .journey-viewport.is-open .journey-card:nth-child(8){animation-delay:.49s}
+  @keyframes jcardIn{from{opacity:0;transform:translateY(46px) scale(.97)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.journey-viewport.is-idle .jgal,.journey-viewport.is-idle .jgal::before,.journey-viewport.is-idle .jgal::after,.journey-viewport.is-open .journey-card{animation:none}}
   .journey-card[data-hidden]{display:none!important}
   .journey-bullets{margin:0;padding:0;list-style:none;display:grid;gap:var(--space-3);color:#aeb6c8;font-size:var(--text-base);line-height:1.5}
   .journey-bullets li{position:relative;padding-left:20px}.journey-bullets li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:#7fd1a8}
@@ -531,7 +573,7 @@
   .marquee-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;perspective:1200px}
   .marquee-tilt{width:100%;display:flex;align-items:center;justify-content:flex-start;transform:rotateX(8deg) rotateY(-28deg);transform-style:preserve-3d}
   .marquee-track{display:flex;white-space:nowrap;animation:marqueeSlide 26s linear infinite}
-  .marquee-item{display:inline-block;font-family:var(--font-geist-sans,-apple-system),BlinkMacSystemFont,sans-serif;font-size:var(--text-4xl);font-weight:700;letter-spacing:var(--tr-tightest);color:#fafafa;padding-right:clamp(24px,4vw,76px);filter:blur(0);opacity:.96;text-shadow:0 0 18px rgba(255,255,255,.08)}
+  .marquee-item{display:inline-block;font-family:var(--font-geist-sans,-apple-system),BlinkMacSystemFont,sans-serif;font-size:calc(var(--text-4xl) * .8);font-weight:700;letter-spacing:var(--tr-tightest);color:#fafafa;padding-right:clamp(24px,4vw,76px);filter:blur(0);opacity:.96;text-shadow:0 0 18px rgba(255,255,255,.08)}
   .marquee-fade-v,.marquee-fade-h{position:absolute;inset:0;pointer-events:none}
   .marquee-fade-v{background:linear-gradient(180deg,#050505 0%,transparent 25%,transparent 75%,#050505 100%)}
   .marquee-fade-h{background:linear-gradient(90deg,#050505 0%,transparent 18%,transparent 82%,#050505 100%)}
@@ -607,7 +649,7 @@
   .lanyard__strap{width:16px;height:clamp(64px,11vh,110px);margin:0 auto;border-radius:3px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
     background:repeating-linear-gradient(-48deg,rgba(255,255,255,.16) 0 5px,transparent 5px 11px),linear-gradient(90deg,#0e8a5c,#14c882 45%,#0b7a51)}
   .lanyard__clip{width:28px;height:16px;margin:-3px auto 0;border-radius:4px;background:linear-gradient(#eef2f8,#98a2b4);box-shadow:0 3px 6px rgba(0,0,0,.42),inset 0 1px 0 #fff}
-  .lanyard__card{pointer-events:auto;position:relative;width:clamp(184px,15vw,210px);margin-top:-2px;padding:22px 18px 16px;border-radius:16px;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;
+  .lanyard__card{pointer-events:auto;position:relative;transform:scale(1.25);transform-origin:top center;width:clamp(184px,15vw,210px);margin-top:-2px;padding:22px 18px 16px;border-radius:16px;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;
     background:linear-gradient(160deg,rgba(23,28,42,.97),rgba(8,10,17,.98));border:1px solid rgba(199,210,234,.16);
     box-shadow:0 34px 74px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.06)}
   .lanyard.is-grabbing .lanyard__card{cursor:grabbing}
@@ -1142,7 +1184,7 @@
 
   <!-- ============ MIDSECTION · THE OBSERVER (video left, plays once) ============ -->
   <section id="observer" style="position:relative;width:100%;min-height:clamp(760px,88.9vw,1530px);overflow:hidden;background:#04050a">
-    <video data-role="obs" data-lazy="1" class="sig-vid" src="uploads/Silhouette_with_swirling_particles_202606261709.mp4" muted loop playsinline preload="none" style="position:absolute;top:50%;left:0;width:min(44%,560px);height:auto;aspect-ratio:9/16;transform:translateY(-50%);object-fit:contain;object-position:center center;z-index:0;display:block;-webkit-mask-image:linear-gradient(to left,transparent 0%,#000 26%,#000 100%);mask-image:linear-gradient(to left,transparent 0%,#000 26%,#000 100%)"></video>
+    <video data-role="obs" data-lazy="1" class="sig-vid" src="uploads/Silhouette_with_swirling_particles_202606261709.mp4" muted loop playsinline preload="none" style="position:absolute;top:50%;left:0;width:min(53%,672px);height:auto;aspect-ratio:9/16;transform:translateY(-50%);object-fit:contain;object-position:78% center;z-index:0;display:block;-webkit-mask-image:linear-gradient(to left,transparent 0%,#000 26%,#000 100%);mask-image:linear-gradient(to left,transparent 0%,#000 26%,#000 100%)"></video>
     <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#04050a 0%,rgba(4,5,10,0) 16%,rgba(4,5,10,0) 80%,#04050a 100%)"></div>
 
     <div style="position:absolute;top:0;left:0;right:0;z-index:2;display:flex;justify-content:space-between;padding:30px clamp(22px,4vw,56px);font-family:'Orbitron','Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-label);color:#aeb6c8">
@@ -1276,7 +1318,7 @@
   <!-- ============ JOURNEY · STICKY STACKING CARDS ============ -->
   <section id="journey" class="journey-section" aria-label="Project journey">
     <div class="journey-stack" id="journeyStack">
-      <div class="journey-viewport">
+      <div class="journey-viewport is-idle">
         <div class="particles-container" aria-hidden="true"></div>
         <div class="journey-head">
           <div class="journey-intro">
@@ -3263,7 +3305,7 @@ void main() {
       const shootingStars = [];
       let shootTimer = 0;
       const spawnShootingStars = ()=>{
-        const count = 1 + Math.floor(Math.random() * 3);
+        const count = 2 + Math.floor(Math.random() * 3);
         for(let i=0;i<count;i++){
           const fromRight = Math.random() < 0.5;
           shootingStars.push({
@@ -3279,7 +3321,7 @@ void main() {
         }
       };
       spawnShootingStars();
-      shootTimer = rand(200, 360);
+      shootTimer = rand(90, 200);
 
       const onStarMove = (e)=>{
         tx = (e.clientX / Math.max(1, W) - 0.5) * 18;
@@ -3308,7 +3350,7 @@ void main() {
         // shooting stars
         if(!reduce){
           shootTimer--;
-          if(shootTimer <= 0){ spawnShootingStars(); shootTimer = rand(200, 360); }
+          if(shootTimer <= 0){ spawnShootingStars(); shootTimer = rand(90, 200); }
           for(let i=shootingStars.length-1;i>=0;i--){
             const s = shootingStars[i];
             s.x += s.vx; s.y += s.vy; s.life -= s.decay;
@@ -3347,6 +3389,7 @@ void main() {
     const journeyTrack = journeyStack ? journeyStack.querySelector('.journey-track') : null;
     const journeyCards = journeyTrack ? [...journeyTrack.querySelectorAll('.journey-card')] : [];
     const journeyInners = journeyStack ? [...journeyStack.querySelectorAll('.journey-card__inner')] : [];
+    const journeyHint = journeyStack ? journeyStack.querySelector('.journey-hint') : null;
     if(journeyStack && journeyTrack && journeyCards.length){
       const reduceJ = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const clamp = (v,a,b)=> Math.min(b, Math.max(a, v));
@@ -3354,8 +3397,9 @@ void main() {
       let rafId = 0, looping = false;
       // section height ∝ visible panel count so the slide pace stays consistent
       const setHeight = ()=>{
-        const n = journeyCards.filter(c=> getComputedStyle(c).display !== 'none').length || 1;
-        journeyStack.style.setProperty('--jn', (n + 1).toString());
+        const idle = journeyViewport.classList.contains('is-idle');
+        const n = idle ? 1 : (journeyCards.filter(c=> getComputedStyle(c).display !== 'none').length || 1);
+        journeyStack.style.setProperty('--jn', (idle ? 1 : n + 1).toString());
       };
       const HOLD = 0.85; // finish sliding at 85% of the scroll; hold the last card centered for the rest (dwell)
       const applyJourney = ()=>{
@@ -3419,6 +3463,7 @@ void main() {
     // ---- journey tab filter ----
     const journeyTabs = [...document.querySelectorAll('.journey-tab')];
     // journeyCards already declared above (the panels inside the track)
+    if(journeyHint) journeyHint.textContent = 'select a galaxy to begin';
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
       document.querySelectorAll('.jgal svg').forEach(s=>{ if(s.pauseAnimations) s.pauseAnimations(); });
     }
@@ -3426,8 +3471,22 @@ void main() {
       const tabHandlers = [];
       journeyTabs.forEach(tab=>{
         const handler = ()=>{
+          const wasIdle = journeyViewport.classList.contains('is-idle');
+          const collapsing = !wasIdle && tab.classList.contains('is-active');
+          // clicking the already-open tab collapses back to the big centered galaxy view
+          if(collapsing){
+            journeyTabs.forEach(t=>{ t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+            journeyViewport.classList.add('is-idle');
+            journeyViewport.classList.remove('is-open');
+            if(journeyHint) journeyHint.textContent = 'select a galaxy to begin';
+            if(this._applyJourney) this._applyJourney();
+            return;
+          }
           journeyTabs.forEach(t=>{ t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
           tab.classList.add('is-active'); tab.setAttribute('aria-selected','true');
+          journeyViewport.classList.remove('is-idle');
+          journeyViewport.classList.add('is-open');
+          if(journeyHint) journeyHint.textContent = 'scroll to slide through the timeline';
           const cat = tab.dataset.tab;
           journeyCards.forEach(c=>{
             const cCat = c.dataset.category || '';
