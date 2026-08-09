@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gargantua — Hero Bang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#07080b;--paper:#ECE4D4;--mid:#8A8577;--ochre:#D8A24A;--m:'Space Mono',monospace;--f:'Urbanist',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#000;overflow:hidden}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .ui{position:fixed;inset:0;z-index:2;pointer-events:none}
+  .top{position:absolute;top:26px;left:34px;right:34px;display:flex;justify-content:space-between;
+    font-family:var(--m);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid)}
+  .top b{color:var(--paper);font-weight:400}
+  .copy{position:absolute;left:44px;bottom:12%;color:var(--paper)}
+  .copy .eb{font-family:var(--m);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ochre);
+    opacity:0;animation:fade 1s ease .3s forwards}
+  .copy h1{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;
+    font-size:clamp(44px,7vw,104px);line-height:.9;margin-top:14px}
+  .copy h1 span{display:inline-block;opacity:0;transform:translateY(30px);filter:blur(10px);animation:rise 1.1s cubic-bezier(.16,1,.3,1) forwards}
+  .copy .role{max-width:42ch;color:#c9c2b2;font-size:16px;line-height:1.6;margin-top:18px;opacity:0;animation:fade 1s ease 1.1s forwards}
+  @keyframes rise{to{opacity:1;transform:none;filter:none}}
+  @keyframes fade{to{opacity:1}}
+  .hud{position:absolute;right:44px;bottom:12%;text-align:right;font-family:var(--m);font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--mid);line-height:2.1;opacity:0;animation:fade 1s ease 1.3s forwards}
+  .hud b{color:var(--ochre);font-weight:400}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="ui">
+  <div class="top"><span><b>ALISTAIR RODRIGUES</b> // AI ENGINEER</span><span>GARGANTUA · <b style="color:#3FD69B">STABLE ORBIT</b></span></div>
+  <div class="copy">
+    <div class="eb">A signal from the void</div>
+    <h1><span style="animation-delay:.35s">Building</span> <span style="animation-delay:.5s">systems</span><br><span style="animation-delay:.66s">that</span> <span style="animation-delay:.8s">reason</span></h1>
+    <div class="role">Retrieval systems, on-device intelligence, and the interfaces that make them legible — from pipeline to pixel.</div>
+  </div>
+  <div class="hud">MASS <b>100M M&#9737;</b><br>SPIN <b>0.999</b><br>DILATION <b>&times;61,000</b></div>
+</div>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');
+let W,H,DPR,cx,cy,R,t=0,mx=0,my=0,tmx=0,tmy=0,stars=[];
+function resize(){
+  DPR=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;
+  c.width=W*DPR;c.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);
+  cx=W*0.62;cy=H*0.46;R=Math.min(W,H)*0.13;
+  stars=[];const n=Math.round(Math.min(420,W/3));
+  for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+0.2,tw:Math.random()*6.28,sp:0.4+Math.random()});
+}
+addEventListener('resize',resize);resize();
+addEventListener('pointermove',e=>{tmx=(e.clientX/W-0.5);tmy=(e.clientY/H-0.5);});
+
+function disc(rot){
+  x.save();x.translate(cx,cy);
+  const incline=0.30;
+  for(let i=0;i<64;i++){
+    const rr=R*(1.35+i*0.055);
+    const a=Math.max(0,0.5-i*0.008);
+    const ang=rot*1.6+i*0.14;
+    const dopp=0.55+0.45*Math.cos(ang);
+    x.beginPath();
+    x.ellipse(0,0,rr,rr*incline,0,0,Math.PI*2);
+    const g=x.createLinearGradient(-rr,0,rr,0);
+    g.addColorStop(0,'rgba(255,214,140,'+(a*dopp)+')');
+    g.addColorStop(0.5,'rgba(240,150,60,'+(a*0.5)+')');
+    g.addColorStop(1,'rgba(180,90,30,'+(a*(1-dopp)*0.6)+')');
+    x.strokeStyle=g;x.lineWidth=R*0.05;x.stroke();
+  }
+  x.restore();
+}
+function frame(){
+  t+=0.016;mx+=(tmx-mx)*0.05;my+=(tmy-my)*0.05;
+  const ox=mx*26,oy=my*20;
+  x.clearRect(0,0,W,H);
+  x.save();x.translate(ox,oy);
+  const bg=x.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.9);
+  bg.addColorStop(0,'#0b0d12');bg.addColorStop(0.5,'#070809');bg.addColorStop(1,'#000');
+  x.fillStyle=bg;x.fillRect(-ox-40,-oy-40,W+80,H+80);
+  for(const s of stars){const tw=0.5+0.5*Math.sin(t*s.sp+s.tw);
+    x.beginPath();x.fillStyle='rgba(233,239,249,'+(0.25+tw*0.6)+')';x.arc(s.x,s.y,s.r,0,6.28);x.fill();}
+  x.globalCompositeOperation='lighter';
+  const bl=x.createRadialGradient(cx,cy,R*0.6,cx,cy,R*4.2);
+  bl.addColorStop(0,'rgba(216,150,70,0.35)');bl.addColorStop(0.5,'rgba(180,110,50,0.12)');bl.addColorStop(1,'rgba(0,0,0,0)');
+  x.fillStyle=bl;x.beginPath();x.arc(cx,cy,R*4.2,0,6.28);x.fill();
+  // FAR side of disc bent up and over the top (the signature)
+  x.save();x.translate(cx,cy);
+  for(let i=0;i<40;i++){const rr=R*(1.2+i*0.05);const a=Math.max(0,0.42-i*0.009);
+    x.beginPath();x.ellipse(0,0,rr,rr*0.62,0,Math.PI*1.03,Math.PI*1.97);
+    x.strokeStyle='rgba(255,206,130,'+a+')';x.lineWidth=R*0.045;x.shadowColor='rgba(240,170,80,0.8)';x.shadowBlur=18;x.stroke();}
+  x.restore();
+  disc(t);
+  x.globalCompositeOperation='source-over';
+  x.beginPath();x.arc(cx,cy,R,0,6.28);x.fillStyle='#000';x.shadowColor='rgba(255,210,140,0.9)';x.shadowBlur=30;x.fill();x.shadowBlur=0;
+  x.beginPath();x.arc(cx,cy,R*1.02,0,6.28);x.strokeStyle='rgba(255,224,170,0.9)';x.lineWidth=2;x.stroke();
+  x.globalCompositeOperation='lighter';x.save();x.translate(cx,cy);
+  for(let i=0;i<30;i++){const rr=R*(1.15+i*0.05);const a=Math.max(0,0.5-i*0.012);
+    const ang=t*1.6+i*0.14;const dopp=0.55+0.45*Math.cos(ang);
+    x.beginPath();x.ellipse(0,0,rr,rr*0.30,0,0.06,Math.PI-0.06);
+    x.strokeStyle='rgba(255,'+((190+40*dopp)|0)+',120,'+(a*dopp)+')';x.lineWidth=R*0.05;x.stroke();}
+  x.restore();
+  x.globalCompositeOperation='source-over';
+  x.restore();
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>

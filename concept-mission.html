@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alistair Rodrigues — Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+:root{
+  --bg:#05070B; --panel:#0A0E15; --hair:#18202D; --hair-2:#111825;
+  --hi:#E9EFF9; --mid:#7E8BA0; --dim:#485366;
+  --accent:#4C8DFF; --warn:#FFB020; --ok:#3FD69B;
+  --f:'Archivo',system-ui,sans-serif; --m:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1); --gut:clamp(20px,4vw,64px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--mid);font-family:var(--f);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.mono{font-family:var(--m);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase}
+
+.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:linear-gradient(90deg,var(--hair-2) 1px,transparent 1px) 0 0/25vw 100%,
+             linear-gradient(var(--hair-2) 1px,transparent 1px) 0 0/100% 240px;opacity:.55}
+.vignette{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(120% 90% at 70% 10%,rgba(76,141,255,.07),transparent 55%)}
+
+header{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;
+  padding:16px var(--gut);border-bottom:1px solid var(--hair);background:rgba(5,7,11,.7);backdrop-filter:blur(12px)}
+header .id{display:flex;align-items:center;gap:10px;color:var(--hi);font-weight:600;letter-spacing:.02em;font-size:13px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
+nav{display:flex;gap:26px}
+nav a{color:var(--mid);text-decoration:none;position:relative;padding:4px 0;transition:color .25s}
+nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--accent);transition:width .35s var(--ease)}
+nav a:hover{color:var(--hi)} nav a:hover::after{width:100%}
+
+.hero{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,64px);
+  align-items:center;padding:clamp(48px,7vw,104px) var(--gut) clamp(40px,5vw,72px);min-height:78vh}
+.kick{color:var(--accent);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+.kick::after{content:"";flex:1;max-width:120px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+h1{font-size:clamp(40px,6.4vw,88px);line-height:.98;font-weight:800;letter-spacing:-.025em;color:var(--hi);text-transform:uppercase}
+h1 .l{display:inline-block;opacity:0;transform:translateY(28px);filter:blur(8px);animation:rise .9s var(--ease) forwards}
+@keyframes rise{to{opacity:1;transform:none;filter:none}}
+.role{margin-top:20px;max-width:46ch;font-size:16px;color:#9AA6B9;line-height:1.65}
+.role b{color:var(--hi);font-weight:600}
+
+.tel{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair);border:1px solid var(--hair);margin-top:38px;max-width:520px}
+.tel div{background:var(--panel);padding:16px 18px}
+.tel .lab{color:var(--dim)}
+.tel .val{font-size:26px;font-weight:700;color:var(--hi);margin-top:8px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tel .val span{color:var(--accent);font-size:15px;font-weight:500}
+
+.stage{position:relative;height:min(62vh,540px)}
+model-viewer{width:100%;height:100%;background:transparent;--poster-color:transparent}
+.reticle{position:absolute;left:50%;top:50%;width:230px;height:230px;transform:translate(-50%,-50%);pointer-events:none}
+.reticle::before,.reticle::after{content:"";position:absolute;background:rgba(233,239,249,.22)}
+.reticle::before{left:0;right:0;top:50%;height:1px}
+.reticle::after{top:0;bottom:0;left:50%;width:1px}
+.tick{position:absolute;width:9px;height:9px;border:1px solid var(--accent);opacity:.85}
+.tick.tl{left:0;top:0;border-right:0;border-bottom:0}.tick.tr{right:0;top:0;border-left:0;border-bottom:0}
+.tick.bl{left:0;bottom:0;border-right:0;border-top:0}.tick.br{right:0;bottom:0;border-left:0;border-top:0}
+.tag{position:absolute;left:calc(50% + 96px);top:calc(50% - 14px);pointer-events:none}
+.tag .chip{display:inline-block;border:1px solid var(--hi);color:var(--hi);padding:2px 7px;font-family:var(--m);font-size:9.5px;letter-spacing:.16em}
+.tag .sub{font-family:var(--m);font-size:10px;color:var(--mid);margin-top:7px;line-height:1.5}
+.earth{position:absolute;left:50%;bottom:-58%;width:150%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 50% 8%,rgba(76,141,255,.30),rgba(20,52,110,.16) 34%,transparent 60%);
+  box-shadow:inset 0 34px 90px -30px rgba(140,190,255,.55);
+  opacity:0;animation:earthRise 2.6s var(--ease) .5s forwards}
+@keyframes earthRise{to{opacity:1;bottom:-52%}}
+.scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(76,141,255,.5),transparent);animation:scan 7s linear infinite}
+@keyframes scan{0%{top:6%}100%{top:94%}}
+
+section{position:relative;z-index:2;padding:clamp(56px,7vw,110px) var(--gut);border-top:1px solid var(--hair)}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:40px}
+.sec-head h2{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--hi);font-family:var(--m);font-weight:500}
+.sec-head .n{color:var(--dim);font-family:var(--m);font-size:10.5px;letter-spacing:.16em}
+.row{display:grid;grid-template-columns:44px 1.6fr 1.5fr 118px 92px;gap:20px;align-items:center;
+  padding:20px 12px;border-top:1px solid var(--hair-2);cursor:pointer;
+  opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease),background .3s,padding .3s}
+.row.in{opacity:1;transform:none}
+.row:hover{background:rgba(76,141,255,.045);padding-left:20px}
+.row .idx{font-family:var(--m);font-size:10.5px;color:var(--dim)}
+.row .nm{color:var(--hi);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.row .ds{color:var(--mid);font-size:13.5px}
+.row .st{font-family:var(--m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:7px;color:var(--mid)}
+.row .st i{width:5px;height:5px;border-radius:50%;background:var(--ok);display:inline-block}
+.row .st.dev i{background:var(--warn)}
+.row .mx{font-family:var(--m);font-size:11px;color:var(--accent);text-align:right}
+.row .arrow{opacity:0;transform:translateX(-6px);transition:all .3s var(--ease);color:var(--accent);display:inline-block}
+.row:hover .arrow{opacity:1;transform:none}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.row{grid-template-columns:32px 1fr;gap:8px}.row .ds,.row .st,.row .mx{display:none}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div><div class="vignette"></div>
+
+<header>
+  <div class="id"><span class="dot"></span>ALISTAIR RODRIGUES</div>
+  <nav class="mono"><a href="#">Missions</a><a href="#">Journey</a><a href="#">Résumé</a><a href="#">Contact</a></nav>
+  <div class="mono" style="color:var(--dim)">STATUS · <span style="color:var(--ok)">OPERATIONAL</span></div>
+</header>
+
+<div class="hero">
+  <div>
+    <div class="kick mono">AI Engineering · Data · Interface</div>
+    <h1 id="h1"></h1>
+    <p class="role">MSc Advanced Computer Science, <b>University of Strathclyde</b>. I build retrieval systems, on-device intelligence and the interfaces that make them legible — <b>from pipeline to pixel</b>.</p>
+    <div class="tel">
+      <div><div class="lab mono">Systems shipped</div><div class="val" data-to="5">0</div></div>
+      <div><div class="lab mono">Retrieval p95</div><div class="val" data-to="180">0<span>ms</span></div></div>
+      <div><div class="lab mono">Model stack</div><div class="val" data-to="7">0<span>+</span></div></div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <model-viewer src="uploads/satellite.glb" camera-orbit="-35deg 74deg 108%" field-of-view="30deg"
+      min-camera-orbit="auto auto 108%" max-camera-orbit="auto auto 108%"
+      auto-rotate auto-rotate-delay="0" rotation-per-second="14deg" exposure="1.15"
+      shadow-intensity=".4" interaction-prompt="none" disable-zoom camera-controls></model-viewer>
+    <div class="reticle"><i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i></div>
+    <div class="tag"><span class="chip">SATELLITE</span><div class="sub">LOW EARTH ORBIT<br>512 KB · GLB / WEBP</div></div>
+    <div class="scan"></div>
+    <div class="earth"></div>
+  </div>
+</div>
+
+<section>
+  <div class="sec-head"><h2>Selected Missions</h2><span class="n">05 RECORDS · SORTED BY RECENCY</span></div>
+  <div id="rows">
+    <div class="row"><span class="idx">01</span><span class="nm">RAGStar</span><span class="ds">Hybrid retrieval — Pinecone vectors + BM25, fused via Reciprocal Rank Fusion</span><span class="st"><i></i>Deployed</span><span class="mx">k=60 RRF <span class="arrow">→</span></span></div>
+    <div class="row"><span class="idx">02</span><span class="nm">HawkAI</span><span class="ds">Computer-vision auth surface with liveness and secure session handoff</span><span class="st"><i></i>Deployed</span><span class="mx">CV · Auth <span class="arrow">→</span></span></div>
+    <div class="row"><span class="idx">03</span><span class="nm">Quantasphere</span><span class="ds">Real-time 3D data environment — WebGL instancing, streamed geometry</span><span class="st"><i></i>Deployed</span><span class="mx">WebGL <span class="arrow">→</span></span></div>
+    <div class="row"><span class="idx">04</span><span class="nm">Study Snippets</span><span class="ds">Android learning client — Jetpack Compose, offline-first sync</span><span class="st dev"><i></i>Iterating</span><span class="mx">Kotlin <span class="arrow">→</span></span></div>
+    <div class="row"><span class="idx">05</span><span class="nm">Health Weight</span><span class="ds">Longitudinal health tracking with trend inference and forecasting</span><span class="st dev"><i></i>Iterating</span><span class="mx">Python <span class="arrow">→</span></span></div>
+  </div>
+</section>
+
+<script>
+const words='ALISTAIR RODRIGUES'.split(' ');
+document.getElementById('h1').innerHTML = words.map(w=>
+  `<span style="display:inline-block;white-space:nowrap">${[...w].map(c=>`<span class="l">${c}</span>`).join('')}</span>`
+).join(' ');
+[...document.querySelectorAll('.l')].forEach((el,i)=>el.style.animationDelay=(.25+i*.035)+'s');
+
+const tick=el=>{const to=+el.dataset.to,suf=el.querySelector('span')?.outerHTML||'';let v=0;
+  const step=()=>{v=Math.min(to,v+Math.max(1,to/28));el.innerHTML=Math.round(v)+suf;if(v<to)requestAnimationFrame(step)};step()};
+document.querySelectorAll('.tel .val').forEach(el=>setTimeout(()=>tick(el),900));
+
+const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){
+  e.target.style.transitionDelay=(e.target.dataset.d||0)+'ms';e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.25});
+document.querySelectorAll('.row').forEach((r,i)=>{r.dataset.d=i*70;io.observe(r)});
+</script>
+</body>
+</html>

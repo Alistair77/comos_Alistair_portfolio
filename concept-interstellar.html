@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interstellar Portfolio — Concept Boards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0B0E; --paper:#ECE4D4; --mut:#8A8577; --dim:#565247;
+  --ochre:#D8A24A; --amber:#F0B65C; --steel:#4C6076; --steeld:#2A3543;
+  --f:'Urbanist',system-ui,sans-serif; --m:'Space Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--ink);color:var(--paper);font-family:var(--f)}
+.frame{position:relative;height:100vh;overflow:hidden;isolation:isolate;
+  display:flex;flex-direction:column;justify-content:center}
+.frame::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:8;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vig{position:absolute;inset:0;z-index:7;pointer-events:none;
+  background:radial-gradient(130% 100% at 50% 42%,transparent 40%,rgba(0,0,0,.62) 100%)}
+.tag{position:absolute;left:34px;top:30px;z-index:9;font-family:var(--m);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ochre)}
+.tag b{color:var(--paper);font-weight:400}
+.cap{position:absolute;left:34px;right:34px;bottom:26px;z-index:9;font-family:var(--m);font-size:11px;
+  letter-spacing:.06em;color:var(--mut);line-height:1.6;border-top:1px solid rgba(216,162,74,.25);padding-top:12px;max-width:760px}
+.cap b{color:var(--ochre);font-weight:400}
+.hud{font-family:var(--m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+
+/* 01 HERO */
+.f-hero{background:radial-gradient(120% 90% at 78% 40%,rgba(70,52,26,.5),transparent 55%),linear-gradient(180deg,#0A0B0E,#0d0f13)}
+.window{position:absolute;right:-6%;top:50%;transform:translateY(-50%);width:min(52vw,720px);aspect-ratio:1;z-index:1}
+.gargantua{position:absolute;inset:18%;border-radius:50%;background:#000;
+  box-shadow:0 0 0 2px rgba(240,182,92,.85),0 0 90px 24px rgba(216,162,74,.35),inset 0 0 60px rgba(0,0,0,.9)}
+.disc{position:absolute;left:50%;top:50%;width:150%;height:42%;translate:-50% -50%;border-radius:50%;
+  background:radial-gradient(ellipse at center,transparent 34%,rgba(240,182,92,.55) 46%,rgba(216,120,40,.25) 56%,transparent 66%);
+  filter:blur(3px);transform:rotate(-16deg)}
+.lens{position:absolute;left:50%;top:50%;width:66%;height:66%;translate:-50% -50%;border-radius:50%;
+  border:2px solid rgba(240,182,92,.7);filter:blur(1px);
+  -webkit-mask:linear-gradient(#000,#000) top/100% 46% no-repeat;mask:linear-gradient(#000,#000) top/100% 46% no-repeat;transform:rotate(-16deg)}
+.bezel{position:absolute;inset:22px;z-index:5;pointer-events:none}
+.bezel i{position:absolute;width:34px;height:34px;border:2px solid rgba(236,228,212,.28)}
+.bezel .a{left:0;top:0;border-right:0;border-bottom:0}.bezel .b{right:0;top:0;border-left:0;border-bottom:0}
+.bezel .c{left:0;bottom:0;border-right:0;border-top:0}.bezel .d{right:0;bottom:0;border-left:0;border-top:0}
+.tars{position:absolute;left:6%;bottom:16%;z-index:4;display:flex;flex-direction:column;gap:5px}
+.tars i{width:34px;background:linear-gradient(180deg,#2b3038,#171b21);border:1px solid rgba(236,228,212,.14);border-radius:2px}
+.tars i:nth-child(1){height:120px}.tars i:nth-child(2){height:70px}.tars i:nth-child(3){height:40px;background:#20252c}
+.tars span{font-family:var(--m);font-size:8.5px;letter-spacing:.2em;color:var(--dim);margin-top:6px}
+.hero-c{position:relative;z-index:6;padding:0 6vw;max-width:60ch}
+.hero-c .eb{color:var(--ochre)}
+.hero-c h1{font-weight:800;font-size:clamp(46px,6.4vw,88px);line-height:.95;letter-spacing:-.02em;color:var(--paper);margin:16px 0 0;text-transform:uppercase}
+.hero-c .role{margin-top:18px;max-width:40ch;color:#C9C2B2;font-size:16px;line-height:1.6}
+.readout{position:absolute;right:40px;bottom:96px;z-index:6;text-align:right;line-height:2}
+.console{position:absolute;left:0;right:0;bottom:0;height:64px;z-index:6;display:flex;align-items:center;gap:26px;
+  padding:0 34px;background:linear-gradient(180deg,transparent,rgba(10,11,14,.9));border-top:1px solid rgba(216,162,74,.2)}
+.sw{display:flex;align-items:center;gap:8px}.sw i{width:8px;height:8px;border-radius:50%;background:var(--ochre);box-shadow:0 0 8px var(--ochre)}
+.sw.off i{background:var(--steeld);box-shadow:none}.sw span{font-family:var(--m);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+
+/* 02 WORK */
+.f-work{background:radial-gradient(circle at 50% 46%,rgba(60,44,22,.4),#08090c 60%)}
+.bh{position:relative;z-index:2;width:min(60vh,520px);aspect-ratio:1;margin:0 auto}
+.bh .core{position:absolute;inset:30%;border-radius:50%;background:#000;box-shadow:0 0 0 2px rgba(240,182,92,.9),0 0 70px 16px rgba(216,162,74,.3),inset 0 0 50px #000}
+.bh .ring{position:absolute;left:50%;top:50%;width:100%;height:30%;translate:-50% -50%;border-radius:50%;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(240,182,92,.6) 50%,rgba(210,110,36,.2) 60%,transparent 70%);filter:blur(3px)}
+.bh .halo{position:absolute;left:50%;top:50%;width:46%;height:46%;translate:-50% -50%;border-radius:50%;border:2px solid rgba(240,182,92,.75);
+  -webkit-mask:linear-gradient(#000,#000) top/100% 50% no-repeat;mask:linear-gradient(#000,#000) top/100% 50% no-repeat}
+.orbit-lbl{position:absolute;z-index:3;font-family:var(--m);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#C9C2B2}
+.orbit-lbl b{display:block;color:var(--ochre);font-size:9px;letter-spacing:.2em;margin-top:3px}
+.center-t{position:absolute;left:6vw;top:16%;z-index:3}
+.center-t h2{font-weight:800;font-size:clamp(30px,4vw,54px);line-height:1;text-transform:uppercase;letter-spacing:-.01em;color:var(--paper)}
+
+/* 03 PROJECTS */
+.f-proj{background:linear-gradient(160deg,#0a0c10,#0e1218 60%,#0a0f14)}
+.planet{position:absolute;right:-10%;top:50%;translate:0 -50%;width:min(58vw,640px);aspect-ratio:1;border-radius:50%;z-index:1;
+  background:radial-gradient(circle at 36% 32%,#7fb7d8,#2f6a92 40%,#123049 72%,#0a1b2b);
+  box-shadow:inset -30px -20px 90px rgba(0,0,0,.7),0 0 70px rgba(90,150,200,.22)}
+.planet::after{content:"";position:absolute;inset:-3px;border-radius:50%;box-shadow:inset 0 0 40px 6px rgba(150,200,235,.4)}
+.ranger{position:absolute;left:34%;top:38%;z-index:3;width:70px;height:20px;background:linear-gradient(90deg,#c9c2b2,#7a7466);
+  border-radius:4px 10px 10px 4px;box-shadow:0 0 18px rgba(240,182,92,.3);transform:rotate(-14deg)}
+.ranger::before{content:"";position:absolute;left:12px;top:-8px;width:26px;height:8px;background:#55657a;border-radius:3px;transform:skewX(-20deg)}
+.ranger::after{content:"";position:absolute;left:12px;bottom:-8px;width:26px;height:8px;background:#55657a;border-radius:3px;transform:skewX(20deg)}
+.dossier{position:relative;z-index:4;margin-left:6vw;width:min(40vw,420px);border:1px solid rgba(216,162,74,.3);
+  background:rgba(10,12,16,.7);backdrop-filter:blur(6px);padding:22px}
+.dossier .k{color:var(--ochre)}
+.dossier h3{font-weight:800;font-size:34px;text-transform:uppercase;color:var(--paper);margin:10px 0}
+.shot{height:140px;border:1px solid rgba(236,228,212,.14);background:
+  repeating-linear-gradient(135deg,rgba(76,96,118,.18) 0 10px,transparent 10px 20px),linear-gradient(160deg,#12202c,#0b141c);
+  display:flex;align-items:center;justify-content:center;color:var(--dim);font-family:var(--m);font-size:10px;letter-spacing:.2em;margin:6px 0 14px}
+.dossier p{color:#C9C2B2;font-size:14px;line-height:1.6}
+.dilate{margin-top:14px;padding-top:12px;border-top:1px solid rgba(216,162,74,.25);display:flex;justify-content:space-between;align-items:baseline}
+.dilate b{font-family:var(--m);color:var(--ochre);font-size:16px}
+.path{position:absolute;left:6vw;bottom:64px;z-index:4;display:flex;align-items:center;gap:14px}
+.path i{width:9px;height:9px;border-radius:50%;background:var(--steel)}.path i.on{background:var(--ochre);box-shadow:0 0 10px var(--ochre)}
+.path .ln{width:44px;height:1px;background:rgba(216,162,74,.3)}
+
+/* 04 JOURNEY */
+.f-tess{background:#070809;perspective:900px}
+.lattice{position:absolute;inset:-20%;z-index:1;transform:rotateX(58deg) scale(1.1);transform-origin:50% 40%;
+  background:
+    repeating-linear-gradient(0deg,rgba(216,162,74,.16) 0 1px,transparent 1px 84px),
+    repeating-linear-gradient(90deg,rgba(216,162,74,.16) 0 1px,transparent 1px 84px),
+    repeating-linear-gradient(0deg,rgba(76,96,118,.1) 0 1px,transparent 1px 28px);
+  -webkit-mask:radial-gradient(circle at 50% 40%,#000 10%,transparent 62%);mask:radial-gradient(circle at 50% 40%,#000 10%,transparent 62%)}
+.tglow{position:absolute;left:50%;top:40%;width:340px;height:340px;translate:-50% -50%;z-index:2;border-radius:50%;
+  background:radial-gradient(circle,rgba(240,182,92,.22),transparent 70%)}
+.node{position:absolute;z-index:3;text-align:center}
+.node i{display:block;width:10px;height:10px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px var(--amber);margin:0 auto 8px}
+.node span{font-family:var(--m);font-size:10px;letter-spacing:.14em;color:#C9C2B2}.node b{display:block;color:var(--dim);font-size:8.5px;letter-spacing:.2em;margin-top:2px}
+.tess-t{position:absolute;left:6vw;top:14%;z-index:4}
+.tess-t h2{font-weight:800;font-size:clamp(30px,4vw,54px);text-transform:uppercase;line-height:1;color:var(--paper)}
+
+/* 05 CONTACT */
+.f-cont{background:radial-gradient(circle at 50% 50%,rgba(40,54,72,.5),#07090c 62%)}
+.worm{position:absolute;left:62%;top:50%;translate:-50% -50%;width:min(46vh,420px);aspect-ratio:1;border-radius:50%;z-index:1;
+  background:radial-gradient(circle at 50% 50%,#0a1420 18%,#274156 40%,#5b8199 60%,#9fc4d8 72%,transparent 74%);
+  box-shadow:0 0 80px 10px rgba(120,170,205,.3),inset 0 0 60px rgba(0,0,0,.8)}
+.worm::after{content:"";position:absolute;inset:-16%;border-radius:50%;border:1px solid rgba(159,196,216,.25);
+  box-shadow:0 0 0 14px rgba(159,196,216,.06),0 0 0 30px rgba(159,196,216,.04)}
+.signal{position:relative;z-index:4;margin-left:6vw;width:min(40vw,420px)}
+.signal h2{font-weight:800;font-size:clamp(30px,4vw,52px);text-transform:uppercase;color:var(--paper);line-height:1}
+.field{margin-top:16px;border:1px solid rgba(216,162,74,.3);background:rgba(10,12,16,.6);padding:12px 14px;
+  font-family:var(--m);font-size:11px;letter-spacing:.1em;color:var(--mut)}
+.transmit{margin-top:14px;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--ochre);color:var(--ochre);
+  padding:11px 18px;font-family:var(--m);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.morse{margin-top:22px;display:flex;align-items:center;gap:7px}
+.morse i{height:6px;border-radius:3px;background:var(--ochre);opacity:.8}
+.morse .d{width:6px}.morse .l{width:20px}
+.morse span{font-family:var(--m);font-size:9px;letter-spacing:.2em;color:var(--dim);margin-left:10px}
+</style>
+</head>
+<body>
+
+<!-- 01 HERO -->
+<div class="frame f-hero">
+  <div class="tag">01 — <b>HERO · COCKPIT / DEPARTURE</b></div>
+  <div class="window"><div class="gargantua"></div><div class="disc"></div><div class="lens"></div></div>
+  <div class="bezel"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div>
+  <div class="tars"><i></i><i></i><i></i><span>TARS</span></div>
+  <div class="hero-c">
+    <div class="eb hud">Cooper Station // Departure Sequence</div>
+    <h1>Alistair<br>Rodrigues</h1>
+    <p class="role">AI engineer. Retrieval systems, on-device intelligence, and the interfaces that make them legible.</p>
+  </div>
+  <div class="readout hud">LAT 40.7128 · LON −74.0060<br>T− 00:04:12 TO BURN<br>DILATION ×1.00</div>
+  <div class="console">
+    <div class="sw"><i></i><span>Work</span></div>
+    <div class="sw"><i></i><span>Journey</span></div>
+    <div class="sw off"><i></i><span>Résumé</span></div>
+    <div class="sw off"><i></i><span>Contact</span></div>
+    <div style="flex:1"></div><div class="hud">TARS · HONESTY 90% · HUMOR 75%</div>
+  </div>
+  <div class="cap">Interactive cockpit (growon-style). <b>Gargantua's glow = the gradient you love.</b> Console switches are the nav portals; TARS stands to the side as guide + cursor. Loader "Setting the scene…" plays over the black-hole glow, then hands into the hello/constellation.</div>
+</div>
+
+<!-- 02 WORK -->
+<div class="frame f-work">
+  <div class="tag">02 — <b>WORK · GARGANTUA</b></div>
+  <div class="center-t"><div class="hud" style="color:var(--ochre)">What I Do</div><h2>Bending complexity<br>into order</h2></div>
+  <div class="bh">
+    <div class="ring"></div><div class="halo"></div><div class="core"></div>
+    <div class="orbit-lbl" style="left:-8%;top:20%">Retrieval / RAG<b>Vector · BM25 · RRF</b></div>
+    <div class="orbit-lbl" style="right:-6%;top:34%">Computer Vision<b>Liveness · Auth</b></div>
+    <div class="orbit-lbl" style="left:2%;bottom:12%">On-device ML<b>Kotlin · Compose</b></div>
+    <div class="orbit-lbl" style="right:4%;bottom:8%">Interfaces<b>WebGL · Motion</b></div>
+  </div>
+  <div class="cap">Your capabilities <b>orbit the event horizon like the accretion disc.</b> Hovering a disc segment details a skill. The lensing is a metaphor for what an engineer does — bending complexity into order. Rendered as a canvas shader, not a 3D model.</div>
+</div>
+
+<!-- 03 PROJECTS -->
+<div class="frame f-proj">
+  <div class="tag">03 — <b>PROJECTS · THE PLANETS</b></div>
+  <div class="planet"></div>
+  <div class="ranger"></div>
+  <div class="dossier">
+    <div class="k hud">Destination 01 · Miller's Ocean</div>
+    <h3>RAGStar</h3>
+    <div class="shot">PROJECT SCREENSHOT</div>
+    <p>Hybrid search — dense vectors + BM25, fused via Reciprocal Rank Fusion, reranked with Cohere.</p>
+    <div class="dilate"><span class="hud">Time cost</span><b>1H HERE = 7Y EARTH</b></div>
+  </div>
+  <div class="path"><i class="on"></i><span class="ln"></span><i></i><span class="ln"></span><i></i><span class="ln"></span><i></i></div>
+  <div class="cap">Each project is a <b>planet you fly the Ranger to.</b> Miller's ocean world = flagship (entered with the tidal-wave reveal); other worlds follow. Approach → land → screenshot + what it does. The <b>time-dilation "cost"</b> is a playful depth metric (wink at 1hr = 7yrs).</div>
+</div>
+
+<!-- 04 JOURNEY -->
+<div class="frame f-tess">
+  <div class="tag">04 — <b>JOURNEY · THE TESSERACT</b></div>
+  <div class="lattice"></div><div class="tglow"></div>
+  <div class="tess-t"><div class="hud" style="color:var(--ochre)">Personal Journey</div><h2>Reaching across<br>time</h2></div>
+  <div class="node" style="left:30%;top:44%"><i></i><span>Strathclyde MSc<b>2024</b></span></div>
+  <div class="node" style="left:52%;top:52%"><i></i><span>First RAG system<b>2025</b></span></div>
+  <div class="node" style="left:66%;top:40%"><i></i><span>Shipped 5 projects<b>2026</b></span></div>
+  <div class="cap">The <b>5D bookshelf</b> — your milestones laid out as moments across time you reach <b>through</b>. Scrolling moves you through time; each milestone is a frame you pull. Nolan's time-as-connection, as your life story. Built from instanced lattice geometry.</div>
+</div>
+
+<!-- 05 CONTACT -->
+<div class="frame f-cont">
+  <div class="tag">05 — <b>CONTACT · WORMHOLE / SIGNAL</b></div>
+  <div class="worm"></div>
+  <div class="signal">
+    <div class="hud" style="color:var(--ochre)">Contact</div>
+    <h2>Send a signal<br>home</h2>
+    <div class="field">NAME / CALLSIGN</div>
+    <div class="field">MESSAGE ACROSS THE VOID…</div>
+    <div class="transmit">▲ Transmit signal</div>
+    <div class="morse"><i class="d"></i><i class="l"></i><i class="d"></i><i class="d"></i><i class="l"></i><i class="d"></i><i class="l"></i><span>watch · contact in morse</span></div>
+  </div>
+  <div class="cap">The wormhole is the <b>gateway home.</b> The form "transmits a signal"; on send, a gravity/morse pulse fires — a nod to <b>Murph's watch</b>, which hides your details in morse as an easter egg.</div>
+</div>
+
+</body>
+</html>
