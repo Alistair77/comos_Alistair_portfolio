@@ -124,6 +124,9 @@
   .signal-status>span:first-child{display:inline-flex;align-items:center;gap:var(--space-3)}
   .signal-status .sig-dot{width:5px;height:5px;border-radius:50%;background:#7fd1a8;box-shadow:0 0 10px rgba(127,209,168,.8);animation:sigPulse 1.8s ease-in-out infinite}
   #introPct{color:#aebadb}
+  .signal-bar{position:relative;width:min(62vw,340px);height:5px;margin:20px auto 4px;border-radius:99px;background:rgba(126,156,230,.14);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(199,210,234,.14)}
+  .signal-bar__fill{position:absolute;left:0;top:0;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#5aa0ff,#7fd1a8);box-shadow:0 0 12px rgba(127,209,168,.65),0 0 22px rgba(90,160,255,.45);transition:width .35s cubic-bezier(.4,0,.2,1)}
+  .signal-bar__fill::after{content:"";position:absolute;right:0;top:50%;width:8px;height:8px;transform:translate(50%,-50%);border-radius:50%;background:#eaf3ff;box-shadow:0 0 10px #7fd1a8,0 0 18px rgba(90,160,255,.7)}
   .hdr-in{opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .1s both;animation-play-state:paused}
   .hero-headline-wrap{opacity:0;animation:heroContentIn .55s cubic-bezier(.44,0,.56,1) .12s both;animation-play-state:paused}
   .hero-sub-wrap{opacity:0;animation:heroContentIn .55s cubic-bezier(.44,0,.56,1) .28s both;animation-play-state:paused}
@@ -1053,6 +1056,7 @@
           <circle id="introHead" cx="404" cy="70" r="2.6" />
         </svg>
         <div class="signal-word"><span>h</span><span>e</span><span>l</span><span>l</span><span>o</span></div>
+        <div class="signal-bar" aria-hidden="true"><span class="signal-bar__fill" id="introBar"></span></div>
         <div class="signal-status"><span><span class="sig-dot"></span><span id="introStatus">Acquiring signal</span></span><span id="introPct">000%</span></div>
       </div>
     </div>
@@ -1210,7 +1214,7 @@
         <circle cx="394" cy="84" r="2.5" />
       </svg>
       <h2 style="font-style:normal;font-weight:700;font-family:'Syncopate',sans-serif;font-size:var(--text-4xl);line-height:1.1;letter-spacing:var(--tr-wide);color:#fff;margin:0;text-shadow:0 4px 36px rgba(0,0,0,.5);text-transform:uppercase">The Observer</h2>
-      <p style="font-size:var(--text-lg);line-height:1.55;color:#d4d0c6;margin:20px 0 0;max-width:44ch">A silhouette holding whole galaxies, still, watching, swirling with quiet light. The space between signal and answer, rendered in motion.</p>
+      <p class="scramble-text" style="font-size:var(--text-lg);line-height:1.55;color:#d4d0c6;margin:20px 0 0;max-width:44ch">A silhouette cradling whole galaxies — motionless, yet endlessly turning. Light bends slow around the stillness. The held breath between a signal cast into the dark and the void that answers back.</p>
       <span style="display:inline-block;margin-top:24px;font-family:'Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-label);color:#c7d2ea">2026 · SINGLE FRAME</span>
       </div>
       <div class="desktop-window">
@@ -1800,7 +1804,7 @@ class Component extends DCLogic {
       var paths=[].slice.call(svg.querySelectorAll('path'));
       var stars=[].slice.call(svg.querySelectorAll('circle')).filter(function(c){return c.id!=='introHead';});
       var head=document.getElementById('introHead');
-      var pnode=document.getElementById('introPct'), snode=document.getElementById('introStatus');
+      var pnode=document.getElementById('introPct'), snode=document.getElementById('introStatus'), bnode=document.getElementById('introBar');
       var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
       var seq=[],total=0,finished=false,loaded=false;
       var target=.06,shown=0;
@@ -1822,6 +1826,7 @@ class Component extends DCLogic {
         stars.forEach(function(c){if(f>=+c.dataset.at)c.classList.add('lit');});
         if(head){if(active&&f<1){var pt=active.p.getPointAtLength(hlen-active.start);head.setAttribute('cx',pt.x);head.setAttribute('cy',pt.y);head.classList.add('on');}else{head.classList.remove('on');}}
         if(pnode)pnode.textContent=String(Math.round(f*100)).padStart(3,'0')+'%';
+        if(bnode)bnode.style.width=Math.round(f*100)+'%';
         if(snode){var lab=labels[0][1];labels.forEach(function(l){if(f>=l[0])lab=l[1];});if(snode.textContent!==lab)snode.textContent=lab;}
       }
       var lastTick=0,watchdog=null;
@@ -3862,6 +3867,7 @@ void main() {
       };
 
       resize();
+      requestAnimationFrame(resize); // re-measure next frame so a premature 0-size first paint still fills instantly
       window.addEventListener('resize', resize, false);
       animate();
 
@@ -5047,6 +5053,59 @@ import { Renderer, Triangle, Program, Mesh } from 'https://esm.sh/ogl@1.0.11';
   const render = t => { program.uniforms.iTime.value=(t-t0)*0.001; renderer.render({ scene: mesh }); raf = (vis && !reduce) ? requestAnimationFrame(render) : 0; };
   const io = new IntersectionObserver(es => { vis = es.some(e=>e.isIntersecting); if (vis && !raf) raf = requestAnimationFrame(render); else if (!vis && raf) { cancelAnimationFrame(raf); raf=0; } }); io.observe(ctn);
   if (reduce) renderer.render({ scene: mesh });
+})();
+</script>
+<script>
+/* ScrambledText — proximity scramble on the observer copy (vanilla port of React Bits <ScrambledText/>) */
+function initScrambledText(root){
+  if(!root || root.dataset.scrambled) return;
+  root.dataset.scrambled = '1';
+  const scrambleChars = '.:';
+  const radius = 110;
+  const text = root.textContent;
+  root.textContent = '';
+  const spans = [];
+  for(const ch of text){
+    const s = document.createElement('span');
+    s.textContent = ch;
+    s.dataset.ch = ch;
+    if(ch === ' ') s.style.whiteSpace = 'pre';
+    else s.style.display = 'inline-block';
+    root.appendChild(s);
+    spans.push(s);
+  }
+  const active = new Map();
+  let raf = 0;
+  const tick = ()=>{
+    active.forEach((ticks, s)=>{
+      if(ticks <= 0){ s.textContent = s.dataset.ch; active.delete(s); return; }
+      s.textContent = scrambleChars[Math.floor(Math.random()*scrambleChars.length)] || s.dataset.ch;
+      active.set(s, ticks-1);
+    });
+    raf = active.size ? requestAnimationFrame(tick) : 0;
+  };
+  root.addEventListener('pointermove', (e)=>{
+    for(const s of spans){
+      if(s.dataset.ch === ' ' || active.has(s)) continue;
+      const r = s.getBoundingClientRect();
+      const dist = Math.hypot(e.clientX - (r.left + r.width/2), e.clientY - (r.top + r.height/2));
+      if(dist < radius) active.set(s, 6 + Math.floor((1 - dist/radius) * 10));
+    }
+    if(!raf && active.size) raf = requestAnimationFrame(tick);
+  });
+}
+(function(){
+  const trigger = ()=>{ const el = document.querySelector('.scramble-text'); if(el) initScrambledText(el); };
+  const el = document.querySelector('.scramble-text');
+  if(el){
+    const io = new IntersectionObserver((entries)=>{
+      if(entries.some(e=>e.isIntersecting)){ trigger(); io.disconnect(); }
+    }, { threshold: 0.15 });
+    io.observe(el);
+  }
+  // fallbacks so it runs even under Lenis/late render — dataset flag prevents double-init
+  if(document.readyState === 'complete') setTimeout(trigger, 1500);
+  else window.addEventListener('load', ()=>setTimeout(trigger, 1500));
 })();
 </script>
 </body>
