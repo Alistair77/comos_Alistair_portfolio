@@ -24,8 +24,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Archivo+Black&family=Archivo:wght@500;600;700;800;900&family=Syncopate:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="preconnect" href="https://unpkg.com" crossorigin />
-<link rel="preload" as="fetch" type="model/gltf-binary" href="uploads/station.glb" crossorigin="anonymous" />
-<link rel="preload" as="fetch" type="model/gltf-binary" href="uploads/groot.glb" crossorigin="anonymous" />
+<!-- station.glb removed from hero (nebula replaces the satellite); groot.glb is a decorative
+     hero play-button — neither should preload ahead of the black-hole LCP, so both are fetched
+     on demand by their own <model-viewer> instead. -->
 <link rel="preload" as="fetch" href="uploads/bh/blackhole.fbx" crossorigin="anonymous" />
 <link rel="preload" as="fetch" href="uploads/bh/textures/planet.png" crossorigin="anonymous" />
 <link rel="preload" as="fetch" href="uploads/bh/textures/blackholering_1_color.png" crossorigin="anonymous" />
@@ -62,7 +63,7 @@
     --space-section:clamp(64px,3rem + 5vw,160px);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:#04050a;overflow-x:clip}
+  html,body{margin:0;padding:0;background:oklch(8% 0.015 275);overflow-x:clip}
   /* Lenis smooth scroll */
   html.lenis,html.lenis body{height:auto}
   .lenis.lenis-smooth{scroll-behavior:auto!important}
@@ -93,7 +94,8 @@
   @keyframes floatWord2{0%,100%{transform:translate(0,0) rotate(0deg);opacity:.3}25%{transform:translate(16px,-22px) rotate(3deg);opacity:.8}50%{transform:translate(6px,-8px) rotate(-1deg);opacity:.5}75%{transform:translate(24px,-30px) rotate(2deg);opacity:.9}}
   @keyframes floatWord3{0%,100%{transform:translate(0,0) rotate(0deg);opacity:.2}25%{transform:translate(-12px,-14px) rotate(-2deg);opacity:.7}50%{transform:translate(-4px,-4px) rotate(1deg);opacity:.4}75%{transform:translate(-18px,-20px) rotate(-1deg);opacity:.8}}
 
-  .page-stars{position:fixed;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;opacity:.72}
+  .page-atmos{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(120% 90% at 72% 48%, oklch(22% 0.05 300 / .16), transparent 64%)}
+  .page-stars{position:fixed;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;opacity:.9}
   .hero-particles{position:absolute;top:0;left:0;width:100vw;height:100%;z-index:0;pointer-events:none;overflow:hidden}
   .hero-particles canvas{width:100%!important;height:100%!important;display:block}
 
@@ -130,12 +132,11 @@
   .hdr-in{opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .1s both;animation-play-state:paused}
   .hero-headline-wrap{opacity:0;animation:heroContentIn .55s cubic-bezier(.44,0,.56,1) .12s both;animation-play-state:paused}
   .hero-sub-wrap{opacity:0;animation:heroContentIn .55s cubic-bezier(.44,0,.56,1) .28s both;animation-play-state:paused}
-  body.is-ready .hdr-in,body.is-ready .hero-headline-wrap,body.is-ready .hero-sub-wrap,body.is-ready .hero-dashboard,body.is-ready .hero-card,body.is-ready .hero-constellation,body.is-ready .satellite-hub,body.is-ready .hero-planets,body.is-ready .hero-planets .planet{animation-play-state:running}
-  body.is-ready .satellite-hub{transform:translate(-10%,5%) scale(.82)} /* −18%, nudged 5% down / 10% left */
+  body.is-ready .hdr-in,body.is-ready .hero-headline-wrap,body.is-ready .hero-sub-wrap,body.is-ready .hero-dashboard,body.is-ready .hero-card,body.is-ready .hero-constellation,body.is-ready .hero-planets,body.is-ready .hero-planets .planet{animation-play-state:running}
 
 
   /* HERO copy — positioned to avoid overlap with header */
-  .hero-copy{position:absolute;top:52px;left:28px;transform:none;text-align:left;z-index:4;width:min(44vw,480px);text-transform:uppercase}
+  .hero-copy{position:absolute;bottom:calc(clamp(46px,7.5vh,104px) + 132px);left:28px;transform:none;text-align:left;z-index:4;width:min(44vw,480px);text-transform:uppercase}
   .hero-copy .hero-kicker{font-family:'Orbitron','Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-kicker);color:#7f8ba3;margin:0 0 10px}
   .hero-copy .hero-name{font-family:'Orbitron','Archivo Black',sans-serif;font-style:normal;font-weight:800;text-transform:uppercase;font-size:var(--text-4xl);line-height:.9;letter-spacing:var(--tr-normal);color:#fff;margin:0;text-shadow:0 4px 40px rgba(0,0,0,.45);white-space:nowrap}
   .hero-copy .hero-sub{font-family:'Space Mono',ui-monospace,monospace;font-style:normal;font-weight:400;font-size:clamp(12.5px,.72rem + .22vw,15px);color:#c3cee1;letter-spacing:.015em;line-height:1.7;max-width:46ch;margin:14px 0 2px;text-shadow:0 1px 10px rgba(0,0,0,.5)}
@@ -151,7 +152,7 @@
   .hero-card__meta{margin:7px 0 0;font-family:'Space Mono',monospace;font-size:var(--text-2xs);letter-spacing:var(--tr-wide);line-height:1.4;color:#8f98ad}
 
   /* CONSTELLATION — shifted 36px left */
-  .hero-constellation{position:absolute;left:clamp(444px,45vw,544px);top:80px;width:min(52vw,540px);height:auto;z-index:6;pointer-events:none;opacity:0;animation:heroContentIn .7s cubic-bezier(.44,0,.56,1) .4s both;animation-play-state:paused}
+  .hero-constellation{position:absolute;left:28px;top:52px;width:min(44vw,480px);height:auto;z-index:6;pointer-events:none;opacity:0;animation:heroContentIn .7s cubic-bezier(.44,0,.56,1) .4s both;animation-play-state:paused}
   .taurus-const{width:100%;height:auto;display:block;overflow:visible}
   .taurus-const path{fill:none;stroke:rgba(199,210,234,.7);stroke-width:.8;stroke-dasharray:360;stroke-dashoffset:360;animation:taurusDraw 5s ease-in-out infinite}
   .taurus-const circle{fill:#fff;filter:drop-shadow(0 0 8px rgba(199,210,234,.6))}
@@ -159,12 +160,6 @@
   .taurus-const .taurus-star--p{animation:taurusPulse 3.4s ease-in-out infinite}
 
   /* SATELLITE — original left position, tilted 45° */
-  .satellite-hub{position:absolute;left:clamp(22px,4vw,56px);width:min(50vw,600px);top:clamp(224px,26vh,312px);bottom:clamp(138px,17vh,176px);z-index:3;display:grid;place-items:center;perspective:1100px;pointer-events:none;overflow:visible;opacity:0;transform:scale(2.4);transform-origin:50% 45%;animation:satAppear 1.1s ease .8s both;transition:transform 1.7s cubic-bezier(.16,1,.3,1)}
-  .satellite-core{position:relative;width:min(36vw,48vh,440px);height:min(36vw,48vh,440px);pointer-events:auto;overflow:visible;transform:rotate(45deg)}
-  .satellite-orbit{position:absolute;inset:4%;border:1px solid rgba(199,210,234,.13);border-radius:50%;transform:rotateX(64deg) rotateZ(-18deg);box-shadow:0 0 60px rgba(127,209,168,.07)}
-  .satellite-orbit:nth-child(2){inset:15%;transform:rotateX(68deg) rotateZ(24deg)}
-  .satellite-model{width:100%;height:100%;filter:drop-shadow(0 32px 80px rgba(0,0,0,.72)) drop-shadow(0 0 34px rgba(127,209,168,.18))}
-  .satellite-core::after{content:"";position:absolute;left:18%;right:18%;bottom:4%;height:16%;border-radius:50%;background:radial-gradient(ellipse,rgba(127,209,168,.16),transparent 72%);filter:blur(10px);pointer-events:none}
   /* black hole = full-hero background scene (the source project's dark sky + drifting
      stars + disk). Sits behind the hero content (text z4, planets z5, station z3). */
   .blackhole-hub{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;opacity:0;animation:satAppear 1.4s ease .2s both}
@@ -247,7 +242,7 @@
   @keyframes pTilt{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
   @keyframes pPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.06);filter:brightness(1.12)}}
 
-  .mission-desktop{position:relative;overflow:hidden;min-height:760px;background:radial-gradient(120% 88% at 50% -6%,rgba(20,30,56,.55),transparent 58%),linear-gradient(180deg,#05060d 0%,#04050a 64%,#05060d 100%);padding:clamp(70px,9vw,120px) clamp(22px,4vw,56px)}
+  .mission-desktop{position:relative;overflow:hidden;min-height:760px;padding:clamp(70px,9vw,120px) clamp(22px,4vw,56px)}
   .mission-desktop::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 46%,rgba(127,209,168,.05),transparent 62%);pointer-events:none}
   .desktop-blackhole{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;opacity:.7}
   .mac-menu{position:absolute;left:0;right:0;top:0;z-index:2;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(10,10,14,.42);backdrop-filter:blur(18px);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:var(--text-sm);color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.5)}
@@ -418,11 +413,10 @@
 
   /* ---- Personal journey — space gradient waves + starfield ---- */
   .pj-waves{position:absolute;inset:0;z-index:0;pointer-events:none}
-  .pj-stars{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(1px 1px at 18% 32%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 42% 68%,rgba(255,255,255,.32),transparent),radial-gradient(1.5px 1.5px at 62% 18%,rgba(199,210,234,.45),transparent),radial-gradient(1px 1px at 81% 52%,rgba(255,255,255,.38),transparent),radial-gradient(1px 1px at 12% 82%,rgba(255,255,255,.28),transparent),radial-gradient(1.5px 1.5px at 90% 86%,rgba(127,209,168,.4),transparent),radial-gradient(1px 1px at 33% 10%,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 73% 74%,rgba(240,182,92,.3),transparent);animation:starTwinkle 5s ease-in-out infinite}
   @keyframes starTwinkle{0%,100%{opacity:.55}50%{opacity:1}}
 
   /* JOURNEY — sticky stacking cards (scroll-scaled pile) */
-  .journey-section{position:relative;background:#04050a;padding:0 0 2vh}
+  .journey-section{position:relative;padding:0 0 2vh}
   .journey-intro{position:relative;z-index:2;text-align:center;padding:7vh clamp(22px,4vw,56px) 2vh}
   .journey-intro .journey-kicker{font-family:'Orbitron','Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-kicker);color:#7f8ba3;margin:0 0 16px;text-transform:uppercase}
   .journey-intro h2{font-family:'Orbitron',-apple-system,sans-serif;font-weight:700;font-size:var(--text-4xl);line-height:.98;letter-spacing:var(--tr-normal);margin:0;color:#fff;text-transform:uppercase}
@@ -572,14 +566,14 @@
   .jc.is-active circle{opacity:.9}
   .jc text{font-family:'Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-label);fill:rgba(199,210,234,.42)}
 
-  .marquee-wrap{position:relative;min-height:420px;overflow:hidden;background:#050505;perspective:1200px}
+  .marquee-wrap{position:relative;min-height:420px;overflow:hidden;perspective:1200px}
   .marquee-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;perspective:1200px}
   .marquee-tilt{width:100%;display:flex;align-items:center;justify-content:flex-start;transform:rotateX(8deg) rotateY(-28deg);transform-style:preserve-3d}
   .marquee-track{display:flex;white-space:nowrap;animation:marqueeSlide 26s linear infinite}
   .marquee-item{display:inline-block;font-family:var(--font-geist-sans,-apple-system),BlinkMacSystemFont,sans-serif;font-size:calc(var(--text-4xl) * .8);font-weight:700;letter-spacing:var(--tr-tightest);color:#fafafa;padding-right:clamp(24px,4vw,76px);filter:blur(0);opacity:.96;text-shadow:0 0 18px rgba(255,255,255,.08)}
   .marquee-fade-v,.marquee-fade-h{position:absolute;inset:0;pointer-events:none}
-  .marquee-fade-v{background:linear-gradient(180deg,#050505 0%,transparent 25%,transparent 75%,#050505 100%)}
-  .marquee-fade-h{background:linear-gradient(90deg,#050505 0%,transparent 18%,transparent 82%,#050505 100%)}
+  .marquee-fade-v{background:linear-gradient(180deg,oklch(8% 0.015 275) 0%,transparent 25%,transparent 75%,oklch(8% 0.015 275) 100%)}
+  .marquee-fade-h{background:linear-gradient(90deg,oklch(8% 0.015 275) 0%,transparent 18%,transparent 82%,oklch(8% 0.015 275) 100%)}
   .marquee-label{position:absolute;left:clamp(22px,4vw,56px);top:clamp(22px,3vw,34px);z-index:2;font-family:'Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-label);color:#8f98ad}
   .marquee-label strong{color:#fafafa;font-weight:700}
   .marquee-corner{position:absolute;right:clamp(22px,4vw,56px);bottom:clamp(22px,3vw,34px);z-index:2;font-family:'Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-label);color:#8f98ad;animation:marqueeGlow 4.8s ease-in-out infinite}
@@ -773,7 +767,7 @@
     header{padding:16px 16px!important}
     header span:first-child{font-size:var(--text-xs);letter-spacing:var(--tr-label)}
     #sig-clock{font-size:var(--text-2xs)}
-    .satellite-hub,.blackhole-hub,.hero-constellation,.hero-dashboard{display:none}
+    .blackhole-hub,.hero-constellation,.hero-dashboard{display:none}
     .hero-video-area{width:100%;opacity:.5}
     .hero-scroll-cue{right:14px;bottom:18px;padding:10px 14px;font-size:var(--text-xs);gap:var(--space-2)}
     .hero-scroll-cue span{width:24px;height:24px}
@@ -1031,7 +1025,8 @@
 </style>
 </helmet>
 
-<main style="position:relative;background:#04050a;font-family:'Fraunces',Georgia,serif;color:#e8e6e0;-webkit-font-smoothing:antialiased">
+<main style="position:relative;background:transparent;font-family:'Fraunces',Georgia,serif;color:#e8e6e0;-webkit-font-smoothing:antialiased">
+  <div class="page-atmos" aria-hidden="true"></div>
   <canvas id="page-stars" class="page-stars" aria-hidden="true"></canvas>
 
   <!-- ============ HERO · FIRST LIGHT (video right, plays once) ============ -->
@@ -1061,7 +1056,7 @@
       </div>
     </div>
 
-    <noscript><style>.signal-intro-group{display:none}.hdr-in,.hero-headline-wrap,.hero-sub-wrap,.hero-dashboard,.hero-card,.hero-constellation,.satellite-hub,.hero-planets,.hero-planets .planet{animation:none!important;opacity:1!important;transform:none!important}</style></noscript>
+    <noscript><style>.signal-intro-group{display:none}.hdr-in,.hero-headline-wrap,.hero-sub-wrap,.hero-dashboard,.hero-card,.hero-constellation,.hero-planets,.hero-planets .planet{animation:none!important;opacity:1!important;transform:none!important}</style></noscript>
     <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#04050a 0%,rgba(4,5,10,0) 16%,rgba(4,5,10,0) 80%,#04050a 100%)"></div>
 
     <header class="hdr-in" style="position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:24px clamp(22px,4vw,56px);font-family:'Orbitron','Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-label);color:#cdc9bf">
@@ -1124,14 +1119,6 @@
       </svg>
     </div>
 
-    <div class="satellite-hub" aria-label="Identity satellite">
-      <div class="satellite-core" aria-hidden="true">
-        <div class="satellite-orbit"></div>
-        <div class="satellite-orbit"></div>
-        <model-viewer class="satellite-model" style="width:100%;height:100%;display:block;filter:drop-shadow(0 32px 80px rgba(0,0,0,.72)) drop-shadow(0 0 34px rgba(127,209,168,.18))" src="uploads/station.glb" camera-orbit="0deg 78deg 115%" field-of-view="30deg" min-camera-orbit="auto auto 115%" max-camera-orbit="auto auto 115%" exposure="1.1" shadow-intensity=".45" interaction-prompt="none" disable-zoom loading="eager" reveal="auto"></model-viewer>
-      </div>
-    </div>
-
     <div class="blackhole-hub" aria-hidden="true">
       <div class="blackhole-core">
         <div class="blackhole-model" data-role="hero-bh" style="width:100%;height:100%;display:block" aria-hidden="true"></div>
@@ -1187,9 +1174,8 @@
   </section>
 
   <!-- ============ MIDSECTION · THE OBSERVER (video left, plays once) ============ -->
-  <section id="observer" style="position:relative;width:100%;min-height:clamp(760px,88.9vw,1530px);overflow:hidden;background:#04050a">
+  <section id="observer" style="position:relative;width:100%;min-height:clamp(760px,88.9vw,1530px);overflow:hidden">
     <video data-role="obs" data-lazy="1" class="sig-vid" src="uploads/Silhouette_with_swirling_particles_202606261709.mp4" muted loop playsinline preload="none" style="position:absolute;top:50%;left:0;width:min(53%,672px);height:auto;aspect-ratio:9/16;transform:translateY(-50%);object-fit:contain;object-position:78% center;z-index:0;display:block;-webkit-mask-image:linear-gradient(to left,transparent 0%,#000 26%,#000 100%);mask-image:linear-gradient(to left,transparent 0%,#000 26%,#000 100%)"></video>
-    <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#04050a 0%,rgba(4,5,10,0) 16%,rgba(4,5,10,0) 80%,#04050a 100%)"></div>
 
     <div style="position:absolute;top:0;left:0;right:0;z-index:2;display:flex;justify-content:space-between;padding:30px clamp(22px,4vw,56px);font-family:'Orbitron','Space Mono',monospace;font-size:var(--text-xs);letter-spacing:var(--tr-label);color:#aeb6c8">
       <span style="text-shadow:0 1px 8px rgba(0,0,0,.7)">SELECTED TRANSMISSION</span><span style="text-shadow:0 1px 8px rgba(0,0,0,.7)">01 / OBSERVED</span>
@@ -1645,7 +1631,6 @@
       .pj-pagination .swiper-pagination-bullet{width:7px;height:7px;border-radius:50%}
     </style>
     <div class="pj-waves" data-role="pj-waves" aria-hidden="true"></div>
-    <div class="pj-stars" aria-hidden="true"></div>
     <div class="pj-inner">
       <div class="pj-header">
         <p class="pj-kicker">along the way</p>
@@ -1659,11 +1644,10 @@
   </section>
 
   <!-- ============ FOOTER · EVENT HORIZON (16:9 band, segment loop) ============ -->
-  <section style="position:relative;width:100%;min-height:100svh;overflow:hidden;background:#04050a">
+  <section style="position:relative;width:100%;min-height:100svh;overflow:hidden">
     <div data-role="groot" class="groot-stage" aria-label="Groot dances to greet you">
       <canvas class="groot-canvas"></canvas>
     </div>
-    <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#04050a 0%,rgba(4,5,10,0) 18%,rgba(4,5,10,0) 78%,#04050a 100%)"></div>
 
     <div class="event-horizon-words" aria-hidden="true">
       <span class="event-word event-word--e">EVENT</span>
@@ -3281,12 +3265,27 @@ void main() {
       const ctx = pageStars.getContext('2d');
       const DPR = Math.min(window.devicePixelRatio || 1, 2);
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // ---- nebula (dense + vibrant): ochre / steel / violet / amber / deep-blue clouds ----
+      const NEB_COLS = [[76,96,118],[150,110,200],[40,70,120]];
+      const gpuIsLow = (()=>{
+        try{
+          const gl = document.createElement('canvas').getContext('webgl');
+          if(!gl) return true;
+          const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+          const r = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+          return /swiftshader|llvmpipe|software|basic/i.test(r);
+        }catch(e){ return false; }
+      })();
+      let nebCount = gpuIsLow ? 4 : 10, nebula = [];
       const layers = [
-        { count: 520, size: 1, speed: 0.10, stars: [] },
-        { count: 210, size: 1.7, speed: 0.055, stars: [] },
-        { count: 90, size: 2.5, speed: 0.032, stars: [] }
+        { count: 520, size: 1, speed: 0.10, travel: 0.08, stars: [] },
+        { count: 210, size: 1.7, speed: 0.055, travel: 0.20, stars: [] },
+        { count: 90, size: 2.5, speed: 0.032, travel: 0.38, stars: [] }
       ];
       let W = 0, H = 0, mx = 0, my = 0, tx = 0, ty = 0;
+      let nebFrames = 0, nebFpsT = performance.now(), nebBadSecs = 0;
+      // scroll drives the field so the page reads as travelling, not as a static backdrop
+      let lastSY = window.scrollY, scrollDY = 0;
       const rand = (a,b)=> a + Math.random() * (b - a);
       const resizePageStars = ()=>{
         W = window.innerWidth;
@@ -3305,6 +3304,12 @@ void main() {
             ph: rand(0, Math.PI * 2)
           }));
         });
+        nebula = Array.from({ length: nebCount }, (_, i)=>({
+          x: rand(0, W), y: rand(0, H),
+          r: Math.min(W, H) * rand(0.20, 0.66),
+          c: NEB_COLS[i % NEB_COLS.length],
+          dx: rand(-0.06, 0.06), dy: rand(-0.04, 0.04)
+        }));
       };
       // ---- shooting stars ----
       const shootingStars = [];
@@ -3335,13 +3340,39 @@ void main() {
       const renderPageStars = ()=>{
         mx += (tx - mx) * 0.04;
         my += (ty - my) * 0.04;
+        const sy = window.scrollY;
+        const rawDY = reduce ? 0 : sy - lastSY;
+        // cap per-frame travel: an anchor jump or a flick would otherwise sweep the
+        // whole field past the viewport in one frame and leave empty space behind
+        scrollDY = Math.max(-H * 0.35, Math.min(H * 0.35, rawDY));
+        lastSY = sy;
         ctx.clearRect(0,0,W,H);
+        // ponytail: gradients rebuilt per frame — cache to an offscreen canvas only if this profiles hot
+        ctx.globalCompositeOperation = 'lighter';
+        nebula.forEach(n=>{
+          if(!reduce){
+            n.x += n.dx; n.y += n.dy;
+            if(n.x < -n.r) n.x = W + n.r; else if(n.x > W + n.r) n.x = -n.r;
+          }
+          if(!reduce) n.y -= scrollDY * 0.05;
+          if(n.y < -n.r) n.y = H + n.r; else if(n.y > H + n.r) n.y = -n.r;
+          const x = n.x + (reduce ? 0 : mx * 1.8), y = n.y + (reduce ? 0 : my * 1.4);
+          const g = ctx.createRadialGradient(x, y, 0, x, y, n.r);
+          g.addColorStop(0,    `rgba(${n.c},0.22)`);
+          g.addColorStop(0.3,  `rgba(${n.c},0.10)`);
+          g.addColorStop(0.6,  `rgba(${n.c},0.035)`);
+          g.addColorStop(1,    `rgba(${n.c},0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(x, y, n.r, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.globalCompositeOperation = 'source-over';
         layers.forEach((layer, li)=>{
           const drift = reduce ? 0 : layer.speed;
           layer.stars.forEach(star=>{
             star.ph += star.tw;
-            star.y -= drift;
+            star.y -= drift + scrollDY * layer.travel;
             if(star.y < -H){ star.y += H * 3; star.x = rand(-W * 0.2, W * 1.2); }
+            else if(star.y > H * 2){ star.y -= H * 3; star.x = rand(-W * 0.2, W * 1.2); }
             const twinkle = reduce ? 1 : (0.62 + 0.38 * Math.sin(star.ph));
             const px = star.x + (reduce ? 0 : mx * (li + 1) * 0.2);
             const py = star.y + (reduce ? 0 : my * (li + 1) * 0.2);
@@ -3378,6 +3409,16 @@ void main() {
           }
         }
         ctx.globalAlpha = 1;
+        nebFrames++;
+        const nebNow = performance.now();
+        if(nebNow - nebFpsT >= 1000){
+          const fps = nebFrames * 1000 / (nebNow - nebFpsT);
+          nebFrames = 0; nebFpsT = nebNow;
+          // only thin out on sustained trouble — the page's own load jank must not
+          // silently undo the density this background is here for
+          nebBadSecs = fps < 30 ? nebBadSecs + 1 : 0;
+          if(nebCount > 4 && nebBadSecs >= 3){ nebCount = 4; resizePageStars(); }
+        }
         this._pageStarsRAF = requestAnimationFrame(renderPageStars);
       };
       resizePageStars();
@@ -4566,19 +4607,19 @@ function addStars(scene) {
 
 function assignByName(mat) {
   const n = (mat.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  let map = null, bump = null, emissive = false;
+  let map = null, bump = null, emissive = false, glow = 1.6;
   if (n.includes('planet')) map = 'planet.png';
   else if (n.includes('ring')) { map = 'blackholering_1_color.png'; bump = 'blackholering_2_bump.png'; emissive = true; }
-  else if (n.includes('light1')) { map = 'blackholelight_1_color.png'; emissive = true; }
-  else if (n.includes('light2')) { map = 'blackholelight_2_color.png'; emissive = true; }
-  else if (n.includes('light3')) { map = 'blackholelight_3_color.png'; emissive = true; }
+  else if (n.includes('light1')) { map = 'blackholelight_1_color.png'; emissive = true; glow = 0.5; }
+  else if (n.includes('light2')) { map = 'blackholelight_2_color.png'; emissive = true; glow = 0.5; }
+  else if (n.includes('light3')) { map = 'blackholelight_3_color.png'; emissive = true; glow = 0.5; }
   else return;
   if (!mat.map && map) mat.map = tex(map);
   if (bump && 'bumpMap' in mat) { mat.bumpMap = tex(bump, false); mat.bumpScale = 0.4; }
   if (emissive && 'emissive' in mat) {
     mat.emissive = new THREE.Color(0xffffff);
     mat.emissiveMap = mat.map;
-    mat.emissiveIntensity = 1.6;
+    mat.emissiveIntensity = glow;
   }
   mat.needsUpdate = true;
 }
@@ -4725,23 +4766,6 @@ if (!reduce) addEventListener('pointermove', (e) => {
     }) : null;
     if (hero) { hero.setInst(m); hero.inst.position.set(1.7, 0.3, 0); } // bigger, further right, higher, 45° tilt
 
-    // station spins like a top: orbit the camera's azimuth continuously (model-viewer's
-    // .model isn't a plain Object3D, so direct mesh rotation is unreliable — turntable it).
-    try {
-      const satMv = await waitFor('.satellite-hub model-viewer');
-      if (satMv && !reduce) {
-        const POLAR = 78, RADIUS = '115%';
-        let theta = 180;                       // start facing away from the right-side black hole
-        const spinStation = () => {
-          theta = (theta + 0.35) % 360;        // consistent, visible top-spin (~21°/s)
-          satMv.setAttribute('camera-orbit', theta.toFixed(2) + 'deg ' + POLAR + 'deg ' + RADIUS);
-          requestAnimationFrame(spinStation);
-        };
-        requestAnimationFrame(spinStation);
-      } else if (satMv) {
-        satMv.setAttribute('camera-orbit', '180deg 78deg 115%');
-      }
-    } catch (e) { console.warn('[station] spin setup skipped:', e); }
 
     const clock = new THREE.Clock();
     (function tick() {
