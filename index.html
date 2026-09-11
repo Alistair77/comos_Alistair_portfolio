@@ -4781,6 +4781,7 @@ if (!reduce) addEventListener('pointermove', (e) => {
 <script type="module">
   import * as THREE from 'three';
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+  import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
   (function () {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4930,6 +4931,11 @@ if (!reduce) addEventListener('pointermove', (e) => {
       if (modelStarted) return;
       modelStarted = true;
       const loader = new GLTFLoader();
+      // groot.glb is Draco-compressed (8.9MB → ~0.7MB) — without a decoder the footer dancer won't load.
+      // model-viewer (the hero play-button) has its own Draco decoder, so only this three.js loader needs one.
+      const draco = new DRACOLoader();
+      draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/');
+      loader.setDRACOLoader(draco);
       loader.load('uploads/groot.glb', setup, undefined, function (err) {
         console.warn('[groot] load failed:', err);
       });
