@@ -760,7 +760,7 @@
     .signal-intro-group{background:radial-gradient(circle at 50% 46%,rgba(70,92,150,.12),transparent 38%),#04050a}
 
     /* ── HERO ── */
-    .hero-copy{position:relative;top:auto;left:auto;transform:none;width:auto;max-width:none;margin:0;padding:100px 20px 0;z-index:4}
+    .hero-copy{position:relative;top:auto;left:auto;bottom:auto;transform:none;width:auto;max-width:none;margin:0;padding:100px 20px 0;z-index:4}
     .hero-copy .hero-kicker{font-size:var(--text-2xs);letter-spacing:var(--tr-kicker)}
     .hero-copy .hero-name{font-size:var(--text-3xl);padding:0}
     .hero-copy .hero-sub{font-size:var(--text-sm);margin:10px 0 0;max-width:30ch;padding:0}
@@ -772,16 +772,11 @@
     .hero-scroll-cue{right:14px;bottom:18px;padding:10px 14px;font-size:var(--text-xs);gap:var(--space-2)}
     .hero-scroll-cue span{width:24px;height:24px}
 
-    /* ── PLANETS on mobile: arc on the left (mirrors desktop right-side arc) ── */
-    .hero-planets{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5}
-    .hero-planets .planet{position:absolute!important;pointer-events:auto}
-    .hero-planets .planet:nth-child(1){left:4%!important;top:78%!important}
-    .hero-planets .planet:nth-child(2){left:10%!important;top:58%!important}
-    .hero-planets .planet:nth-child(3){left:3%!important;top:42%!important}
-    .hero-planets .planet:nth-child(4){left:8%!important;top:25%!important}
-    .planet__ico{width:36px;height:36px}
+    /* ── PLANETS on mobile: clean centered nav row below the copy (no text overlap) ── */
+    .hero-planets{position:static;left:auto;top:auto;width:auto;height:auto;display:flex;flex-flow:row wrap;justify-content:center;align-items:flex-start;gap:22px 18px;padding:34px 16px 0;pointer-events:auto;z-index:5}
+    .hero-planets .planet{position:static!important;inset:auto!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;pointer-events:auto}
+    .planet__ico{width:44px;height:44px}
     .planet__lbl{font-size:var(--text-2xs);letter-spacing:var(--tr-label)}
-    .hero-copy .hero-name{padding-left:clamp(52px,14vw,70px)}
 
     /* ── OBSERVER — stack: video strip then macOS Finder desktop ── */
     section[id="observer"]{min-height:auto;padding-bottom:40px;display:flex;flex-direction:column}
