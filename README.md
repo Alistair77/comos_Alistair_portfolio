@@ -63,9 +63,19 @@ A vanilla ES-module port of the `EtchedAccretion` React component (no build step
 import { mountEtchedAccretion } from './etched-accretion.js'
 const bh = mountEtchedAccretion(el, { preset: 'crimson', params: { center: [0.63, 0.45] }, root: heroSection })
 bh.setParams({ holeSize: 0.07 })   // retune live; presets: crimson · ember · glacier · ash · orchid
+bh.setPaused(false)                // pass { paused: true } to compile now and animate later
 ```
 
 The hero mounts it from the module at the bottom of `index.html`; desktop/phone placement lives in its `layout()`.
+
+## Performance rules
+
+Keep these when adding effects — breaking any one of them is what made the page feel heavy:
+
+- **Only what is on screen animates.** Every canvas/WebGL loop, the SVG galaxies and the Observer video pause via `IntersectionObserver` when out of view. The hero shader is held during the intro and the starfield skips frames while the opaque hero fills the screen.
+- **Heavy libraries load on demand.** three.js (footer Groot) loads when the footer is a screen away; model-viewer (hero "play me" Groot) loads after the intro when the browser is idle, and not at all on phones.
+- **Cap pixel density.** Drawing buffers stop at 1.5×; soft layers (journey particles, waves) render at 1× and the footer Prism at 0.4× / 30fps — they are blurs, so nobody can tell.
+- **No per-frame filters on moving content.** No `backdrop-filter` over the animated starfield and no CSS `drop-shadow` on live canvases — glows are static gradients. Batch canvas draws (one fill per colour bucket) instead of one draw — or one `shadowBlur` — per particle.
 
 ## Stack
 
