@@ -4,11 +4,11 @@ A signal-based portfolio that feels discovered, not browsed.
 
 ## What it is
 
-A single-page portfolio with a sci-fi/void aesthetic — 3D satellite, letter-carved name reveal, scroll-driven timeline, and live project showcase.
+A single-page portfolio with an engraved deep-space aesthetic — a procedural black hole in the hero, decrypted name reveal, scroll-driven timeline, and live project showcase.
 
 ## Sections
 
-- **Hero** — Animated name carve-in, live UTC clock, 3D satellite model (GLB), dashboard cards, looping background video
+- **Hero** — *Etched Accretion*: a black hole drawn like an engraving (hair-thin orbital streaks banded in crimson, photon crown, contour-line nebula, film grain). Move the pointer for parallax, hold to feed it. Plus decrypted name reveal, live UTC clock and planet nav
 - **Perspective Marquee** — Scrolling brand marquee (Vercel, Linear, Stripe, etc.) with 3D tilt
 - **Mission Desktop** — Mac-style Finder window showing project folders
 - **Observer** — Selected work cards (HawkAI Login, Quantasphere Hero) with hover-reveal parallax
@@ -42,9 +42,35 @@ All projects linked from the portfolio are hosted on GitHub:
 - [github.com/Alistair77/AAPL_stock_prediction-2024](https://github.com/Alistair77/AAPL_stock_prediction-2024) — Apple stock prediction (Jupyter Notebook)
 - [github.com/Alistair77](https://github.com/Alistair77) — Full GitHub profile
 
+## Theme
+
+The whole site takes its palette and voice from the hero black hole:
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--bg` | `#030307` | deep space, every section |
+| `--silver` | `#e9e4df` | disk streaks — secondary ink, clock |
+| `--cloud` | `#c9d0e2` | nebula contour lines — hairlines |
+| `--crimson` / `--crimson-hi` | `#d3121f` / `#ff3b47` | the one accent (fills & glows / text) |
+
+Type: **Urbanist** (light display), **Instrument Serif** italic for the single crimson accent word in each headline (`.etch-accent`), **IBM Plex Mono** for labels. A fixed film-grain layer (`.page-grain`) sits over everything. Project category chips reuse the component's presets: web = glacier, AI = crimson, full-stack = orchid, mobile = ember.
+
+## Hero black hole — `etched-accretion.js`
+
+A vanilla ES-module port of the `EtchedAccretion` React component (no build step needed): one full-screen WebGL2 fragment shader, no textures or network assets. It adapts its resolution on slow GPUs, pauses when off-screen, recovers from context loss, draws a single still frame under `prefers-reduced-motion`, and falls back to a CSS sketch without WebGL2.
+
+```js
+import { mountEtchedAccretion } from './etched-accretion.js'
+const bh = mountEtchedAccretion(el, { preset: 'crimson', params: { center: [0.63, 0.45] }, root: heroSection })
+bh.setParams({ holeSize: 0.07 })   // retune live; presets: crimson · ember · glacier · ash · orchid
+```
+
+The hero mounts it from the module at the bottom of `index.html`; desktop/phone placement lives in its `layout()`.
+
 ## Stack
 
 - Custom DC runtime (`support.js`)
-- Three.js + model-viewer (3D satellite)
+- WebGL2 shader for the hero black hole (`etched-accretion.js`)
+- Three.js + model-viewer (Groot)
 - Lenis (smooth scroll)
-- Google Fonts: Fraunces, Space Mono, Orbitron, Space Grotesk, Archivo
+- Google Fonts: Urbanist, Instrument Serif, IBM Plex Mono
