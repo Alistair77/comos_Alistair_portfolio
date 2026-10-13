@@ -25,9 +25,9 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="preconnect" href="https://unpkg.com" crossorigin />
 <!-- The hero black hole is procedural (etched-accretion.js): no model or textures to preload.
-     groot.glb is a decorative hero play-button, fetched on demand by its own <model-viewer>. -->
+     model-viewer (the hero "play me" Groot) and three.js (footer Groot) are loaded on demand later. -->
 <link rel="modulepreload" href="etched-accretion.js" />
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -74,10 +74,10 @@
   ::selection{background:rgba(211,18,31,.55);color:#fff}
   .etch-accent{font-family:var(--font-serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:0;color:var(--crimson-hi);text-shadow:0 0 28px rgba(211,18,31,.35)}
   /* film grain over the whole page — the engraving's paper. Static tile, stepped jitter. */
-  .page-grain{position:fixed;inset:-50%;z-index:9990;pointer-events:none;opacity:.075;
+  .page-grain{position:fixed;inset:-10%;z-index:9990;pointer-events:none;opacity:.075;will-change:transform;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     animation:grainJitter .9s steps(6) infinite}
-  @keyframes grainJitter{0%{transform:translate(0,0)}17%{transform:translate(-3%,2%)}33%{transform:translate(2%,-4%)}50%{transform:translate(-4%,-1%)}67%{transform:translate(3%,3%)}83%{transform:translate(-1%,4%)}100%{transform:translate(0,0)}}
+  @keyframes grainJitter{0%{transform:translate(0,0)}17%{transform:translate(-3%,2%)}33%{transform:translate(2%,-3%)}50%{transform:translate(-3%,-1%)}67%{transform:translate(3%,3%)}83%{transform:translate(-1%,3%)}100%{transform:translate(0,0)}}
   @media (prefers-reduced-motion:reduce){.page-grain{animation:none}}
   /* Lenis smooth scroll */
   html.lenis,html.lenis body{height:auto}
@@ -109,7 +109,7 @@
   @keyframes floatWord3{0%,100%{transform:translate(0,0) rotate(0deg);opacity:.2}25%{transform:translate(-12px,-14px) rotate(-2deg);opacity:.7}50%{transform:translate(-4px,-4px) rotate(1deg);opacity:.4}75%{transform:translate(-18px,-20px) rotate(-1deg);opacity:.8}}
 
   .page-atmos{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(110% 70% at 70% 0%, rgba(20,30,70,.22), transparent 60%),radial-gradient(90% 70% at 62% 56%, rgba(211,18,31,.045), transparent 62%)}
-  .page-stars{position:fixed;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;opacity:.9}
+  .page-stars{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.9}
 
   /* SIGNAL INTRO — load-driven loader: constellation lines draw with real progress, overlay releases on "signal locked" */
   .signal-intro-group{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:radial-gradient(circle at 50% 46%,rgba(201,208,226,.06),transparent 42%);pointer-events:none;animation:introIn .6s ease both;transition:opacity 1.05s cubic-bezier(.4,0,.2,1),visibility 0s 1.1s}
@@ -156,7 +156,7 @@
   .hero-copy .hero-sub .accent{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:1.5em;line-height:1;letter-spacing:0;text-transform:none;color:var(--crimson-hi);text-shadow:0 0 24px rgba(211,18,31,.45)}
   /* HERO dashboard — tidy 3-card row bottom-left (replaces scattered nodes) */
   .hero-dashboard{position:absolute;left:clamp(22px,4vw,56px);bottom:clamp(42px,6.5vh,82px);z-index:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3);width:min(44vw,540px);opacity:0;animation:heroContentIn .5s cubic-bezier(.44,0,.56,1) .5s both;animation-play-state:paused}
-  .hero-card{min-height:72px;border:1px solid rgba(199,210,234,.16);border-radius:18px;background:linear-gradient(145deg,rgba(10,13,24,.72),rgba(3,3,7,.42));backdrop-filter:blur(14px);box-shadow:0 22px 70px rgba(0,0,0,.22);padding:10px 13px;opacity:0;transform:translateY(18px);animation:cardArrive .9s cubic-bezier(.16,1,.3,1) forwards;animation-play-state:paused}
+  .hero-card{min-height:72px;border:1px solid rgba(199,210,234,.16);border-radius:18px;background:linear-gradient(145deg,rgba(10,13,24,.72),rgba(3,3,7,.42));box-shadow:0 22px 70px rgba(0,0,0,.22);padding:10px 13px;opacity:0;transform:translateY(18px);animation:cardArrive .9s cubic-bezier(.16,1,.3,1) forwards;animation-play-state:paused}
 .hero-card:nth-child(1){animation-delay:.65s}
 .hero-card:nth-child(2){animation-delay:.8s}
 .hero-card:nth-child(3){animation-delay:.95s}
@@ -191,7 +191,7 @@
   .hero-scroll-cue span{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,59,71,.14);color:#ff3b47;animation:sigDrop 2.4s ease-in-out infinite}
   .hero-scroll-cue.is-visible{opacity:1;pointer-events:auto}
   /* "play me" Groot — right-bottom, ~35% smaller than the station; click toggles the Awesome Mix */
-  .groot-playme{position:absolute;right:clamp(12px,2.5vw,38px);bottom:clamp(10px,2.5vh,34px);z-index:6;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent;padding:0;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 18px 40px rgba(0,0,0,.5))}
+  .groot-playme{position:absolute;right:clamp(12px,2.5vw,38px);bottom:clamp(10px,2.5vh,34px);z-index:6;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent;padding:0;cursor:pointer;pointer-events:auto}
   .groot-playme__model{width:min(20vw,27vh,235px);height:min(20vw,27vh,235px);display:block;pointer-events:none;--poster-color:transparent;background:transparent}
   .groot-playme__label{font-family:var(--font-mono);font-size:var(--text-2xs);font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--silver);text-shadow:0 1px 10px rgba(0,0,0,.7);animation:playmePulse 2.2s ease-in-out infinite}
   .groot-playme.is-playing .groot-playme__label{color:var(--crimson-hi);animation:none}
@@ -263,9 +263,9 @@
 
   .mission-desktop{position:relative;overflow:hidden;min-height:760px;padding:clamp(70px,9vw,120px) clamp(22px,4vw,56px)}
   .mission-desktop::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 46%,rgba(255,59,71,.05),transparent 62%);pointer-events:none}
-  .mac-menu{position:absolute;left:0;right:0;top:0;z-index:2;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(10,10,14,.42);backdrop-filter:blur(18px);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:var(--text-sm);color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+  .mac-menu{position:absolute;left:0;right:0;top:0;z-index:2;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(10,10,14,.86);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:var(--text-sm);color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.5)}
   .mac-menu__left,.mac-menu__right{display:flex;align-items:center;gap:var(--space-4)}.mac-menu strong{font-weight:700}
-  .desktop-window{position:relative;z-index:2;max-width:980px;min-height:470px;margin:0 auto;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(28,28,33,.62);box-shadow:0 50px 130px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(34px) saturate(1.4);overflow:hidden;color:#e9e9ec}
+  .desktop-window{position:relative;z-index:2;max-width:980px;min-height:470px;margin:0 auto;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(22,22,27,.93);box-shadow:0 50px 130px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden;color:#e9e9ec}
   .desktop-bar{display:flex;align-items:center;gap:var(--space-4);height:50px;padding:0 16px;background:rgba(46,46,52,.7);border-bottom:1px solid rgba(0,0,0,.34)}
   .desktop-dots{display:flex;gap:var(--space-2)}.desktop-dots span{position:relative;display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;background:#ff5f57;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}.desktop-dots span:nth-child(2){background:#febc2e}.desktop-dots span:nth-child(3){background:#28c840}
   .desktop-dots span::after{content:"";font-family:-apple-system,sans-serif;font-size:7px;font-weight:900;color:rgba(0,0,0,0.55);opacity:0;transition:opacity 0.15s ease;line-height:1;position:absolute}
@@ -357,7 +357,7 @@
   .desktop-file:hover .ico--folder .fp3,.desktop-file.is-selected .ico--folder .fp3{transform:translate(-50%,-64%) rotate(4deg)}
   .desktop-file:hover .ico--folder::after,.desktop-file.is-selected .ico--folder::after{transform:scaleY(.6)}
   @media (prefers-reduced-motion:reduce){.desktop-file .ico--folder,.ico--folder .folder-paper,.ico--folder::after{transition:none}}
-  .desktop-dock{position:absolute;left:50%;bottom:26px;z-index:2;transform:translateX(-50%);display:flex;gap:var(--space-3);border:1px solid rgba(255,255,255,.16);border-radius:22px;background:rgba(40,40,48,.42);backdrop-filter:blur(20px);padding:9px 12px;box-shadow:0 20px 70px rgba(0,0,0,.4)}
+  .desktop-dock{position:absolute;left:50%;bottom:26px;z-index:2;transform:translateX(-50%);display:flex;gap:var(--space-3);border:1px solid rgba(255,255,255,.16);border-radius:22px;background:rgba(34,34,42,.9);padding:9px 12px;box-shadow:0 20px 70px rgba(0,0,0,.4)}
   .desktop-dock span{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;cursor:pointer}
   .desktop-dock span:hover{transform:translateY(-6px) scale(1.1);box-shadow:0 8px 20px rgba(0,0,0,0.5)}
   @keyframes dockBounce {
@@ -416,7 +416,7 @@
   .arch-map .arch-edge{stroke:rgba(255,59,71,.3);stroke-width:1.4;fill:none;stroke-dasharray:5 7;animation:archFlow 1.6s linear infinite}
   .arch-map .arch-edge--muted{stroke:rgba(179,33,158,.22)}
   .arch-map .arch-edge.is-lit{stroke:rgba(255,59,71,.95);stroke-width:2;filter:drop-shadow(0 0 6px rgba(255,59,71,.6))}
-  .arch-map .arch-node{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:.06em;color:#d9d6de;background:rgba(10,12,20,.85);border:1px solid rgba(174,182,200,.16);backdrop-filter:blur(4px);white-space:nowrap;transition:border-color .3s,box-shadow .3s,transform .3s;cursor:default;z-index:1}
+  .arch-map .arch-node{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:.06em;color:#d9d6de;background:rgba(10,12,20,.85);border:1px solid rgba(174,182,200,.16);white-space:nowrap;transition:border-color .3s,box-shadow .3s,transform .3s;cursor:default;z-index:1}
   .arch-map .arch-node:hover{border-color:rgba(255,255,255,.38);box-shadow:0 0 22px rgba(255,59,71,.28);transform:translate(-50%,-50%) translateY(-2px);z-index:3}
   .arch-map .arch-node .arch-badge{display:inline-flex;width:18px;height:18px;border-radius:50%;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
   .arch-node--in .arch-badge{background:rgba(47,107,255,.22);color:#a9c1ff}
@@ -614,7 +614,7 @@
   .obs-main .desktop-pane h2{font-size:var(--text-xl)}
 
   .display-cards{position:relative;display:flex;flex-direction:column;gap:var(--space-6);width:min(100%,38rem);margin-top:34px;opacity:1}
-  .display-cluster{border:1px solid rgba(174,182,200,.08);border-radius:14px;padding:14px 16px;background:rgba(10,12,20,.36);backdrop-filter:blur(4px);position:relative}
+  .display-cluster{border:1px solid rgba(174,182,200,.08);border-radius:14px;padding:14px 16px;background:rgba(10,12,20,.6);position:relative}
   .display-cluster--web{border-color:rgba(47,107,255,.12)}
   .display-cluster--ai{border-color:rgba(211,18,31,.12)}
   .display-cluster--app{border-color:rgba(179,33,158,.12)}
@@ -626,7 +626,7 @@
   .display-cluster__label{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--tr-label);color:#c7d2ea;text-transform:uppercase}
   .display-cluster__count{font-family:var(--font-mono);font-size:var(--text-2xs);color:#5a6278;margin-left:auto}
   .display-cluster__cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-4)}
-  .display-cluster .display-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:8rem;user-select:none;border:2px solid rgba(174,182,200,.14);border-radius:12px;background:rgba(20,22,30,.7);backdrop-filter:blur(6px);padding:12px 14px;transform:skewY(-6deg);transition:border-color .6s ease,background .6s ease,filter .6s ease,transform .6s ease;filter:grayscale(1);box-shadow:0 18px 50px rgba(0,0,0,.3);cursor:pointer}
+  .display-cluster .display-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:8rem;user-select:none;border:2px solid rgba(174,182,200,.14);border-radius:12px;background:rgba(20,22,30,.82);padding:12px 14px;transform:skewY(-6deg);transition:border-color .6s ease,background .6s ease,filter .6s ease,transform .6s ease;filter:grayscale(1);box-shadow:0 18px 50px rgba(0,0,0,.3);cursor:pointer}
   .display-cluster .display-card::before{content:"";position:absolute;inset:0;border-radius:10px;background:rgba(3,3,7,.38);transition:opacity .6s ease;pointer-events:none}
   .display-cluster .display-card::after{content:"";position:absolute;top:-4%;right:-3px;width:70%;height:108%;background:linear-gradient(to left,#030307,transparent);pointer-events:none}
   .display-cluster .display-card:hover{border-color:rgba(255,255,255,.2);background:rgba(28,30,40,.82);filter:grayscale(0);transform:skewY(-6deg) translateY(-8px)}
@@ -655,7 +655,7 @@
   .footer-11__contact{display:flex;flex-direction:column;gap:var(--space-2)}
   /* ===== contact lanyard — hanging, draggable, clickable ID badge ===== */
   @property --swing{syntax:"<angle>";inherits:false;initial-value:0deg}
-  .lanyard{position:absolute;top:0;right:clamp(24px,9vw,150px);z-index:6;display:flex;flex-direction:column;align-items:center;pointer-events:none;filter:drop-shadow(0 26px 42px rgba(0,0,0,.55))}
+  .lanyard{position:absolute;top:0;right:clamp(24px,9vw,150px);z-index:6;display:flex;flex-direction:column;align-items:center;pointer-events:none}
   .lanyard__hook{width:40px;height:11px;border-radius:0 0 9px 9px;background:linear-gradient(#3b4254,#20242f);box-shadow:inset 0 -2px 3px rgba(0,0,0,.4)}
   .lanyard__swing{transform-origin:top center;transform:rotate(var(--swing));animation:lanyardSway 6s ease-in-out infinite;will-change:transform}
   .lanyard.is-grabbing .lanyard__swing,.lanyard.is-releasing .lanyard__swing{animation:none}
@@ -695,7 +695,7 @@
   @media (max-width:860px){.lanyard{position:relative;right:auto;top:auto;margin:0 auto 20px}}
   @media (prefers-reduced-motion:reduce){.lanyard__swing{animation:none}}
   /* ===== hero music control — elastic volume slider + play toggle ===== */
-  .hero-music{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:11px;padding:7px 14px 7px 8px;border-radius:999px;background:rgba(8,10,17,.5);border:1px solid rgba(199,210,234,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 12px 34px rgba(0,0,0,.42);opacity:.9;transition:opacity .3s ease,box-shadow .3s ease}
+  .hero-music{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:11px;padding:7px 14px 7px 8px;border-radius:999px;background:rgba(8,10,17,.8);border:1px solid rgba(199,210,234,.14);box-shadow:0 12px 34px rgba(0,0,0,.42);opacity:.9;transition:opacity .3s ease,box-shadow .3s ease}
   .hero-music:hover{opacity:1;box-shadow:0 16px 42px rgba(0,0,0,.55)}
   .hero-music__play{width:30px;height:30px;flex:none;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;color:#fff4f4;background:radial-gradient(circle at 30% 28%,#ff8d95,#d3121f);box-shadow:0 4px 14px rgba(211,18,31,.42);transition:transform .2s ease}
   .hero-music__play:hover{transform:scale(1.08)}
@@ -725,8 +725,8 @@
   .footer-11__brand{position:relative;z-index:1;font-family:var(--font-display);font-size:var(--text-display);font-weight:300;line-height:.92;letter-spacing:var(--tr-normal);color:rgba(255,255,255,.18);white-space:nowrap;text-transform:uppercase}
 
   .event-horizon-words{position:absolute;right:clamp(24px,5vw,80px);top:50%;z-index:3;transform:translateY(-50%);display:flex;flex-direction:column;gap:var(--space-4);pointer-events:none}
-  .groot-stage{position:absolute;left:50%;top:52%;z-index:2;width:clamp(220px,30vw,440px);aspect-ratio:2/3;transform:translate(-50%,-52%);pointer-events:none;filter:drop-shadow(0 44px 90px rgba(0,0,0,.75)) drop-shadow(0 0 70px rgba(255,59,71,.16))}
-  .groot-stage .groot-canvas{width:100%;height:100%;display:block}  .groot-stage::before{content:"";position:absolute;left:50%;top:50%;width:118%;height:118%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:radial-gradient(circle at 50% 56%,rgba(255,59,71,.10),rgba(3,3,7,0) 62%);filter:blur(2px)}
+  .groot-stage{position:absolute;left:50%;top:52%;z-index:2;width:clamp(220px,30vw,440px);aspect-ratio:2/3;transform:translate(-50%,-52%);pointer-events:none}
+  .groot-stage .groot-canvas{width:100%;height:100%;display:block}  .groot-stage::before{content:"";position:absolute;left:50%;top:50%;width:118%;height:118%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:radial-gradient(circle at 50% 56%,rgba(255,59,71,.16),rgba(211,18,31,.05) 40%,rgba(3,3,7,0) 64%)}
   @media (max-width:760px){.groot-stage{width:clamp(150px,34vw,200px);top:58%;aspect-ratio:2/3}}
   .event-word{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:var(--tr-kicker);color:rgba(199,210,234,.5);white-space:nowrap}
   .event-word--e{animation:floatWord1 5s ease-in-out infinite}
@@ -1774,7 +1774,8 @@ class Component extends DCLogic {
     // ---- smooth scrolling (Lenis) — buttery 60/120fps feel ----
     const startLenis = ()=>{
       if(this._lenis || !window.Lenis) return;
-      const lenis = new Lenis({ duration: 1.6, lerp: 0.06, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.5 });
+      // lerp 0.1 (Lenis' standard): smooth, but it follows the wheel instead of gliding on long after it stops
+      const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.5 });
       this._lenis = lenis;
       const rafL = (t)=>{ lenis.raf(t); this._lenisRAF = requestAnimationFrame(rafL); };
       this._lenisRAF = requestAnimationFrame(rafL);
@@ -1784,7 +1785,7 @@ class Component extends DCLogic {
           const id = a.getAttribute('href');
           if(!id || id.length < 2) return;
           const target = document.querySelector(id);
-          if(target){ e.preventDefault(); lenis.scrollTo(target, { offset: 0, duration: 1.3 }); }
+          if(target){ e.preventDefault(); lenis.scrollTo(target, { offset: 0, duration: 1.1 }); }
         });
       });
     };
@@ -2210,23 +2211,20 @@ class Component extends DCLogic {
         gathering = true;
       };
 
-      const drawParticle = p => {
-        const size = p.size;
-        ctx.fillStyle = p.color;
-        if (size <= 2.1) { ctx.fillRect(p.x - size / 2, p.y - size / 2, size, size); return; }
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size / 2, 0, Math.PI * 2);
-        ctx.fill();
-      };
+      // Particles are drawn in batches — one path and one fill per colour/alpha bucket — instead of
+      // thousands of individual draws. The glow is a single GPU drop-shadow on the canvas element
+      // rather than a canvas shadowBlur recomputed for every particle on every frame.
+      const COLOR_STEPS = 8, ALPHA_STEPS = 4;
+      let bucketColors = [o.color];
+      const batches = Array.from({ length: COLOR_STEPS * ALPHA_STEPS }, () => []);
+      if (o.glow) canvas.style.filter = `drop-shadow(0 0 ${Math.max(2, o.particleSize * 1.5)}px ${o.highlightColor}99)`;
+      let inView = true;
 
       const render = now => {
+        animationFrame = null;
+        if (!inView) return;
         ctx.clearRect(0, 0, width, height);
-        if (o.glow && !reducedMotion) {
-          ctx.shadowBlur = o.particleSize * 3;
-          ctx.shadowColor = o.highlightColor;
-        } else {
-          ctx.shadowBlur = 0;
-        }
+        for (const b of batches) b.length = 0;
         pointer.smoothX += (pointer.x - pointer.smoothX) * 0.18;
         pointer.smoothY += (pointer.y - pointer.smoothY) * 0.18;
         let complete = true;
@@ -2257,18 +2255,33 @@ class Component extends DCLogic {
           const follow = reducedMotion ? 1 : 0.22;
           p.x += (baseX - p.x) * follow;
           p.y += (baseY - p.y) * follow;
-          ctx.globalAlpha = clamp(0.35 + progress * 0.65, 0, 1);
-          drawParticle(p);
+          const a = Math.round(clamp(progress, 0, 1) * (ALPHA_STEPS - 1));
+          batches[p.bucket * ALPHA_STEPS + a].push(p);
         });
+        for (let i = 0; i < batches.length; i++) {
+          const batch = batches[i];
+          if (!batch.length) continue;
+          ctx.globalAlpha = 0.35 + 0.65 * ((i % ALPHA_STEPS) / (ALPHA_STEPS - 1));
+          ctx.fillStyle = bucketColors[Math.floor(i / ALPHA_STEPS)] || o.color;
+          ctx.beginPath();
+          for (const p of batch) ctx.rect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+          ctx.fill();
+        }
         ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0;
         if (gathering && complete) gathering = false;
-        animationFrame = window.requestAnimationFrame(render);
+        if (!reducedMotion || gathering) animationFrame = window.requestAnimationFrame(render);
       };
 
       const ensureRenderLoop = () => {
-        if (animationFrame === null) animationFrame = window.requestAnimationFrame(render);
+        if (inView && animationFrame === null) animationFrame = window.requestAnimationFrame(render);
       };
+      // only animate while the signature is on screen
+      const viewObserver = new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) ensureRenderLoop();
+        else if (animationFrame !== null) { window.cancelAnimationFrame(animationFrame); animationFrame = null; }
+      });
+      viewObserver.observe(container);
 
       const sampleText = async () => {
         const currentBuild = ++buildId;
@@ -2276,7 +2289,7 @@ class Component extends DCLogic {
         width = Math.floor(rect.width);
         height = Math.floor(rect.height);
         if (width <= 0 || height <= 0) return;
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
         canvas.width = Math.max(1, Math.floor(width * dpr));
         canvas.height = Math.max(1, Math.floor(height * dpr));
         canvas.style.width = '100%';
@@ -2340,15 +2353,17 @@ class Component extends DCLogic {
         const baseRgb = hexToRgb(o.color);
         const highlightRgb = hexToRgb(o.highlightColor);
         const selected = targets.filter((_, i) => i % stride === 0);
+        const twoTone = !!(baseRgb && highlightRgb);
+        bucketColors = twoTone
+          ? Array.from({ length: COLOR_STEPS }, (_, k) => rgbToCss(mixRgb(baseRgb, highlightRgb, k / (COLOR_STEPS - 1))))
+          : [o.color];
         particles = selected.map((t, i) => {
           const seed = ((i * 9301 + 49297) % 233280) / 233280;
           const depth = 0.45 + (((i * 233 + 97) % 1000) / 1000) * 0.9;
           const blend = baseRgb && highlightRgb
             ? clamp(t.x / Math.max(1, width) + (seed - 0.5) * 0.35, 0, 1)
             : 0;
-          const particleColor = baseRgb && highlightRgb
-            ? rgbToCss(mixRgb(baseRgb, highlightRgb, blend))
-            : o.color;
+          const bucket = twoTone ? Math.round(blend * (COLOR_STEPS - 1)) : 0;
           const angle = seed * Math.PI * 2;
           const distance = (reducedMotion ? 0 : o.scatter) * (0.35 + depth * 0.75);
           const startX = t.x + Math.cos(angle) * distance + (seed - 0.5) * o.scatter * 0.45;
@@ -2358,7 +2373,7 @@ class Component extends DCLogic {
             y: reducedMotion ? t.y : startY,
             startX, startY, targetX: t.x, targetY: t.y,
             size: Math.max(0.6, o.particleSize * (0.75 + t.alpha * 0.45)),
-            color: particleColor, seed, depth, delay: seed * o.stagger
+            bucket, seed, depth, delay: seed * o.stagger
           };
         });
         pointer.x = width / 2; pointer.y = height / 2;
@@ -2410,6 +2425,7 @@ class Component extends DCLogic {
         destroy(){
           buildId++;
           resizeObserver.disconnect();
+          viewObserver.disconnect();
           if (reduceMotionQuery) reduceMotionQuery.removeEventListener('change', handleReduceMotionChange);
           canvas.removeEventListener('pointerenter', handlePointerEnter);
           canvas.removeEventListener('pointermove', handlePointerMove);
@@ -2871,7 +2887,7 @@ void main() {
 
       let rafId = 0, visible = true, last = performance.now(), elapsed = 0;
       function update(t){
-        rafId = requestAnimationFrame(update);
+        rafId = visible ? requestAnimationFrame(update) : 0;   // fully idle while off-screen
         const delta = Math.min(t - last, 100); last = t;
         if(visible) elapsed += delta * o.speed;
         program.uniforms.uTime.value = elapsed * 0.001;
@@ -2891,7 +2907,10 @@ void main() {
       }
       rafId = requestAnimationFrame(update);
 
-      const io = new IntersectionObserver(([entry])=>{ visible = entry.isIntersecting; }, { threshold:0 });
+      const io = new IntersectionObserver(([entry])=>{
+        visible = entry.isIntersecting;
+        if(visible && !rafId){ last = performance.now(); rafId = requestAnimationFrame(update); }
+      }, { threshold:0 });
       io.observe(ctn);
 
       return function cleanup(){
@@ -3031,7 +3050,7 @@ void main() {
       };
       const steps = o.detail === 'low' ? 40.0 : (o.detail === 'high' ? 110.0 : 70.0);
 
-      const renderer = new Renderer({ alpha: true, premultipliedAlpha: true, dpr: Math.min(window.devicePixelRatio || 1, 2) });
+      const renderer = new Renderer({ alpha: true, premultipliedAlpha: true, dpr: 1 });   // soft gradient waves: 1x is plenty
       const gl = renderer.gl;
       gl.clearColor(0, 0, 0, 0);
       const canvas = gl.canvas;
@@ -3158,7 +3177,7 @@ void main() {
           moveParticlesOnHover:true, particleHoverFactor:0.6,
           alphaParticles:true, particleBaseSize:90, sizeRandomness:1,
           cameraDistance:22,
-          pixelRatio: Math.min(window.devicePixelRatio || 1, 2)
+          pixelRatio: 1   // soft, blurry points: 1x is indistinguishable and 4x cheaper to fill on retina
         });
       }).catch(()=>{});
     }
@@ -3248,7 +3267,7 @@ void main() {
     const pageStars = document.querySelector('#page-stars');
     if(pageStars){
       const ctx = pageStars.getContext('2d');
-      const DPR = Math.min(window.devicePixelRatio || 1, 2);
+      const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       // ---- nebula (dense + vibrant): ochre / steel / violet / amber / deep-blue clouds ----
       const NEB_COLS = [[46,56,92],[120,14,24],[70,76,96]];
@@ -3258,6 +3277,7 @@ void main() {
           if(!gl) return true;
           const dbg = gl.getExtension('WEBGL_debug_renderer_info');
           const r = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+          const lose = gl.getExtension('WEBGL_lose_context'); if(lose) lose.loseContext();   // probe only — free it
           return /swiftshader|llvmpipe|software|basic/i.test(r);
         }catch(e){ return false; }
       })();
@@ -3318,11 +3338,44 @@ void main() {
       spawnShootingStars();
       shootTimer = rand(90, 200);
 
+      const nebSprites = new Map();
+      const nebSprite = (c)=>{
+        const key = c.join(',');
+        if(!nebSprites.has(key)){
+          const sc = document.createElement('canvas'); sc.width = sc.height = 256;
+          const sx = sc.getContext('2d');
+          const g = sx.createRadialGradient(128, 128, 0, 128, 128, 128);
+          g.addColorStop(0,    `rgba(${key},0.22)`);
+          g.addColorStop(0.3,  `rgba(${key},0.10)`);
+          g.addColorStop(0.6,  `rgba(${key},0.035)`);
+          g.addColorStop(1,    `rgba(${key},0)`);
+          sx.fillStyle = g; sx.fillRect(0, 0, 256, 256);
+          nebSprites.set(key, sc);
+        }
+        return nebSprites.get(key);
+      };
+      // The hero's black hole is an opaque layer above this canvas: while it fills the screen
+      // there is nothing here to see, so skip drawing entirely.
+      let heroCovers = false;
+      const heroSec = document.querySelector('#dc-root section.hero') || document.querySelector('section.hero');
+      if(heroSec){
+        new IntersectionObserver(([e])=>{ heroCovers = e.intersectionRatio > 0.995; }, { threshold: [0, 0.995, 1] }).observe(heroSec);
+      }
+      const STAR_ALPHA_STEPS = 8;
       const onStarMove = (e)=>{
         tx = (e.clientX / Math.max(1, W) - 0.5) * 18;
         ty = (e.clientY / Math.max(1, H) - 0.5) * 12;
       };
+      let cleared = false;
       const renderPageStars = ()=>{
+        this._pageStarsRAF = requestAnimationFrame(renderPageStars);
+        if(heroCovers && document.body.classList.contains('is-ready')){
+          if(!cleared){ ctx.clearRect(0,0,W,H); cleared = true; }
+          lastSY = window.scrollY;
+          nebFrames = 0; nebFpsT = performance.now();   // skipped frames are not slow frames
+          return;
+        }
+        cleared = false;
         mx += (tx - mx) * 0.04;
         my += (ty - my) * 0.04;
         const sy = window.scrollY;
@@ -3332,7 +3385,6 @@ void main() {
         scrollDY = Math.max(-H * 0.35, Math.min(H * 0.35, rawDY));
         lastSY = sy;
         ctx.clearRect(0,0,W,H);
-        // ponytail: gradients rebuilt per frame — cache to an offscreen canvas only if this profiles hot
         ctx.globalCompositeOperation = 'lighter';
         nebula.forEach(n=>{
           if(!reduce){
@@ -3342,17 +3394,14 @@ void main() {
           if(!reduce) n.y -= scrollDY * 0.05;
           if(n.y < -n.r) n.y = H + n.r; else if(n.y > H + n.r) n.y = -n.r;
           const x = n.x + (reduce ? 0 : mx * 1.8), y = n.y + (reduce ? 0 : my * 1.4);
-          const g = ctx.createRadialGradient(x, y, 0, x, y, n.r);
-          g.addColorStop(0,    `rgba(${n.c},0.22)`);
-          g.addColorStop(0.3,  `rgba(${n.c},0.10)`);
-          g.addColorStop(0.6,  `rgba(${n.c},0.035)`);
-          g.addColorStop(1,    `rgba(${n.c},0)`);
-          ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(x, y, n.r, 0, Math.PI * 2); ctx.fill();
+          ctx.drawImage(nebSprite(n.c), x - n.r, y - n.r, n.r * 2, n.r * 2);
         });
         ctx.globalCompositeOperation = 'source-over';
+        // stars: one batched path per (layer, brightness step) instead of one fill per star
+        ctx.fillStyle = '#ffffff';
         layers.forEach((layer, li)=>{
           const drift = reduce ? 0 : layer.speed;
+          const paths = new Array(STAR_ALPHA_STEPS);
           layer.stars.forEach(star=>{
             star.ph += star.tw;
             star.y -= drift + scrollDY * layer.travel;
@@ -3361,13 +3410,19 @@ void main() {
             const twinkle = reduce ? 1 : (0.62 + 0.38 * Math.sin(star.ph));
             const px = star.x + (reduce ? 0 : mx * (li + 1) * 0.2);
             const py = star.y + (reduce ? 0 : my * (li + 1) * 0.2);
-            ctx.globalAlpha = star.a * twinkle;
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(px, py, layer.size, 0, Math.PI * 2);
-            ctx.fill();
+            if(px < -4 || px > W + 4 || py < -4 || py > H + 4) return;   // off-screen: nothing to draw
+            const b = Math.min(STAR_ALPHA_STEPS - 1, Math.floor(star.a * twinkle * STAR_ALPHA_STEPS));
+            const path = paths[b] || (paths[b] = new Path2D());
+            path.moveTo(px + layer.size, py);
+            path.arc(px, py, layer.size, 0, Math.PI * 2);
           });
+          for(let b = 0; b < STAR_ALPHA_STEPS; b++){
+            if(!paths[b]) continue;
+            ctx.globalAlpha = (b + 0.5) / STAR_ALPHA_STEPS;
+            ctx.fill(paths[b]);
+          }
         });
+        ctx.globalAlpha = 1;
         // shooting stars
         if(!reduce){
           shootTimer--;
@@ -3404,7 +3459,6 @@ void main() {
           nebBadSecs = fps < 30 ? nebBadSecs + 1 : 0;
           if(nebCount > 4 && nebBadSecs >= 3){ nebCount = 4; resizePageStars(); }
         }
-        this._pageStarsRAF = requestAnimationFrame(renderPageStars);
       };
       resizePageStars();
       addEventListener('resize', resizePageStars);
@@ -3495,8 +3549,15 @@ void main() {
     const journeyTabs = [...document.querySelectorAll('.journey-tab')];
     // journeyCards already declared above (the panels inside the track)
     if(journeyHint) journeyHint.textContent = 'select a galaxy to begin';
+    const jgalSvgs = [...document.querySelectorAll('.jgal svg')];
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
-      document.querySelectorAll('.jgal svg').forEach(s=>{ if(s.pauseAnimations) s.pauseAnimations(); });
+      jgalSvgs.forEach(s=>{ if(s.pauseAnimations) s.pauseAnimations(); });
+    } else if(jgalSvgs.length && 'IntersectionObserver' in window){
+      // the galaxies' blurred, rotating arms only animate while the tabs are on screen
+      const tabsEl = document.querySelector('.journey-tabs');
+      if(tabsEl) new IntersectionObserver(([e])=>{
+        jgalSvgs.forEach(s=>{ if(s.pauseAnimations) (e.isIntersecting ? s.unpauseAnimations() : s.pauseAnimations()); });
+      }).observe(tabsEl);
     }
     if(journeyTabs.length){
       const tabHandlers = [];
@@ -4198,14 +4259,20 @@ void main() {
       lazies.forEach(startVid);
     }
 
-    // OBSERVER: hover => loop
+    // OBSERVER: the clip loops while it is on screen and pauses (no decoding) when it is not
     const obsVid = document.querySelector('[data-role="obs"]');
     if(obsVid){
-      obsVid.loop = true;            // observer clip loops continuously (no longer hover-gated)
-      obsVid.preload = 'auto';
+      obsVid.loop = true;
       const kickObs = ()=>{ const pr = obsVid.play(); if(pr && pr.catch) pr.catch(()=>{}); };
-      obsVid.addEventListener('canplay', kickObs, { once: true });
-      kickObs();
+      if('IntersectionObserver' in window){
+        new IntersectionObserver(([e])=>{
+          if(e.isIntersecting){ obsVid.preload = 'auto'; kickObs(); }
+          else obsVid.pause();
+        }, { rootMargin: '200px 0px' }).observe(obsVid);
+      } else {
+        obsVid.preload = 'auto';
+        kickObs();
+      }
     }
 
     // ---- GitHub auto-sync: projects tagged with the `portfolio` topic appear
@@ -4487,60 +4554,169 @@ function mount() {
   if (!host) return false;
   if (bh && bh.canvas.isConnected) return true;
   if (bh) bh.destroy();
-  bh = mountEtchedAccretion(host, { preset: 'crimson', params: layout(), root: host.closest('section') || host });
+  // Held (compiled, one frame drawn) while the "hello" intro covers it, so it neither competes with
+  // the page load nor lets load jank talk its adaptive resolution down.
+  const introDone = document.body.classList.contains('is-ready');
+  bh = mountEtchedAccretion(host, { preset: 'crimson', params: layout(), root: host.closest('section') || host, paused: !introDone });
+  if (!introDone) document.addEventListener('cosmos:ready', () => bh && bh.setPaused(false), { once: true });
   return true;
 }
 
 const boot = setInterval(() => { if (mount()) clearInterval(boot); }, 60);
 setTimeout(() => clearInterval(boot), 15000);
+
+// Hero "play me" Groot: model-viewer (~1MB, with its own three.js) stays off the critical path — it
+// loads after the intro once the browser is idle, and never on phones, where the button is hidden.
+const playMeShown = matchMedia('(min-width: 601px)');
+let modelViewerRequested = false;
+const loadModelViewer = () => {
+  if (modelViewerRequested || !playMeShown.matches) return;
+  modelViewerRequested = true;
+  const go = () => import('https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js').catch(() => {});
+  'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2500 }) : setTimeout(go, 1200);
+};
+const afterIntro = (fn) => document.body.classList.contains('is-ready') ? fn() : document.addEventListener('cosmos:ready', fn, { once: true });
+afterIntro(loadModelViewer);
+playMeShown.addEventListener('change', () => afterIntro(loadModelViewer));
 // self-heal: a late runtime re-render can replace the hero node under us
 setInterval(() => { if (bh && !bh.canvas.isConnected) mount(); }, 1000);
 narrow.addEventListener('change', () => bh && bh.setParams(layout()));
 </script>
 <script type="module">
-  import * as THREE from 'three';
-  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-  import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+/* ---- footer Groot (three.js) ----
+   Performance contract: three.js is only downloaded when the footer comes within a screen of the
+   viewport, the model only renders while the footer is actually visible, and the drawing buffer is
+   capped at 1.5x. It binds to the live React-rendered node (the <x-dc> runtime replaces the parsed
+   DOM on boot, so an early query would grab a node that is about to be detached). */
+(function () {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let stage = null, canvas = null;
+  let THREE = null, renderer = null, scene = null, camera = null, mixer = null, clock = null;
+  let ready = false, visible = false, raf = 0, booting = false;
 
-  (function () {
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let stage = null;
-    let canvas = null;
-    let renderer = null;
-    let scene = null;
-    let camera = null;
-    let mixer = null;
-    let modelStarted = false;
-    let started = false;
+  function resize() {
+    if (!renderer) return;
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    if (ready && !raf) renderer.render(scene, camera);
+  }
 
-    // The page's <x-dc> host is re-rendered by React on boot, which replaces
-    // the original DOM nodes. Always query the LIVE stage/canvas so we never
-    // hold a detached reference.
-    function findStage() {
-      const el = document.querySelector('[data-role="groot"]');
-      if (!el || !document.body.contains(el)) return false;
-      const cv = el.querySelector('canvas.groot-canvas');
-      if (!cv) return false;
-      stage = el;
-      canvas = cv;
-      return true;
+  function frame() {
+    raf = 0;
+    if (!visible) return;
+    if (mixer && !reduce) mixer.update(Math.min(clock.getDelta(), 0.05));
+    renderer.render(scene, camera);
+    if (!reduce) raf = requestAnimationFrame(frame);
+  }
+  function play() {
+    if (!ready || raf || !visible) return;
+    clock.getDelta();                       // drop the time spent off-screen
+    raf = requestAnimationFrame(frame);
+  }
+  function pause() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+
+  function makeShadowTexture() {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(64, 64, 4, 64, 64, 62);
+    g.addColorStop(0, 'rgba(0,0,0,0.5)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  }
+
+  function skinnedBox(mesh, box) {
+    mesh.boundingBox = null;
+    mesh.computeBoundingBox();
+    box.union(mesh.boundingBox);
+  }
+
+  function setup(gltf) {
+    const root = gltf.scene;
+    if (!root) return;
+    let mesh = null;
+    root.traverse(function (o) { if (o.isSkinnedMesh && !mesh) mesh = o; });
+    if (!mesh) { console.warn('[groot] no skinned mesh found'); return; }
+    const clip = gltf.animations && gltf.animations[0];
+
+    // Frame from the full dance so Groot never clips mid-move.
+    const box = new THREE.Box3();
+    if (clip && !reduce) {
+      mixer = new THREE.AnimationMixer(root);
+      mixer.clipAction(clip).play();
+      root.updateMatrixWorld(true);
+      const N = 40;
+      for (let i = 0; i <= N; i++) {
+        mixer.setTime((i / N) * clip.duration);
+        mixer.update(0);
+        root.updateMatrixWorld(true);
+        skinnedBox(mesh, box);
+      }
+      mixer.setTime(0); mixer.update(0); root.updateMatrixWorld(true);
+      skinnedBox(mesh, box);
+    } else {
+      root.updateMatrixWorld(true);
+      skinnedBox(mesh, box);
     }
 
-    function initScene() {
-      try {
-        renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-      } catch (e) { console.warn('[groot] WebGL unavailable:', e); return false; }
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    const S = 2 / size.y;
+    root.scale.set(S, S, S);
+    root.position.set(-center.x * S, -center.y * S, -center.z * S);
+    root.updateMatrixWorld(true);
+    scene.add(root);
 
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const vFov = camera.fov * Math.PI / 180;
+    let dist = (size.y * S / 2) / Math.tan(vFov / 2);
+    const needW = (size.x * S / 2) / Math.tan(vFov / 2) / camera.aspect;
+    if (needW > dist) dist = needW;
+    dist *= 1.12;
+    camera.position.set(0, 0, dist);
+    camera.lookAt(0, 0, 0);
+
+    const shadow = new THREE.Mesh(
+      new THREE.PlaneGeometry(size.x * S * 0.8, size.z * S * 1.1),
+      new THREE.MeshBasicMaterial({ map: makeShadowTexture(), transparent: true, depthWrite: false })
+    );
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.set(0, -size.y * S / 2 + 0.02, 0);
+    scene.add(shadow);
+
+    clock = new THREE.Clock();
+    ready = true;
+    resize();
+    renderer.render(scene, camera);          // one frame even under reduced motion
+    play();
+  }
+
+  async function boot() {
+    if (booting) return;
+    booting = true;
+    try {
+      const [three, { GLTFLoader }, { DRACOLoader }] = await Promise.all([
+        import('three'),
+        import('three/addons/loaders/GLTFLoader.js'),
+        import('three/addons/loaders/DRACOLoader.js'),
+      ]);
+      THREE = three;
+      try {
+        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+      } catch (e) { console.warn('[groot] WebGL unavailable:', e); return; }
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.15;
       renderer.setClearColor(0x000000, 0);
 
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(34, 2 / 3, 0.1, 60);
-      camera.position.set(0, 0.45, 3.9);
-      camera.lookAt(0, 0.1, 0);
-
       scene.add(new THREE.AmbientLight(0xffffff, 0.55));
       const key = new THREE.DirectionalLight(0xfff3e0, 1.7);
       key.position.set(2.5, 4, 3);
@@ -4549,151 +4725,39 @@ narrow.addEventListener('change', () => bh && bh.setParams(layout()));
       const rim = new THREE.DirectionalLight(0x5fd8a4, 0.55);
       rim.position.set(0, 2.5, -4);
       scene.add(key, fill, rim);
-      return true;
-    }
-
-    function makeShadowTexture() {
-      const c = document.createElement('canvas');
-      c.width = c.height = 128;
-      const ctx = c.getContext('2d');
-      const g = ctx.createRadialGradient(64, 64, 4, 64, 64, 62);
-      g.addColorStop(0, 'rgba(0,0,0,0.5)');
-      g.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, 128, 128);
-      return new THREE.CanvasTexture(c);
-    }
-
-    function skinnedBox(mesh, box) {
-      mesh.boundingBox = null;
-      mesh.computeBoundingBox();
-      box.union(mesh.boundingBox);
-    }
-
-    function setup(gltf) {
-      const root = gltf.scene;
-      if (!root) return;
-      let mesh = null;
-      root.traverse(function (o) { if (o.isSkinnedMesh && !mesh) mesh = o; });
-      if (!mesh) { console.warn('[groot] no skinned mesh found'); return; }
-      const clip = gltf.animations && gltf.animations[0];
-
-      // Frame from the full dance so Groot never clips mid-move.
-      const box = new THREE.Box3();
-      if (clip && !reduce) {
-        mixer = new THREE.AnimationMixer(root);
-        const action = mixer.clipAction(clip);
-        action.play();
-        root.updateMatrixWorld(true);
-        const N = 40;
-        for (let i = 0; i <= N; i++) {
-          mixer.setTime((i / N) * clip.duration);
-          mixer.update(0);
-          root.updateMatrixWorld(true);
-          skinnedBox(mesh, box);
-        }
-        mixer.setTime(0); mixer.update(0); root.updateMatrixWorld(true);
-        skinnedBox(mesh, box);
-      } else {
-        root.updateMatrixWorld(true);
-        skinnedBox(mesh, box);
-      }
-
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-      box.getSize(size);
-      box.getCenter(center);
-      const S = 2 / size.y;
-      root.scale.set(S, S, S);
-      root.position.set(-center.x * S, -center.y * S, -center.z * S);
-      root.updateMatrixWorld(true);
-      scene.add(root);
-
-      const vFov = camera.fov * Math.PI / 180;
-      let dist = (size.y * S / 2) / Math.tan(vFov / 2);
-      const needW = (size.x * S / 2) / Math.tan(vFov / 2) / camera.aspect;
-      if (needW > dist) dist = needW;
-      dist *= 1.12;
-      camera.position.set(0, 0, dist);
-      camera.lookAt(0, 0, 0);
-
-      const shadow = new THREE.Mesh(
-        new THREE.PlaneGeometry(size.x * S * 0.8, size.z * S * 1.1),
-        new THREE.MeshBasicMaterial({ map: makeShadowTexture(), transparent: true, depthWrite: false })
-      );
-      shadow.rotation.x = -Math.PI / 2;
-      shadow.position.set(0, -size.y * S / 2 + 0.02, 0);
-      scene.add(shadow);
-
+      new ResizeObserver(resize).observe(stage);
       resize();
 
-      const clock = new THREE.Clock();
-      (function frame() {
-        requestAnimationFrame(frame);
-        if (mixer && !reduce) mixer.update(Math.min(clock.getDelta(), 0.05));
-        resize();
-        renderer.render(scene, camera);
-      })();
-    }
-
-    function resize() {
-      const w = stage.clientWidth, h = stage.clientHeight;
-      if (!w || !h) return;
-      const pr = renderer.getPixelRatio();
-      if (canvas.width === Math.round(w * pr) && canvas.height === Math.round(h * pr)) return;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    }
-
-    function loadModel() {
-      if (modelStarted) return;
-      modelStarted = true;
       const loader = new GLTFLoader();
       // groot.glb is Draco-compressed (8.9MB → ~0.7MB) — without a decoder the footer dancer won't load.
-      // model-viewer (the hero play-button) has its own Draco decoder, so only this three.js loader needs one.
       const draco = new DRACOLoader();
       draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/');
       loader.setDRACOLoader(draco);
-      loader.load('uploads/groot.glb', setup, undefined, function (err) {
-        console.warn('[groot] load failed:', err);
-      });
+      loader.load('uploads/groot.glb', setup, undefined, (err) => console.warn('[groot] load failed:', err));
+    } catch (e) {
+      console.warn('[groot] failed to start:', e);
     }
+  }
 
-    // Wait for React to render the live stage, then wire up and load.
-    function start() {
-      if (started) return;
-      if (!findStage() || !initScene()) {
-        setTimeout(start, 200);
-        return;
-      }
-      started = true;
-
-      if (window.ResizeObserver) {
-        new ResizeObserver(resize).observe(stage);
-      } else {
-        window.addEventListener('resize', resize);
-      }
-      resize();
-
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver(function (ents) {
-          ents.forEach(function (en) {
-            if (en.isIntersecting) {
-              io.disconnect();
-              loadModel();
-            }
-          });
-        }, { threshold: 0.08 });
-        io.observe(stage);
-      } else {
-        loadModel();
-      }
-      setTimeout(loadModel, 5000);
-    }
-
-    setTimeout(start, 0);
-  })();
+  function bind() {
+    stage = document.querySelector('#dc-root [data-role="groot"]');
+    canvas = stage && stage.querySelector('canvas.groot-canvas');
+    if (!canvas) return false;
+    // fetch three.js + the model once the footer is within a screen of the viewport…
+    const near = new IntersectionObserver((ents) => {
+      if (ents.some((e) => e.isIntersecting)) { near.disconnect(); boot(); }
+    }, { rootMargin: '100% 0px' });
+    near.observe(stage);
+    // …and only spend frames on Groot while he is actually on screen
+    new IntersectionObserver((ents) => {
+      visible = ents.some((e) => e.isIntersecting);
+      visible ? play() : pause();
+    }).observe(stage);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); else play(); });
+    return true;
+  }
+  const wait = setInterval(() => { if (bind()) clearInterval(wait); }, 100);
+})();
 </script>
 <script type="module">
 /* Prism — subtle Event-Horizon backdrop (ported from React Bits <Prism/> "rotate", ogl) */
@@ -4703,7 +4767,9 @@ import { Renderer, Triangle, Program, Mesh } from 'https://esm.sh/ogl@1.0.11';
   if (!ctn) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const H=3.5, BW=5.5, BASE_HALF=BW*0.5, GLOW=1, NOISE=0.5, SAT=0.3, SCALE=3.6, HUE=0, CFREQ=1, BLOOM=1, TS=0.5;
-  const dpr = Math.min(2, window.devicePixelRatio||1);
+  // 100 ray-march steps per pixel: render a soft, low-res buffer (it shows at 16% opacity and is
+  // upscaled smoothly by the browser) and cap it at ~30fps — a fraction of the full-res cost.
+  const dpr = 0.4;
   const renderer = new Renderer({ dpr, alpha:true, antialias:false });
   const gl = renderer.gl; gl.disable(gl.DEPTH_TEST); gl.disable(gl.CULL_FACE); gl.disable(gl.BLEND);
   Object.assign(gl.canvas.style, { position:'absolute', inset:'0', width:'100%', height:'100%', display:'block' });
@@ -4747,7 +4813,11 @@ import { Renderer, Triangle, Program, Mesh } from 'https://esm.sh/ogl@1.0.11';
   const ro = new ResizeObserver(resize); ro.observe(ctn); resize();
   const t0 = performance.now();
   let raf=0, vis=false;
-  const render = t => { program.uniforms.iTime.value=(t-t0)*0.001; renderer.render({ scene: mesh }); raf = (vis && !reduce) ? requestAnimationFrame(render) : 0; };
+  let lastDraw = -1e9;
+  const render = t => {
+    if (t - lastDraw >= 32) { lastDraw = t; program.uniforms.iTime.value=(t-t0)*0.001; renderer.render({ scene: mesh }); }
+    raf = (vis && !reduce) ? requestAnimationFrame(render) : 0;
+  };
   const io = new IntersectionObserver(es => { vis = es.some(e=>e.isIntersecting); if (vis && !raf) raf = requestAnimationFrame(render); else if (!vis && raf) { cancelAnimationFrame(raf); raf=0; } }); io.observe(ctn);
   if (reduce) renderer.render({ scene: mesh });
 })();

@@ -471,6 +471,8 @@ function fallbackBackground(P) {
  *                the piece lowers it by itself if frames run long
  *   root         element that receives pointer input and gates rendering on
  *                visibility — usually the hero section (default: host)
+ *   paused       compile and draw one frame, but hold the animation until
+ *                setPaused(false) — e.g. while a loader covers the page
  */
 export function mountEtchedAccretion(host, options = {}) {
   const root = options.root || host
@@ -478,6 +480,7 @@ export function mountEtchedAccretion(host, options = {}) {
   const renderScale = options.renderScale ?? 1
   let preset = options.preset || "crimson"
   let overrides = options.params || {}
+  let paused = !!options.paused
 
   const resolveParams = () =>
     sanitize({ ...ACCRETION_DEFAULTS, ...(ACCRETION_PRESETS[preset] ?? {}), ...overrides })
@@ -502,6 +505,8 @@ export function mountEtchedAccretion(host, options = {}) {
   let destroyed = false
   let teardown = null
   let repaint = () => {}
+  let resume = () => {}
+  let halt = () => {}
 
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)")
   let reduced = motion.matches
@@ -605,12 +610,12 @@ export function mountEtchedAccretion(host, options = {}) {
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
     repaint = () => {
-      if (reduced) draw()
+      if (reduced || paused) draw()
     }
 
     const observer = new ResizeObserver(() => {
       resize()
-      if (reduced) draw()
+      if (reduced || paused) draw()   // a resize clears the buffer; repaint the still frame
     })
     observer.observe(canvas)
 
@@ -689,24 +694,32 @@ export function mountEtchedAccretion(host, options = {}) {
       raf = requestAnimationFrame(frame)
     }
 
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting
-      if (visible && !reduced && !raf) {
+    resume = () => {
+      if (visible && !reduced && !paused && !raf) {
         last = performance.now()
         raf = requestAnimationFrame(frame)
       }
+    }
+    halt = () => {
+      cancelAnimationFrame(raf)
+      raf = 0
+    }
+
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      resume()
     })
     io.observe(root)
 
-    if (reduced) {
-      draw()
-    } else {
-      raf = requestAnimationFrame(frame)
-    }
+    // Always draw once up front: it compiles the pipeline now, so un-pausing never hitches.
+    draw()
+    resume()
 
     return () => {
       cancelAnimationFrame(raf)
       repaint = () => {}
+      resume = () => {}
+      halt = () => {}
       observer.disconnect()
       io.disconnect()
       root.removeEventListener("pointermove", onMove)
@@ -757,6 +770,12 @@ export function mountEtchedAccretion(host, options = {}) {
     setPreset(name) {
       preset = name
       retune()
+    },
+    /** Hold or release the animation; the last frame stays on screen while paused. */
+    setPaused(value) {
+      paused = !!value
+      if (paused) halt()
+      else resume()
     },
     destroy() {
       destroyed = true

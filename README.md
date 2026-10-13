@@ -2,18 +2,51 @@
 
 A signal-based portfolio that feels discovered, not browsed.
 
+![Hero — the Etched Accretion black hole behind the name, planet nav and "play me" Groot](docs/screenshots/hero.jpg)
+
 ## What it is
 
 A single-page portfolio with an engraved deep-space aesthetic — a procedural black hole in the hero, decrypted name reveal, scroll-driven timeline, and live project showcase.
 
 ## Sections
 
-- **Hero** — *Etched Accretion*: a black hole drawn like an engraving (hair-thin orbital streaks banded in crimson, photon crown, contour-line nebula, film grain). Move the pointer for parallax, hold to feed it. Plus decrypted name reveal, live UTC clock and planet nav
-- **Perspective Marquee** — Scrolling brand marquee (Vercel, Linear, Stripe, etc.) with 3D tilt
-- **Mission Desktop** — Mac-style Finder window showing project folders
-- **Observer** — Selected work cards (HawkAI Login, Quantasphere Hero) with hover-reveal parallax
-- **Journey** — Sticky stacking timeline cards with constellation SVGs
-- **Event Horizon** — Footer with contact and loopy background video
+> Screenshots are real captures of the current site (desktop at 1440×900, phone at 390×844).
+
+### Intro — "hello"
+The loader draws the Leo constellation as the page actually loads, with a hairline crimson progress bar and live status ("Acquiring signal → Linking constellation → Signal locked").
+
+![Intro loader](docs/screenshots/intro.jpg)
+
+### Hero — Etched Accretion
+A black hole drawn like an engraving: hair-thin orbital streaks banded in crimson, a photon crown, contour-line nebula and film grain — one procedural WebGL2 shader. Move the pointer for parallax, hold to feed it. Around it: the decrypted name reveal, live UTC clock, ambient music player, the Taurus constellation, planet nav (Work · Journey · Résumé · Contact) and a dancing "play me" Groot that starts the Awesome Mix. *(Screenshot at the top of this page.)*
+
+<p align="center"><img src="docs/screenshots/mobile.jpg" alt="Hero on a phone" width="300"></p>
+<p align="center"><sub>On phones the black hole sits below the copy and planet nav.</sub></p>
+
+### Perspective Marquee
+A scrolling brand marquee (Vercel, Linear, Stripe…) on a 3D tilt.
+
+### The Observer — selected work
+A poetic intro over the starfield, then a macOS-style Finder window: **All Work**, **Projects**, **AI Agents** (an interactive architecture map) and **Résumé**, with Quick Look previews. Repositories tagged `portfolio` on GitHub appear in it automatically.
+
+![The Observer](docs/screenshots/observer.jpg)
+![Finder — Projects](docs/screenshots/work.jpg)
+
+### Journey So Far
+Pick a galaxy — **All**, **Web Design** or **AI Engineering** — and the timeline opens as horizontally scrolling project cards (stack, highlights, screenshots, GitHub links), linked by constellations.
+
+![Journey — galaxy tabs](docs/screenshots/journey.jpg)
+![Journey — project cards](docs/screenshots/journey-cards.jpg)
+
+### Personal Journey
+A coverflow carousel of photos from along the way.
+
+![Personal Journey](docs/screenshots/personal-journey.jpg)
+
+### Event Horizon — contact
+Contact details, a swinging (draggable) crew-credential badge with LinkedIn / GitHub / Email, a dancing 3D Groot, and a particle-text signature that scatters around the cursor.
+
+![Event Horizon footer](docs/screenshots/footer.jpg)
 
 ## Projects in `work/`
 
@@ -63,9 +96,19 @@ A vanilla ES-module port of the `EtchedAccretion` React component (no build step
 import { mountEtchedAccretion } from './etched-accretion.js'
 const bh = mountEtchedAccretion(el, { preset: 'crimson', params: { center: [0.63, 0.45] }, root: heroSection })
 bh.setParams({ holeSize: 0.07 })   // retune live; presets: crimson · ember · glacier · ash · orchid
+bh.setPaused(false)                // pass { paused: true } to compile now and animate later
 ```
 
 The hero mounts it from the module at the bottom of `index.html`; desktop/phone placement lives in its `layout()`.
+
+## Performance rules
+
+Keep these when adding effects — breaking any one of them is what made the page feel heavy:
+
+- **Only what is on screen animates.** Every canvas/WebGL loop, the SVG galaxies and the Observer video pause via `IntersectionObserver` when out of view. The hero shader is held during the intro and the starfield skips frames while the opaque hero fills the screen.
+- **Heavy libraries load on demand.** three.js (footer Groot) loads when the footer is a screen away; model-viewer (hero "play me" Groot) loads after the intro when the browser is idle, and not at all on phones.
+- **Cap pixel density.** Drawing buffers stop at 1.5×; soft layers (journey particles, waves) render at 1× and the footer Prism at 0.4× / 30fps — they are blurs, so nobody can tell.
+- **No per-frame filters on moving content.** No `backdrop-filter` over the animated starfield and no CSS `drop-shadow` on live canvases — glows are static gradients. Batch canvas draws (one fill per colour bucket) instead of one draw — or one `shadowBlur` — per particle.
 
 ## Stack
 
