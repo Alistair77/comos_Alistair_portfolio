@@ -27,7 +27,7 @@ A black hole drawn like an engraving: hair-thin orbital streaks banded in crimso
 A scrolling brand marquee (Vercel, Linear, Stripe…) on a 3D tilt.
 
 ### The Observer — selected work
-A poetic intro over the starfield, then a macOS-style Finder window: **All Work**, **Projects**, **AI Agents** (an interactive architecture map) and **Résumé**, with Quick Look previews. Repositories tagged `portfolio` on GitHub appear in it automatically.
+A poetic intro over the starfield, then a macOS-style Finder window. The front views (**All Work**, **Projects**) lead with the Professional Portfolio and the AI projects; other web work sits behind the **Web** tab. Also **AI Agents** (an interactive architecture map) and **Résumé**, with Quick Look previews. Repositories tagged `portfolio` on GitHub appear automatically (web repos under Web).
 
 ![The Observer](docs/screenshots/observer.jpg)
 ![Finder — Projects](docs/screenshots/work.jpg)
