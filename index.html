@@ -283,7 +283,7 @@
   .desktop-sidebar span.sb-item{display:flex;align-items:center;gap:var(--space-2);border-radius:7px;padding:6px 10px;color:#e4e4e8;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:var(--text-sm);font-weight:500}
   .desktop-sidebar span.sb-item i{width:15px;height:15px;border-radius:4px;flex-shrink:0;background:#0a84ff}
   .desktop-sidebar span.sb-item.is-active{background:rgba(255,255,255,.1)}
-  .sb-item--proj i{background:#30d158}.sb-item--case i{background:#bf5af2}.sb-item--res i{background:#ff9f0a}.sb-item--exp i{background:#ff453a}.sb-item--pics i{background:#64d2ff}
+  .sb-item--proj i{background:#30d158}.sb-item--web i{background:#64d2ff}.sb-item--case i{background:#bf5af2}.sb-item--res i{background:#ff9f0a}.sb-item--exp i{background:#ff453a}.sb-item--pics i{background:#64d2ff}
   .desktop-pane{position:relative;background:linear-gradient(160deg,rgba(38,38,44,.36),rgba(22,22,28,.36));padding:clamp(20px,3vw,34px)}
   .desktop-pane-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);margin-bottom:22px}
   .desktop-pane h2{font-family:var(--font-display);font-weight:400;font-size:var(--text-2xl);line-height:1;margin:0;color:#f4f4f7;letter-spacing:var(--tr-normal)}
@@ -1098,7 +1098,7 @@
       <p class="hero-kicker">A SIGNAL FROM THE VOID</p>
       <h1 id="sig-name" class="hero-name hero-headline-wrap"></h1>
       <p class="hero-sub hero-sub-wrap">I build <span class="accent">AI that ships</span> — retrieval systems, on-device models, and the interfaces that make them usable.</p>
-      <p class="hero-sub-wrap" style="margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#8f98ad;line-height:2.1"><span style="color:#ff3b47">◇</span>&nbsp; MSc Advanced Computer Science · Strathclyde<br><span style="color:#e9e4df">▸</span>&nbsp; Python · Kotlin · FastAPI · React · AI/ML</p>
+      <p class="hero-sub-wrap" style="margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#8f98ad;line-height:2.1"><span style="color:#ff3b47">◇</span>&nbsp; MSc Advanced Computer Science · Strathclyde<br><span style="color:#ff3b47">◆</span>&nbsp; AI Engineer · Fast Company India / Bizaura<br><span style="color:#e9e4df">▸</span>&nbsp; Python · React · FastAPI · LLMs &amp; Agents · AI/ML</p>
     </div>
 
     <div class="hero-planets" aria-label="Primary signals">
@@ -1230,22 +1230,23 @@
           <span class="sb-item is-active" data-section="all"><i></i>All Work</span>
           <span class="sb-item sb-item--proj" data-section="projects"><i></i>Projects</span>
           <span class="sb-item sb-item--case" data-section="agents"><i></i>AI Agents</span>
+          <span class="sb-item sb-item--web" data-section="web"><i></i>Web</span>
           <span class="sb-head">Locations</span>
           <span class="sb-item sb-item--res" data-section="resume"><i></i>Résumé</span>
         </aside>
         <div class="desktop-pane">
           <div class="desktop-pane-head">
             <h2 id="desktopTitle">All Work</h2>
-            <small id="desktopMeta">11 items · updated today</small>
+            <small id="desktopMeta">10 items · updated today</small>
           </div>
           <div class="desktop-files" id="desktopFiles">
-            <div class="desktop-file" data-action="open-folder" data-folder="hawkai"><div class="ico ico--folder"></div><span class="label">HawkAI Login</span></div>
-            <div class="desktop-file" data-action="open-folder" data-folder="quantasphere"><div class="ico ico--folder p"></div><span class="label">Quantasphere</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="professional_portfolio_website"><div class="ico ico--folder"></div><span class="label">Professional Portfolio</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="ragstar"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="agent_orchestrator"><div class="ico ico--folder"></div><span class="label">Agent Orchestrator</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="agent_evals"><div class="ico ico--folder o"></div><span class="label">Agent Evals</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="study_snippets"><div class="ico ico--folder g"></div><span class="label">Study Snippets</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="health_weight"><div class="ico ico--folder p"></div><span class="label">Health Weight</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="experiments"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
-            <div class="desktop-file" data-action="quick-look" data-file="uploads/mac-space-reference.jpeg" data-name="Cosmos Hero.png"><div class="ico ico--img"></div><span class="label">Cosmos Hero.png</span></div>
             <div class="desktop-file" data-action="open-link" data-url="uploads/resume.pdf"><div class="ico ico--doc"></div><span class="label">Résumé.pdf</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="education"><div class="ico ico--folder g"></div><span class="label">Education</span></div>
           </div>
@@ -3629,6 +3630,7 @@ void main() {
     }
     // ---- desktop sidebar and filesystem navigation ----
     const projectMeta = {
+      professional_portfolio_website: { letter:'P', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'Professional portfolio website', date:'2026 · Portfolio' },
       hawkai: { letter:'H', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'3D login — React, Three.js, Ant Design', date:'2026 · Featured' },
       quantasphere: { letter:'Q', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'Cursor-driven video scrub hero', date:'2026 · Interactive' },
       ragstar: { letter:'R', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Hybrid search RAG pipeline', date:'2026 · AI' },
@@ -3639,27 +3641,34 @@ void main() {
     };
 
     const fileSystem = {
+      // Front of the Finder: the Professional Portfolio (the one web project shown here), then AI work.
+      // Other web projects live behind the Web tab.
       all: [
-        { name: 'HawkAI Login', type: 'folder', color: '', proj: 'hawkai' },
-        { name: 'Quantasphere', type: 'folder', color: 'p', proj: 'quantasphere' },
+        { name: 'Professional Portfolio', type: 'folder', color: '', proj: 'professional_portfolio_website' },
         { name: 'RAGStar', type: 'folder', color: 'o', proj: 'ragstar' },
-        { name: 'Study Snippets', type: 'folder', color: 'g', proj: 'study_snippets' },
-        { name: 'Health Weight', type: 'folder', color: 'p', proj: 'health_weight' },
         { name: 'Agent Orchestrator', type: 'folder', color: '', proj: 'agent_orchestrator' },
         { name: 'Agent Evals', type: 'folder', color: 'o', proj: 'agent_evals' },
+        { name: 'Study Snippets', type: 'folder', color: 'g', proj: 'study_snippets' },
+        { name: 'Health Weight', type: 'folder', color: 'p', proj: 'health_weight' },
         { name: 'Experiments', type: 'folder', color: '', proj: 'experiments' },
-        { name: 'Cosmos Hero.png', type: 'image', file: 'uploads/mac-space-reference.jpeg', size: '57 KB' },
         { name: 'Résumé.pdf', type: 'pdf', file: 'uploads/resume.pdf', size: '142 KB' },
         { name: 'Education', type: 'folder', color: 'g', proj: 'education' }
       ],
       projects: [
-        { name: 'HawkAI Login', type: 'project', icon: 'uploads/hawkai-thumb.svg', proj: 'hawkai' },
-        { name: 'Quantasphere', type: 'project', icon: 'uploads/quantasphere-thumb.jpg', proj: 'quantasphere' },
+        { name: 'Professional Portfolio', type: 'project', icon: '', proj: 'professional_portfolio_website' },
         { name: 'RAGStar', type: 'project', icon: 'uploads/ragstar-thumb.svg', proj: 'ragstar' },
-        { name: 'Study Snippets', type: 'project', icon: 'uploads/study-snippets-thumb.svg', proj: 'study_snippets' },
-        { name: 'Health Weight', type: 'project', icon: 'uploads/health-weight-thumb.svg', proj: 'health_weight' },
         { name: 'Agent Orchestrator', type: 'project', icon: '', proj: 'agent_orchestrator' },
-        { name: 'Agent Evals', type: 'project', icon: '', proj: 'agent_evals' }
+        { name: 'Agent Evals', type: 'project', icon: '', proj: 'agent_evals' },
+        { name: 'Study Snippets', type: 'project', icon: 'uploads/study-snippets-thumb.svg', proj: 'study_snippets' },
+        { name: 'Health Weight', type: 'project', icon: 'uploads/health-weight-thumb.svg', proj: 'health_weight' }
+      ],
+      web: [
+        { name: 'HawkAI Login', type: 'project', icon: 'uploads/hawkai-thumb.svg', proj: 'hawkai' },
+        { name: 'Quantasphere', type: 'project', icon: 'uploads/quantasphere-thumb.jpg', proj: 'quantasphere' }
+      ],
+      professional_portfolio_website: [
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/professional-portfolio-website', target: '_blank', size: 'GitHub' },
+        { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/professional-portfolio-website/blob/main/README.md', target: '_blank', size: 'Doc Link' }
       ],
       hawkai: [
         { name: 'Login Screen.png', type: 'image', file: 'projects/Screenshot 2026-05-25 at 2.12.59 PM.png', size: '3.0 MB' },
@@ -3703,8 +3712,9 @@ void main() {
     };
 
     const desktopSections = {
-      all: { title: 'All Work', meta: '11 items · updated today', folderKey: 'all' },
-      projects: { title: 'Projects', meta: '7 projects · click to explore', folderKey: 'projects' },
+      all: { title: 'All Work', meta: `${fileSystem.all.length} items · updated today`, folderKey: 'all' },
+      projects: { title: 'Projects', meta: `${fileSystem.projects.length} projects · click to explore`, folderKey: 'projects' },
+      web: { title: 'Web', meta: `${fileSystem.web.length} projects · web & interactive`, folderKey: 'web' },
       agents: {
         title: 'AI Agents',
         meta: 'architecture map · reasoning chains',
@@ -4016,7 +4026,7 @@ void main() {
     const getFolderHtml = (key) => {
       const items = fileSystem[key];
       if (!items) return '';
-      const isProjects = key === 'projects';
+      const isProjects = key === 'projects' || key === 'web';
       const html = items.map(item => {
         if (item.type === 'folder') {
           return `<div class="desktop-file" data-action="open-folder" data-folder="${item.proj}" data-name="${item.name}">
@@ -4322,6 +4332,7 @@ void main() {
         repos.forEach(repo => {
           if (!repo || repo.fork) return;
           if (!Array.isArray(repo.topics) || !repo.topics.includes('portfolio')) return;
+          if ((repo.name || '').toLowerCase() === 'comos_alistair_portfolio') return;   // this site itself
           const key = slug(repo.name);
           if (!key || existing.has(key)) return;
           existing.add(key);
@@ -4336,8 +4347,12 @@ void main() {
             date: yr + ' · GitHub'
           };
           const display = title(repo.name);
-          fileSystem.projects.push({ name: display, type: 'project', icon: '', proj: key });
-          fileSystem.all.push({ name: display, type: 'folder', color: '', proj: key });
+          if (t.tagClass === 'web') {
+            fileSystem.web.push({ name: display, type: 'project', icon: '', proj: key });
+          } else {
+            fileSystem.projects.push({ name: display, type: 'project', icon: '', proj: key });
+            fileSystem.all.push({ name: display, type: 'folder', color: '', proj: key });
+          }
           fileSystem[key] = [
             { name: 'GitHub Repository.lnk', type: 'link', url: repo.html_url, target: '_blank', size: 'GitHub' },
             { name: 'Documentation.lnk', type: 'link', url: repo.html_url + '/blob/' + (repo.default_branch || 'main') + '/README.md', target: '_blank', size: 'Doc Link' }
@@ -4348,7 +4363,8 @@ void main() {
         if (added.length) {
           desktopSections.all.meta = `${fileSystem.all.length} items · updated today`;
           desktopSections.projects.meta = `${fileSystem.projects.length} projects · click to explore`;
-          if (currentFolderKey === 'all' || currentFolderKey === 'projects') {
+          desktopSections.web.meta = `${fileSystem.web.length} projects · web & interactive`;
+          if (currentFolderKey === 'all' || currentFolderKey === 'projects' || currentFolderKey === 'web') {
             renderFolder(currentFolderKey, desktopTitle.textContent, finderHistory.length > 0);
           }
         }
