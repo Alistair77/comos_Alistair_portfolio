@@ -392,9 +392,9 @@
   .finder-smile-overlay svg{width:min(72%,340px);height:auto;filter:drop-shadow(0 24px 70px rgba(0,0,0,.55));transform:rotate(-8deg)}
 
   /* ---- Finder Projects — observer-style clickable cards ---- */
-  .desktop-pane .df-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-4);padding:10px 6px 12px 2px;
-    max-height:min(31rem,62vh);overflow-y:auto;scrollbar-width:thin;scrollbar-color:transparent transparent;transition:scrollbar-color .3s}
-  /* the grid scrolls once it outgrows the pane (more than six cards); its scrollbar shows on hover */
+  .desktop-pane .df-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--space-4);padding:14px 6px 14px 2px;
+    max-height:38rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:transparent transparent;transition:scrollbar-color .3s}
+  /* six cards (three rows) fit; the grid scrolls once it outgrows that, its scrollbar shows on hover */
   .desktop-pane .df-cards:hover{scrollbar-color:rgba(233,228,223,.28) transparent}
   .desktop-pane .df-cards::-webkit-scrollbar{width:6px}
   .desktop-pane .df-cards::-webkit-scrollbar-thumb{background:transparent;border-radius:99px}
@@ -404,7 +404,7 @@
     font-family:var(--font-mono);font-size:var(--text-2xs);font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
     color:#ffd9dc;background:rgba(211,18,31,.22);border:1px solid rgba(255,59,71,.45);transition:background .2s,color .2s,box-shadow .2s}
   .desktop-pane .df-card__live:hover,.desktop-pane .df-card__live:focus-visible{background:#d3121f;color:#fff;box-shadow:0 0 16px rgba(211,18,31,.6)}
-  .desktop-pane .df-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:9rem;user-select:none;border:2px solid rgba(174,182,200,.16);border-radius:12px;background:rgba(20,22,30,.66);padding:12px 14px;transform:skewY(-4deg);transition:border-color .6s ease,background .6s ease,filter .6s ease,transform .6s ease;filter:grayscale(1);box-shadow:0 18px 50px rgba(0,0,0,.3);cursor:pointer;text-decoration:none;color:inherit;overflow:hidden}
+  .desktop-pane .df-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:10.5rem;user-select:none;border:2px solid rgba(174,182,200,.16);border-radius:12px;background:rgba(20,22,30,.66);padding:12px 14px;transform:skewY(-4deg);transition:border-color .6s ease,background .6s ease,filter .6s ease,transform .6s ease;filter:grayscale(1);box-shadow:0 18px 50px rgba(0,0,0,.3);cursor:pointer;text-decoration:none;color:inherit;overflow:hidden}
   .desktop-pane .df-card::before{content:"";position:absolute;inset:0;border-radius:10px;background:rgba(3,3,7,.38);transition:opacity .6s ease;pointer-events:none}
   .desktop-pane .df-card::after{content:"";position:absolute;top:-4%;right:-3px;width:70%;height:108%;background:linear-gradient(to left,#030307,transparent);pointer-events:none}
   .desktop-pane .df-card:hover,.desktop-pane .df-card.is-selected{border-color:rgba(255,255,255,.24);background:rgba(28,30,40,.85);filter:grayscale(0);transform:skewY(-4deg) translateY(-8px)}
@@ -412,13 +412,14 @@
   .desktop-pane .df-card__row,.desktop-pane .df-card__desc,.desktop-pane .df-card__date{position:relative;z-index:1}
   .desktop-pane .df-card__row{display:flex;align-items:center;gap:var(--space-2)}
   .desktop-pane .df-card__icon{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;border-radius:999px;font-size:var(--text-sm);flex-shrink:0}
-  .desktop-pane .df-card__title{font-family:var(--font-mono);font-size:var(--text-sm);color:var(--silver);letter-spacing:var(--tr-normal);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .desktop-pane .df-card__title{font-family:var(--font-mono);font-size:var(--text-base);color:var(--silver);letter-spacing:var(--tr-normal);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .desktop-pane .df-card__tag{font-family:var(--font-mono);font-size:var(--text-2xs);font-weight:700;letter-spacing:var(--tr-wide);padding:2px 7px;border-radius:999px;line-height:1.3;margin-left:auto;white-space:nowrap;flex-shrink:0}
   .desktop-pane .df-card__tag--web{background:rgba(47,107,255,.18);color:#a9c1ff;border:1px solid rgba(47,107,255,.3)}
   .desktop-pane .df-card__tag--ai{background:rgba(211,18,31,.18);color:#ff8088;border:1px solid rgba(211,18,31,.3)}
   .desktop-pane .df-card__tag--fullstack{background:rgba(179,33,158,.18);color:#e7a3dc;border:1px solid rgba(179,33,158,.3)}
   .desktop-pane .df-card__tag--mobile{background:rgba(255,106,19,.18);color:#ffb27d;border:1px solid rgba(255,106,19,.3)}
-  .desktop-pane .df-card__desc{font-size:var(--text-sm);color:#d4d0c6;margin-top:auto;padding-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .desktop-pane .df-card__desc{font-size:var(--text-sm);color:#d4d0c6;margin-top:auto;padding-bottom:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+  .desktop-pane .df-card:has(.df-card__live) .df-card__desc{padding-right:64px}
   .desktop-pane .df-card__date{font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:var(--tr-label);color:#8f98ad}
 
   /* ---- AI Agents — architecture map ---- */
@@ -579,6 +580,8 @@
   .journey-viewport.is-open .journey-card:nth-child(6){animation-delay:.35s}
   .journey-viewport.is-open .journey-card:nth-child(7){animation-delay:.42s}
   .journey-viewport.is-open .journey-card:nth-child(8){animation-delay:.49s}
+  .journey-viewport.is-open .journey-card:nth-child(9){animation-delay:.56s}
+  .journey-viewport.is-open .journey-card:nth-child(10){animation-delay:.63s}
   @keyframes jcardIn{from{opacity:0;transform:translateY(46px) scale(.97)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){.journey-viewport.is-idle .jgal,.journey-viewport.is-idle .jgal::before,.journey-viewport.is-idle .jgal::after,.journey-viewport.is-open .journey-card{animation:none}}
   .journey-card[data-hidden]{display:none!important}
@@ -1238,8 +1241,8 @@
       <div class="desktop-grid">
         <aside class="desktop-sidebar" aria-label="Finder sidebar">
           <span class="sb-head">Favorites</span>
-          <span class="sb-item is-active" data-section="all"><i></i>All Work</span>
-          <span class="sb-item sb-item--proj" data-section="projects"><i></i>Projects</span>
+          <span class="sb-item" data-section="all"><i></i>All Work</span>
+          <span class="sb-item sb-item--proj is-active" data-section="projects"><i></i>Projects</span>
           <span class="sb-item sb-item--case" data-section="agents"><i></i>AI Agents</span>
           <span class="sb-item sb-item--web" data-section="web"><i></i>Web &amp; Apps</span>
           <span class="sb-head">Locations</span>
@@ -1247,7 +1250,7 @@
         </aside>
         <div class="desktop-pane">
           <div class="desktop-pane-head">
-            <h2 id="desktopTitle">All Work</h2>
+            <h2 id="desktopTitle">Projects</h2>
             <small id="desktopMeta">10 items · updated today</small>
           </div>
           <div class="desktop-files" id="desktopFiles">
@@ -1627,6 +1630,95 @@
         </ul>
         <div style="margin-top:14px">
           <a href="https://github.com/Alistair77/agent-evals" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Repository
+          </a>
+        </div>
+      </article></div>
+      <div class="journey-card" data-category="ai"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
+        <path d="M40 60 L80 50 L120 70 L160 40 M80 50 L100 120 L160 40 M120 70 L100 120 L140 180"/>
+        <circle cx="40" cy="60" r="4"/><circle cx="80" cy="50" r="4.5"/><circle cx="120" cy="70" r="3.5"/><circle cx="160" cy="40" r="4"/><circle cx="100" cy="120" r="5"/><circle cx="140" cy="180" r="4"/>
+        <text x="30" y="28">CRUX</text>
+      </svg><article class="journey-card__inner" style="--i:7">
+        <div class="journey-card__top"><p class="slide-date">2026</p><span class="journey-card__no">07</span></div>
+        <h3>Jericho — Live AI Agent Dashboard</h3>
+        <span class="slide-role">Three.js · Claude Code hooks · Shell · Python</span>
+        <span class="slide-meta">AI ENGINEERING</span>
+        <span class="slide-cat slide-cat--ai">AI ENGINEERING</span>
+        <ul class="journey-bullets">
+          <li>A live 3D Mars base where each of 30 Claude Code skills is a crew bot — when a skill really runs, its bot walks to its building and a progress bar fills above it.</li>
+          <li>A ~30-line Claude Code hook (PreToolUse / PostToolUse) writes the actual skill start and finish to a status file the page reads — idle means idle, no fake activity.</li>
+          <li>One HTML file with no install or build step: five weather modes, a calm notifications panel and real Mars time at Jezero Crater.</li>
+        </ul>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77/Jericho-Agentic-Space-Station" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Repository
+          </a>
+          <a href="https://alistair77.github.io/Jericho-Agentic-Space-Station/" target="_blank" rel="noopener" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px;margin-left:8px">Live ↗</a>
+        </div>
+      </article></div>
+      <div class="journey-card" data-category="ai"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+        <path d="M40 60 L80 50 L120 70 L160 40 M80 50 L100 120 L160 40 M120 70 L100 120 L140 180"/>
+        <circle cx="40" cy="60" r="4"/><circle cx="80" cy="50" r="4.5"/><circle cx="120" cy="70" r="3.5"/><circle cx="160" cy="40" r="4"/><circle cx="100" cy="120" r="5"/><circle cx="140" cy="180" r="4"/>
+        <text x="30" y="28">PYXIS</text>
+      </svg><article class="journey-card__inner" style="--i:8">
+        <div class="journey-card__top"><p class="slide-date">2026</p><span class="journey-card__no">08</span></div>
+        <h3>Semantic Cache — LLMOps for Claude</h3>
+        <span class="slide-role">Python · FastAPI · FAISS · MiniLM embeddings · Claude API</span>
+        <span class="slide-meta">AI ENGINEERING</span>
+        <span class="slide-cat slide-cat--ai">AI ENGINEERING</span>
+        <ul class="journey-bullets">
+          <li>A FastAPI proxy in front of Claude API calls that answers repeated or near-duplicate prompts from a FAISS vector cache (cosine ≥ 0.90) instead of calling the model.</li>
+          <li>Against the live RAG service a cached answer returns in ~84 ms vs ~34 s uncached; a 50-prompt benchmark hits 64% with an 18× speed-up on hits.</li>
+          <li>TTL expiry, purge / invalidate endpoints and a /metrics view of tokens and cost saved; agent runs are deliberately not cached because they have side effects. 25 tests.</li>
+        </ul>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77/semantic-cache" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Repository
+          </a>
+        </div>
+      </article></div>
+      <div class="journey-card" data-category="ai"><svg class="jc jc--right" viewBox="0 0 200 280" aria-hidden="true">
+        <path d="M40 60 L80 50 L120 70 L160 40 M80 50 L100 120 L160 40 M120 70 L100 120 L140 180"/>
+        <circle cx="40" cy="60" r="4"/><circle cx="80" cy="50" r="4.5"/><circle cx="120" cy="70" r="3.5"/><circle cx="160" cy="40" r="4"/><circle cx="100" cy="120" r="5"/><circle cx="140" cy="180" r="4"/>
+        <text x="30" y="28">CETUS</text>
+      </svg><article class="journey-card__inner" style="--i:9">
+        <div class="journey-card__top"><p class="slide-date">2026</p><span class="journey-card__no">09</span></div>
+        <h3>Zetsu — Local Voice Agent</h3>
+        <span class="slide-role">Python · whisper.cpp · Ollama · Claude Code · VAD</span>
+        <span class="slide-meta">AI ENGINEERING</span>
+        <span class="slide-cat slide-cat--ai">AI ENGINEERING</span>
+        <ul class="journey-bullets">
+          <li>A voice-first assistant that runs entirely on the laptop — wake word, follow-ups without re-summoning, and barge-in that stops it mid-word. No API keys, no audio leaves the machine.</li>
+          <li>Kept the speech model warm in a server: recognition went from 1.26 s to 0.15 s per slice (8× faster), and local qwen2.5:3b replies start in 0.23 s.</li>
+          <li>A safety gate asks before every consequential tool action, and a live operations console shows the orb, the current run, the queue and the audit trail.</li>
+        </ul>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77/zetsu-voice-agent" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
+            <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub Repository
+          </a>
+        </div>
+      </article></div>
+      <div class="journey-card" data-category="ai"><svg class="jc jc--left" viewBox="0 0 200 280" aria-hidden="true">
+        <path d="M40 60 L80 50 L120 70 L160 40 M80 50 L100 120 L160 40 M120 70 L100 120 L140 180"/>
+        <circle cx="40" cy="60" r="4"/><circle cx="80" cy="50" r="4.5"/><circle cx="120" cy="70" r="3.5"/><circle cx="160" cy="40" r="4"/><circle cx="100" cy="120" r="5"/><circle cx="140" cy="180" r="4"/>
+        <text x="30" y="28">LUPUS</text>
+      </svg><article class="journey-card__inner" style="--i:10">
+        <div class="journey-card__top"><p class="slide-date">2026 — In development</p><span class="journey-card__no">10</span></div>
+        <h3>OpenJev — Typed Decision Intelligence</h3>
+        <span class="slide-role">Python · FastAPI · Pydantic · TypeScript SDK</span>
+        <span class="slide-meta">AI ENGINEERING</span>
+        <span class="slide-cat slide-cat--ai">AI ENGINEERING</span>
+        <ul class="journey-bullets">
+          <li>Send one state plus named questions and get back probabilities, confidence and an audit trace instead of a paragraph of prose.</li>
+          <li>Honest abstention: confidence is 1 − normalised entropy, and below the threshold the answer says so instead of guessing.</li>
+          <li>Local-first deterministic baseline with no API key, plus a trainable research scorer that reports accuracy, log-loss, Brier and ECE. Still in development.</li>
+        </ul>
+        <div style="margin-top:14px">
+          <a href="https://github.com/Alistair77/openjev" target="_blank" class="quick-look-link" style="display:inline-flex;align-items:center;gap:6px">
             <svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
             GitHub Repository
           </a>
@@ -3604,6 +3696,8 @@ void main() {
         tabHandlers.push(()=> tab.removeEventListener('click', handler));
       });
       this._tabCleanup = ()=> tabHandlers.forEach(f=>f());
+      const aiTab = journeyTabs.find(t=> t.dataset.tab === 'ai');
+      if(aiTab) aiTab.click();
     }
 
     // ---- personal journey swiper ----
@@ -3844,7 +3938,7 @@ void main() {
     const qlActionLink = document.querySelector('#quickLookActionLink');
 
     let finderHistory = [];
-    let currentFolderKey = 'all';
+    let currentFolderKey = 'projects';
 
     // Helper to open Quick Look Modal
     window.openQuickLook = (fileUrl, title, demoUrl) => {
@@ -4042,11 +4136,9 @@ void main() {
         overlay = document.createElement('div');
         overlay.id = 'codingGlitch';
         overlay.className = 'glitch-overlay';
-        host.appendChild(overlay);
-      } else {
-        overlay.classList.toggle('glitch-overlay--full', !!full);
-        if (overlay.parentElement !== host) host.appendChild(overlay);
       }
+      overlay.classList.toggle('glitch-overlay--full', !!full);
+      if (overlay.parentElement !== host) host.appendChild(overlay);
       if (glitchHandle && glitchHandle.stop) {
         glitchHandle.stop();
         glitchHandle = null;
@@ -4057,7 +4149,7 @@ void main() {
       if (wipe) overlay.classList.add('is-wipe');
       overlay.classList.add('is-active');
       glitchHandle = createLetterGlitch(overlay, { glitchSpeed: 55, smooth: true });
-      const duration = full ? 1200 : 3400;
+      const duration = full ? 1700 : 3400;
       setTimeout(() => {
         if (!overlay.classList.contains('is-active')) return;
         overlay.classList.add('is-fade');
@@ -4348,9 +4440,9 @@ void main() {
 
     // ---- GitHub auto-sync: projects tagged with the `portfolio` topic appear
     //      automatically in the Finder. Fetched client-side, cached for 15 min. ----
-    // Render the All Work view once so curated additions show immediately (offline-safe)
-    if (currentFolderKey === 'all' && !finderHistory.length && desktopFiles.querySelector('.desktop-file, .df-card')) {
-      renderFolder('all', 'All Work', false);
+    // Open on Projects (replaces the static All Work markup; offline-safe)
+    if (currentFolderKey === 'projects' && !finderHistory.length) {
+      renderFolder('projects', 'Projects', false);
     }
     const SYNC_CACHE_KEY = 'cosmos_gh_projects_v1';
     const SYNC_CACHE_TTL = 15 * 60 * 1000;
