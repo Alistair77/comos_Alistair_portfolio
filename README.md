@@ -27,16 +27,16 @@ A black hole drawn like an engraving: hair-thin orbital streaks banded in crimso
 A scrolling brand marquee (Vercel, Linear, Stripe…) on a 3D tilt.
 
 ### The Observer — selected work
-A poetic intro over the starfield, then a macOS-style Finder window. **Projects** shows the six AI projects plus OpenJev (marked *in development*) — the grid scrolls on hover once it outgrows the pane. **Web & Apps** holds the Professional Portfolio, the Bizora Media site, The System (3D portfolio), PyLearnWeb, the earlier web projects and the Android apps. Cards for deployed projects carry a **Live ↗** button that opens the GitHub Pages site. Also **AI Agents** (an interactive architecture map) and **Résumé**, with Quick Look previews. Repositories tagged `portfolio` on GitHub appear automatically, and live links are picked up from each repo's homepage / Pages setting.
+A poetic intro over the starfield, then a macOS-style Finder window that opens on **Projects**: the six AI projects as large cards (all six visible at once) plus OpenJev (marked *in development*) — the grid scrolls on hover once it outgrows six. **Web & Apps** holds the Professional Portfolio, the Bizora Media site, The System (3D portfolio), PyLearnWeb, the earlier web projects and the Android apps. Cards for deployed projects carry a **Live ↗** button that opens the GitHub Pages site. Also **AI Agents** (an interactive architecture map) and **Résumé**, with Quick Look previews. Repositories tagged `portfolio` on GitHub appear automatically, and live links are picked up from each repo's homepage / Pages setting.
 
 ![The Observer](docs/screenshots/observer.jpg)
 ![Finder — Projects](docs/screenshots/work.jpg)
 
 ### Journey So Far
-Pick a galaxy — **All**, **Web Design** or **AI Engineering** — and the timeline opens as horizontally scrolling project cards (stack, highlights, screenshots, GitHub links), linked by constellations.
+Opens on **AI Engineering** — RAGStar, Agent Orchestrator, Agent Evals, Jericho, Semantic Cache, Zetsu and OpenJev — as horizontally scrolling project cards (stack, highlights, screenshots, GitHub / live links), linked by constellations. Pick **All** or **Web Design** to switch; click the open galaxy again to collapse back to the three-galaxy view.
 
-![Journey — galaxy tabs](docs/screenshots/journey.jpg)
-![Journey — project cards](docs/screenshots/journey-cards.jpg)
+![Journey — AI Engineering (default)](docs/screenshots/journey.jpg)
+![Journey — All](docs/screenshots/journey-cards.jpg)
 
 ### Personal Journey
 A coverflow carousel of photos from along the way.
