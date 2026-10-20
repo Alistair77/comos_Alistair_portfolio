@@ -392,7 +392,17 @@
   .finder-smile-overlay svg{width:min(72%,340px);height:auto;filter:drop-shadow(0 24px 70px rgba(0,0,0,.55));transform:rotate(-8deg)}
 
   /* ---- Finder Projects — observer-style clickable cards ---- */
-  .desktop-pane .df-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-4);padding:2px}
+  .desktop-pane .df-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-4);padding:10px 6px 12px 2px;
+    max-height:min(31rem,62vh);overflow-y:auto;scrollbar-width:thin;scrollbar-color:transparent transparent;transition:scrollbar-color .3s}
+  /* the grid scrolls once it outgrows the pane (more than six cards); its scrollbar shows on hover */
+  .desktop-pane .df-cards:hover{scrollbar-color:rgba(233,228,223,.28) transparent}
+  .desktop-pane .df-cards::-webkit-scrollbar{width:6px}
+  .desktop-pane .df-cards::-webkit-scrollbar-thumb{background:transparent;border-radius:99px}
+  .desktop-pane .df-cards:hover::-webkit-scrollbar-thumb{background:rgba(233,228,223,.28)}
+  .desktop-pane .df-card__live{position:absolute;right:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;
+    font-family:var(--font-mono);font-size:var(--text-2xs);font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+    color:#ffd9dc;background:rgba(211,18,31,.22);border:1px solid rgba(255,59,71,.45);transition:background .2s,color .2s,box-shadow .2s}
+  .desktop-pane .df-card__live:hover,.desktop-pane .df-card__live:focus-visible{background:#d3121f;color:#fff;box-shadow:0 0 16px rgba(211,18,31,.6)}
   .desktop-pane .df-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:9rem;user-select:none;border:2px solid rgba(174,182,200,.16);border-radius:12px;background:rgba(20,22,30,.66);padding:12px 14px;transform:skewY(-4deg);transition:border-color .6s ease,background .6s ease,filter .6s ease,transform .6s ease;filter:grayscale(1);box-shadow:0 18px 50px rgba(0,0,0,.3);cursor:pointer;text-decoration:none;color:inherit;overflow:hidden}
   .desktop-pane .df-card::before{content:"";position:absolute;inset:0;border-radius:10px;background:rgba(3,3,7,.38);transition:opacity .6s ease;pointer-events:none}
   .desktop-pane .df-card::after{content:"";position:absolute;top:-4%;right:-3px;width:70%;height:108%;background:linear-gradient(to left,#030307,transparent);pointer-events:none}
@@ -610,7 +620,7 @@
   .obs-main .desktop-window{width:100%;margin:0;flex-shrink:0}
   .obs-main .desktop-grid{grid-template-columns:160px 1fr}
   .obs-main .desktop-files{grid-template-columns:repeat(3,1fr)}
-  .obs-main .desktop-pane{padding:clamp(14px,2vw,24px)}
+  .obs-main .desktop-pane{padding:clamp(14px,2vw,24px);padding-bottom:92px}   /* room for the dock, so it never covers the last row */
   .obs-main .desktop-pane h2{font-size:var(--text-xl)}
 
   .display-cards{position:relative;display:flex;flex-direction:column;gap:var(--space-6);width:min(100%,38rem);margin-top:34px;opacity:1}
@@ -1098,7 +1108,7 @@
       <p class="hero-kicker">A SIGNAL FROM THE VOID</p>
       <h1 id="sig-name" class="hero-name hero-headline-wrap"></h1>
       <p class="hero-sub hero-sub-wrap">I build <span class="accent">AI that ships</span> — retrieval systems, on-device models, and the interfaces that make them usable.</p>
-      <p class="hero-sub-wrap" style="margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#8f98ad;line-height:2.1"><span style="color:#ff3b47">◇</span>&nbsp; MSc Advanced Computer Science · Strathclyde<br><span style="color:#ff3b47">◆</span>&nbsp; AI Engineer · Fast Company India / Bizaura<br><span style="color:#e9e4df">▸</span>&nbsp; Python · React · FastAPI · LLMs &amp; Agents · AI/ML</p>
+      <p class="hero-sub-wrap" style="margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#8f98ad;line-height:2.1"><span style="color:#ff3b47">◇</span>&nbsp; MSc Advanced Computer Science with AI · Strathclyde<br><span style="color:#ff3b47">◆</span>&nbsp; AI Engineer @ Bizora · Fast Company India<br><span style="color:#e9e4df">▸</span>&nbsp; Python · React · FastAPI · LLMs &amp; Agents · AI/ML</p>
     </div>
 
     <div class="hero-planets" aria-label="Primary signals">
@@ -1230,7 +1240,7 @@
           <span class="sb-item is-active" data-section="all"><i></i>All Work</span>
           <span class="sb-item sb-item--proj" data-section="projects"><i></i>Projects</span>
           <span class="sb-item sb-item--case" data-section="agents"><i></i>AI Agents</span>
-          <span class="sb-item sb-item--web" data-section="web"><i></i>Web</span>
+          <span class="sb-item sb-item--web" data-section="web"><i></i>Web &amp; Apps</span>
           <span class="sb-head">Locations</span>
           <span class="sb-item sb-item--res" data-section="resume"><i></i>Résumé</span>
         </aside>
@@ -1240,12 +1250,13 @@
             <small id="desktopMeta">10 items · updated today</small>
           </div>
           <div class="desktop-files" id="desktopFiles">
-            <div class="desktop-file" data-action="open-folder" data-folder="professional_portfolio_website"><div class="ico ico--folder"></div><span class="label">Professional Portfolio</span></div>
-            <div class="desktop-file" data-action="open-folder" data-folder="ragstar"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="agent_orchestrator"><div class="ico ico--folder"></div><span class="label">Agent Orchestrator</span></div>
-            <div class="desktop-file" data-action="open-folder" data-folder="agent_evals"><div class="ico ico--folder o"></div><span class="label">Agent Evals</span></div>
-            <div class="desktop-file" data-action="open-folder" data-folder="study_snippets"><div class="ico ico--folder g"></div><span class="label">Study Snippets</span></div>
-            <div class="desktop-file" data-action="open-folder" data-folder="health_weight"><div class="ico ico--folder p"></div><span class="label">Health Weight</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="ragstar"><div class="ico ico--folder o"></div><span class="label">RAGStar</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="agent_evals"><div class="ico ico--folder"></div><span class="label">Agent Evals</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="jericho_agentic_space_station"><div class="ico ico--folder o"></div><span class="label">Jericho</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="semantic_cache"><div class="ico ico--folder"></div><span class="label">Semantic Cache</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="zetsu_voice_agent"><div class="ico ico--folder o"></div><span class="label">Zetsu</span></div>
+            <div class="desktop-file" data-action="open-folder" data-folder="web"><div class="ico ico--folder g"></div><span class="label">Web &amp; Apps</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="experiments"><div class="ico ico--folder"></div><span class="label">Experiments</span></div>
             <div class="desktop-file" data-action="open-link" data-url="uploads/resume.pdf"><div class="ico ico--doc"></div><span class="label">Résumé.pdf</span></div>
             <div class="desktop-file" data-action="open-folder" data-folder="education"><div class="ico ico--folder g"></div><span class="label">Education</span></div>
@@ -3630,45 +3641,66 @@ void main() {
     }
     // ---- desktop sidebar and filesystem navigation ----
     const projectMeta = {
-      professional_portfolio_website: { letter:'P', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'Professional portfolio website', date:'2026 · Portfolio' },
-      hawkai: { letter:'H', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'3D login — React, Three.js, Ant Design', date:'2026 · Featured' },
-      quantasphere: { letter:'Q', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'Cursor-driven video scrub hero', date:'2026 · Interactive' },
-      ragstar: { letter:'R', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Hybrid search RAG pipeline', date:'2026 · AI' },
-      study_snippets: { letter:'S', bg:'#3d0b36', fg:'#e7a3dc', tag:'FULL-STACK', tagClass:'fullstack', desc:'Android + FastAPI monorepo', date:'2026 · Full-Stack' },
-      health_weight: { letter:'W', bg:'#40190a', fg:'#ffb27d', tag:'MOBILE', tagClass:'mobile', desc:'Android health tracker in Compose', date:'2026 · Mobile' },
-      agent_orchestrator: { letter:'A', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Multi-step agent: Plan → Act → Reflect, human-in-the-loop, LangGraph + Claude', date:'2026 · AI' },
-      agent_evals: { letter:'E', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Eval dataset generator & scoring pipeline — Claude-as-judge, DuckDB, Streamlit', date:'2026 · AI' }
+      // `live` = a deployed copy visitors can open (GitHub Pages); shown as a Live button on the card
+      agent_orchestrator: { letter:'A', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'LangGraph agent that plans, acts and checks itself — human approval before risky actions', date:'2026 · AI Agents' },
+      ragstar: { letter:'R', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Fully local hybrid-search RAG with reranking and clickable citations', date:'2026 · RAG', live:'https://alistair77.github.io/ragstar/' },
+      agent_evals: { letter:'E', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Catches agent regressions from real logs — Claude-written rubrics, 1–5 scoring', date:'2026 · LLM Evals' },
+      jericho_agentic_space_station: { letter:'J', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Live 3D dashboard of 30 Claude Code skills — who is running and how far along', date:'2026 · Agents', live:'https://alistair77.github.io/Jericho-Agentic-Space-Station/' },
+      semantic_cache: { letter:'S', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Vector cache for Claude API calls — repeat questions in 84 ms instead of 34 s', date:'2026 · LLMOps' },
+      zetsu_voice_agent: { letter:'Z', bg:'#3a070d', fg:'#ff8088', tag:'AI', tagClass:'ai', desc:'Voice-first assistant that runs entirely on your machine — no API keys', date:'2026 · Voice AI' },
+      professional_portfolio_website: { letter:'P', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'Professional portfolio — AI engineer, LLM apps, RAG and agents', date:'2026 · Portfolio', live:'https://alistair77.github.io/professional-portfolio-website/' },
+      hawkai: { letter:'H', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'3D login — React, Three.js, Ant Design', date:'2026 · Featured', live:'work/hawkai-login-showcase/' },
+      quantasphere: { letter:'Q', bg:'#101c46', fg:'#a9c1ff', tag:'WEB', tagClass:'web', desc:'Cursor-driven video scrub hero', date:'2026 · Interactive', live:'work/quantasphere-hero-export/' },
+      study_snippets: { letter:'S', bg:'#3d0b36', fg:'#e7a3dc', tag:'APP', tagClass:'fullstack', desc:'Android + FastAPI monorepo', date:'2026 · Full-Stack', live:'work/study-snipp-showcase/' },
+      health_weight: { letter:'W', bg:'#40190a', fg:'#ffb27d', tag:'APP', tagClass:'mobile', desc:'Android health tracker in Compose', date:'2026 · Mobile', live:'work/health-weight-app-showcase/' }
     };
 
     const fileSystem = {
-      // Front of the Finder: the Professional Portfolio (the one web project shown here), then AI work.
-      // Other web projects live behind the Web tab.
+      // Front of the Finder is AI work only; web projects and apps live behind the "Web & Apps" tab.
       all: [
-        { name: 'Professional Portfolio', type: 'folder', color: '', proj: 'professional_portfolio_website' },
-        { name: 'RAGStar', type: 'folder', color: 'o', proj: 'ragstar' },
         { name: 'Agent Orchestrator', type: 'folder', color: '', proj: 'agent_orchestrator' },
-        { name: 'Agent Evals', type: 'folder', color: 'o', proj: 'agent_evals' },
-        { name: 'Study Snippets', type: 'folder', color: 'g', proj: 'study_snippets' },
-        { name: 'Health Weight', type: 'folder', color: 'p', proj: 'health_weight' },
+        { name: 'RAGStar', type: 'folder', color: 'o', proj: 'ragstar' },
+        { name: 'Agent Evals', type: 'folder', color: '', proj: 'agent_evals' },
+        { name: 'Jericho', type: 'folder', color: 'o', proj: 'jericho_agentic_space_station' },
+        { name: 'Semantic Cache', type: 'folder', color: '', proj: 'semantic_cache' },
+        { name: 'Zetsu', type: 'folder', color: 'o', proj: 'zetsu_voice_agent' },
+        { name: 'Web & Apps', type: 'folder', color: 'g', proj: 'web' },
         { name: 'Experiments', type: 'folder', color: '', proj: 'experiments' },
-        { name: 'Résumé.pdf', type: 'pdf', file: 'uploads/resume.pdf', size: '142 KB' },
+        { name: 'Résumé.pdf', type: 'pdf', file: 'uploads/resume.pdf', size: '71 KB' },
         { name: 'Education', type: 'folder', color: 'g', proj: 'education' }
       ],
       projects: [
-        { name: 'Professional Portfolio', type: 'project', icon: '', proj: 'professional_portfolio_website' },
-        { name: 'RAGStar', type: 'project', icon: 'uploads/ragstar-thumb.svg', proj: 'ragstar' },
         { name: 'Agent Orchestrator', type: 'project', icon: '', proj: 'agent_orchestrator' },
+        { name: 'RAGStar', type: 'project', icon: 'uploads/ragstar-thumb.svg', proj: 'ragstar' },
         { name: 'Agent Evals', type: 'project', icon: '', proj: 'agent_evals' },
+        { name: 'Jericho', type: 'project', icon: '', proj: 'jericho_agentic_space_station' },
+        { name: 'Semantic Cache', type: 'project', icon: '', proj: 'semantic_cache' },
+        { name: 'Zetsu', type: 'project', icon: '', proj: 'zetsu_voice_agent' }
+      ],
+      web: [
+        { name: 'Professional Portfolio', type: 'project', icon: '', proj: 'professional_portfolio_website' },
+        { name: 'HawkAI Login', type: 'project', icon: 'uploads/hawkai-thumb.svg', proj: 'hawkai' },
+        { name: 'Quantasphere', type: 'project', icon: 'uploads/quantasphere-thumb.jpg', proj: 'quantasphere' },
         { name: 'Study Snippets', type: 'project', icon: 'uploads/study-snippets-thumb.svg', proj: 'study_snippets' },
         { name: 'Health Weight', type: 'project', icon: 'uploads/health-weight-thumb.svg', proj: 'health_weight' }
       ],
-      web: [
-        { name: 'HawkAI Login', type: 'project', icon: 'uploads/hawkai-thumb.svg', proj: 'hawkai' },
-        { name: 'Quantasphere', type: 'project', icon: 'uploads/quantasphere-thumb.jpg', proj: 'quantasphere' }
-      ],
       professional_portfolio_website: [
+        { name: 'Launch Live Site.app', type: 'link', url: 'https://alistair77.github.io/professional-portfolio-website/', target: '_blank', size: 'Live' },
         { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/professional-portfolio-website', target: '_blank', size: 'GitHub' },
         { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/professional-portfolio-website/blob/main/README.md', target: '_blank', size: 'Doc Link' }
+      ],
+      jericho_agentic_space_station: [
+        { name: 'Launch Live Site.app', type: 'link', url: 'https://alistair77.github.io/Jericho-Agentic-Space-Station/', target: '_blank', size: 'Live' },
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/Jericho-Agentic-Space-Station', target: '_blank', size: 'GitHub' },
+        { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/Jericho-Agentic-Space-Station/blob/main/README.md', target: '_blank', size: 'Doc Link' }
+      ],
+      semantic_cache: [
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/semantic-cache', target: '_blank', size: 'GitHub' },
+        { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/semantic-cache/blob/main/README.md', target: '_blank', size: 'Doc Link' }
+      ],
+      zetsu_voice_agent: [
+        { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/zetsu-voice-agent', target: '_blank', size: 'GitHub' },
+        { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/zetsu-voice-agent/blob/master/README.md', target: '_blank', size: 'Doc Link' }
       ],
       hawkai: [
         { name: 'Login Screen.png', type: 'image', file: 'projects/Screenshot 2026-05-25 at 2.12.59 PM.png', size: '3.0 MB' },
@@ -3682,6 +3714,7 @@ void main() {
         { name: 'GitHub Profile.lnk', type: 'link', url: 'https://github.com/Alistair77', target: '_blank', size: 'GitHub' }
       ],
       ragstar: [
+        { name: 'Launch Live Site.app', type: 'link', url: 'https://alistair77.github.io/ragstar/', target: '_blank', size: 'Live' },
         { name: 'Launch Live Demo.app', type: 'link', url: 'work/ragstar-showcase/', target: '_blank', size: 'Live App' },
         { name: 'GitHub Repository.lnk', type: 'link', url: 'https://github.com/Alistair77/ragstar', target: '_blank', size: 'GitHub' },
         { name: 'Documentation.lnk', type: 'link', url: 'https://github.com/Alistair77/ragstar/blob/main/README.md', target: '_blank', size: 'Doc Link' }
@@ -3714,7 +3747,7 @@ void main() {
     const desktopSections = {
       all: { title: 'All Work', meta: `${fileSystem.all.length} items · updated today`, folderKey: 'all' },
       projects: { title: 'Projects', meta: `${fileSystem.projects.length} projects · click to explore`, folderKey: 'projects' },
-      web: { title: 'Web', meta: `${fileSystem.web.length} projects · web & interactive`, folderKey: 'web' },
+      web: { title: 'Web & Apps', meta: `${fileSystem.web.length} projects · web & apps`, folderKey: 'web' },
       agents: {
         title: 'AI Agents',
         meta: 'architecture map · reasoning chains',
@@ -3755,17 +3788,17 @@ void main() {
       },
       resume: {
         title: 'Resume',
-        meta: 'AI Engineering · Data · UX',
+        meta: 'AI Engineer · LLM apps, RAG and agents',
         html: `<div style="grid-column:1/-1;padding:10px 0;font-family:var(--font-mono);font-size:12px;color:#b0b8c8;line-height:1.8">
                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
                 <div><strong style="color:#e6e6ea;font-family:var(--font-display);font-size:13px">Skills</strong>
-                 <div style="margin-top:8px">Python · FastAPI · Kotlin · Jetpack Compose<br/>React · Three.js · AI/ML · RAG Pipelines<br/>UI/UX Design · Data Analysis</div></div>
+                 <div style="margin-top:8px">LLM apps · AI agents &amp; tool use · RAG<br/>LangGraph · Claude API · Ollama<br/>Prompt engineering · LLM evaluation</div></div>
                 <div><strong style="color:#e6e6ea;font-family:var(--font-display);font-size:13px">Education</strong>
-                 <div style="margin-top:8px">MSc Advanced Computer Science<br/>University of Strathclyde<br/>BSc Computer Science</div></div>
+                 <div style="margin-top:8px">MSc Advanced Computer Science with AI<br/>University of Strathclyde · 2025<br/>BSc Computer Science · SPPU Pune</div></div>
                 <div><strong style="color:#e6e6ea;font-family:var(--font-display);font-size:13px">Experience</strong>
-                 <div style="margin-top:8px">AI Engineering · Full-Stack Development<br/>Data Analysis · UI/UX Design<br/>5+ Projects Shipped</div></div>
+                 <div style="margin-top:8px">Web &amp; AI Engineer · Bizora Media Networks<br/>(Fast Company India) · 2026–now<br/>UI/UX Intern · CMS Info Systems (HawkAI)</div></div>
                 <div><strong style="color:#e6e6ea;font-family:var(--font-display);font-size:13px">Stack</strong>
-                 <div style="margin-top:8px">FastAPI · Pinecone · Supabase · Docker<br/>React · Kotlin · Git · CI/CD<br/>3D Web · Motion Design</div></div>
+                 <div style="margin-top:8px">Python · FastAPI · PostgreSQL · Docker<br/>React · JavaScript · Three.js · Figma<br/>Pandas · NumPy · scikit-learn</div></div>
                 <a href="uploads/resume.pdf" download style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;border:1px solid rgba(199,210,234,.2);border-radius:999px;padding:10px 18px;color:#e4e4e7;text-decoration:none;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(255,255,255,.06)';this.style.borderColor='rgba(255,59,71,.5)'" onmouseleave="this.style.background='';this.style.borderColor=''">↓ Download Résumé (PDF)</a>
                 </div></div>`
       }
@@ -4043,6 +4076,7 @@ void main() {
                     </div>
                     <p class="df-card__desc">${meta.desc || ''}</p>
                     <p class="df-card__date">${meta.date || ''}</p>
+                    ${meta.live ? `<a class="df-card__live" href="${meta.live}" target="_blank" rel="noopener" aria-label="Open ${item.name} live">Live ↗</a>` : ''}
                   </div>`;
         } else if (item.type === 'image') {
           return `<div class="desktop-file" data-action="quick-look" data-file="${item.file}" data-name="${item.name}" data-size="${item.size}">
@@ -4067,7 +4101,8 @@ void main() {
         }
         return '';
       }).join('');
-      return isProjects ? `<div class="df-cards">${html}</div>` : html;
+      // data-lenis-prevent: wheel over an overflowing grid scrolls the grid, not the page
+      return isProjects ? `<div class="df-cards" data-lenis-prevent>${html}</div>` : html;
     };
 
     // fan of papers inside each folder icon (open animation on hover/select)
@@ -4112,6 +4147,7 @@ void main() {
       let lastClickedTime = 0;
 
       desktopFiles.addEventListener('click', (e) => {
+        if (e.target.closest('.df-card__live')) return;   // the Live button is a plain link
         const fileNode = e.target.closest('.desktop-file, .df-card');
         if (!fileNode) {
           document.querySelectorAll('.desktop-file, .df-card').forEach(f => f.classList.remove('is-selected'));
@@ -4331,6 +4367,9 @@ void main() {
         const added = [];
         repos.forEach(repo => {
           if (!repo || repo.fork) return;
+          const liveUrl = repo.homepage || (repo.has_pages ? `https://alistair77.github.io/${repo.name}/` : '');
+          const known = projectMeta[slug(repo.name)];
+          if (liveUrl && known && !known.live) { known.live = liveUrl; added.push(slug(repo.name)); }
           if (!Array.isArray(repo.topics) || !repo.topics.includes('portfolio')) return;
           if ((repo.name || '').toLowerCase() === 'comos_alistair_portfolio') return;   // this site itself
           const key = slug(repo.name);
