@@ -18,7 +18,7 @@ The loader draws the Leo constellation as the page actually loads, with a hairli
 ![Intro loader](docs/screenshots/intro.jpg)
 
 ### Hero — Etched Accretion
-A black hole drawn like an engraving: hair-thin orbital streaks banded in crimson, a photon crown, contour-line nebula and film grain — one procedural WebGL2 shader. Move the pointer for parallax, hold to feed it. Around it: the decrypted name reveal, live UTC clock, ambient music player, the Taurus constellation, planet nav (Work · Journey · Résumé · Contact) and a dancing "play me" Groot that starts the Awesome Mix. *(Screenshot at the top of this page.)*
+A black hole drawn like an engraving: hair-thin orbital streaks banded in crimson, a photon crown, contour-line nebula and film grain — one procedural WebGL2 shader. Move the pointer for parallax, hold to feed it. Around it: the decrypted name reveal, live UTC clock, ambient music player, the Taurus constellation, planet nav (Work · Journey · Résumé · Contact — Contact opens LinkedIn) and a dancing "play me" Groot that starts the Awesome Mix. *(Screenshot at the top of this page.)*
 
 <p align="center"><img src="docs/screenshots/mobile.jpg" alt="Hero on a phone" width="300"></p>
 <p align="center"><sub>On phones the black hole sits below the copy and planet nav.</sub></p>
@@ -44,7 +44,7 @@ A coverflow carousel of photos from along the way.
 ![Personal Journey](docs/screenshots/personal-journey.jpg)
 
 ### Event Horizon — contact
-Contact details (the hero's Contact planet scrolls here), a swinging (draggable) crew-credential badge with LinkedIn / GitHub / Email, a dancing 3D Groot, and a particle-text signature that scatters around the cursor.
+Contact details, a swinging (draggable) crew-credential badge with LinkedIn / GitHub / Email, a dancing 3D Groot, and a particle-text signature that scatters around the cursor.
 
 ![Event Horizon footer](docs/screenshots/footer.jpg)
 
