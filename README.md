@@ -44,7 +44,7 @@ A coverflow carousel of photos from along the way.
 ![Personal Journey](docs/screenshots/personal-journey.jpg)
 
 ### Event Horizon — contact
-Contact details, a swinging (draggable) crew-credential badge with LinkedIn / GitHub / Email, a dancing 3D Groot, and a particle-text signature that scatters around the cursor.
+Contact details (the hero's Contact planet scrolls here), a swinging (draggable) crew-credential badge with LinkedIn / GitHub / Email, a dancing 3D Groot, and a particle-text signature that scatters around the cursor.
 
 ![Event Horizon footer](docs/screenshots/footer.jpg)
 
@@ -107,7 +107,7 @@ Keep these when adding effects — breaking any one of them is what made the pag
 
 - **Only what is on screen animates.** Every canvas/WebGL loop, the SVG galaxies and the Observer video pause via `IntersectionObserver` when out of view. The hero shader is held during the intro and the starfield skips frames while the opaque hero fills the screen.
 - **Heavy libraries load on demand.** three.js (footer Groot) loads when the footer is a screen away; model-viewer (hero "play me" Groot) loads after the intro when the browser is idle, and not at all on phones.
-- **Cap pixel density.** Drawing buffers stop at 1.5×; soft layers (journey particles, waves) render at 1× and the footer Prism at 0.4× / 30fps — they are blurs, so nobody can tell.
+- **Cap pixel density.** Drawing buffers stop at 1.5×; soft layers (journey particles, waves) render at 1× — they are blurs, so nobody can tell.
 - **No per-frame filters on moving content.** No `backdrop-filter` over the animated starfield and no CSS `drop-shadow` on live canvases — glows are static gradients. Batch canvas draws (one fill per colour bucket) instead of one draw — or one `shadowBlur` — per particle.
 
 ## Stack

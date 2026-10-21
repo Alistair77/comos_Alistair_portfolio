@@ -199,9 +199,6 @@
   .groot-playme .groot-playme__model{transition:transform .3s cubic-bezier(.16,1,.3,1)}
   .groot-playme:hover .groot-playme__model{transform:scale(1.07)}
   @media (max-width:600px){.groot-playme{display:none}}
-  /* subtle Prism glow behind the Event Horizon (contact) section only */
-  #footerPrism{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.16}
-  #footerPrism canvas{display:block}
   .hero-video-area{position:absolute;top:0;bottom:0;right:0;width:min(38.2%,660px);height:100%;z-index:2;cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='rgba(199,210,234,.6)' stroke-width='1.5'/%3E%3Cpath d='M16 10v12M10 16l6 6 6-6' fill='none' stroke='rgba(199,210,234,.8)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, auto}
 
   /* HERO planet nav — detailed glass planets (Work / Journey / Résumé / Contact) */
@@ -400,8 +397,8 @@
   .desktop-pane .df-cards::-webkit-scrollbar-thumb{background:transparent;border-radius:99px}
   .desktop-pane .df-cards:hover::-webkit-scrollbar-thumb{background:rgba(233,228,223,.28)}
   .desktop-pane .df-card__tag--wip{background:rgba(142,140,152,.14);color:#b5b3bd;border:1px dashed rgba(142,140,152,.45)}
-  .desktop-pane .df-card__live{position:absolute;right:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;
-    font-family:var(--font-mono);font-size:var(--text-2xs);font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+  .desktop-pane .df-card__live{position:absolute;right:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;
+    font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
     color:#ffd9dc;background:rgba(211,18,31,.22);border:1px solid rgba(255,59,71,.45);transition:background .2s,color .2s,box-shadow .2s}
   .desktop-pane .df-card__live:hover,.desktop-pane .df-card__live:focus-visible{background:#d3121f;color:#fff;box-shadow:0 0 16px rgba(211,18,31,.6)}
   .desktop-pane .df-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:9.25rem;user-select:none;border:2px solid rgba(174,182,200,.16);border-radius:12px;background:rgba(20,22,30,.66);padding:12px 14px;transform:skewY(-4deg);transition:border-color .6s ease,background .6s ease,filter .6s ease,transform .6s ease;filter:grayscale(1);box-shadow:0 18px 50px rgba(0,0,0,.3);cursor:pointer;text-decoration:none;color:inherit;overflow:hidden}
@@ -419,7 +416,7 @@
   .desktop-pane .df-card__tag--fullstack{background:rgba(179,33,158,.18);color:#e7a3dc;border:1px solid rgba(179,33,158,.3)}
   .desktop-pane .df-card__tag--mobile{background:rgba(255,106,19,.18);color:#ffb27d;border:1px solid rgba(255,106,19,.3)}
   .desktop-pane .df-card__desc{font-size:var(--text-sm);color:#d4d0c6;margin-top:auto;padding-bottom:2px;line-height:1.4;min-height:2.8em;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
-  .desktop-pane .df-card:has(.df-card__live) .df-card__desc{padding-right:64px}
+  .desktop-pane .df-card:has(.df-card__live) .df-card__desc{padding-right:78px}
   .desktop-pane .df-card__date{font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:var(--tr-label);color:#8f98ad}
 
   /* ---- AI Agents — architecture map ---- */
@@ -741,12 +738,11 @@
   .footer-11__nav a{color:#e4e4e7;text-decoration:none;transition:color .2s ease}
   .footer-11__nav a:hover{color:#fff}
   .footer-11__brand-wrap{position:relative;margin-top:44px;padding-top:38px;border-top:1px solid rgba(228,228,231,.14)}
-  .footer-11__glow{position:absolute;right:-18%;bottom:-42%;width:70%;height:160%;pointer-events:none;background:radial-gradient(circle at 80% 88%,rgba(211,18,31,.42),transparent 34%),radial-gradient(circle at 62% 68%,rgba(92,6,12,.35),transparent 42%),linear-gradient(to top left,rgba(211,18,31,.52),transparent 48%);filter:blur(24px);opacity:.9}
   .footer-11__brand{position:relative;z-index:1;font-family:var(--font-display);font-size:var(--text-display);font-weight:300;line-height:.92;letter-spacing:var(--tr-normal);color:rgba(255,255,255,.18);white-space:nowrap;text-transform:uppercase}
 
   .event-horizon-words{position:absolute;right:clamp(24px,5vw,80px);top:50%;z-index:3;transform:translateY(-50%);display:flex;flex-direction:column;gap:var(--space-4);pointer-events:none}
   .groot-stage{position:absolute;left:50%;top:52%;z-index:2;width:clamp(220px,30vw,440px);aspect-ratio:2/3;transform:translate(-50%,-52%);pointer-events:none}
-  .groot-stage .groot-canvas{width:100%;height:100%;display:block}  .groot-stage::before{content:"";position:absolute;left:50%;top:50%;width:118%;height:118%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:radial-gradient(circle at 50% 56%,rgba(255,59,71,.16),rgba(211,18,31,.05) 40%,rgba(3,3,7,0) 64%)}
+  .groot-stage .groot-canvas{width:100%;height:100%;display:block}
   @media (max-width:760px){.groot-stage{width:clamp(150px,34vw,200px);top:58%;aspect-ratio:2/3}}
   .event-word{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:var(--tr-kicker);color:rgba(199,210,234,.5);white-space:nowrap}
   .event-word--e{animation:floatWord1 5s ease-in-out infinite}
@@ -799,9 +795,11 @@
 
     /* ── HERO ── */
     .hero-copy{position:relative;top:auto;left:auto;bottom:auto;transform:none;width:auto;max-width:none;margin:0;padding:100px 20px 0;z-index:4}
-    .hero-copy .hero-kicker{font-size:var(--text-2xs);letter-spacing:var(--tr-kicker)}
-    .hero-copy .hero-name{font-size:var(--text-3xl);padding:0}
-    .hero-copy .hero-sub{font-size:var(--text-sm);margin:10px 0 0;max-width:30ch;padding:0}
+    .hero-copy .hero-kicker{font-size:var(--text-xs);letter-spacing:.24em;color:rgba(233,228,223,.7)}
+    .hero-copy .hero-name{font-size:clamp(2.5rem,12vw,3.4rem);font-weight:400;padding:0}
+    .hero-copy .hero-sub{font-size:var(--text-base);font-weight:400;color:#e9e4df;letter-spacing:.02em;line-height:1.6;margin:14px 0 0;max-width:none;padding:0}
+    .hero-copy .hero-facts{font-size:var(--text-sm)!important;font-weight:500;color:#c9d0e2!important;letter-spacing:.06em!important;line-height:1.9!important}
+    .hero-hint{font-size:var(--text-xs);color:rgba(233,228,223,.7)}
     header{padding:16px 16px!important}
     header span:first-child{font-size:var(--text-2xs);letter-spacing:.16em}
     header .hdr-role{display:none}
@@ -814,8 +812,8 @@
     /* ── PLANETS on mobile: clean centered nav row below the copy (no text overlap) ── */
     .hero-planets{position:relative;left:auto;top:auto;bottom:auto;width:auto;height:auto;display:flex;flex-flow:row wrap;justify-content:center;align-items:flex-start;gap:22px 18px;padding:34px 16px 0;pointer-events:auto;z-index:5}
     .hero-planets .planet{position:static!important;inset:auto!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;pointer-events:auto}
-    .planet__ico{width:44px;height:44px}
-    .planet__lbl{font-size:var(--text-2xs);letter-spacing:var(--tr-label)}
+    .planet__ico{width:58px;height:58px}
+    .planet__lbl{font-size:var(--text-xs);font-weight:600;letter-spacing:.16em;color:#f3efea}
 
     /* ── OBSERVER — stack: video strip then macOS Finder desktop ── */
     section[id="observer"]{min-height:auto;padding-bottom:40px;display:flex;flex-direction:column}
@@ -1118,7 +1116,7 @@
       <p class="hero-kicker">A SIGNAL FROM THE VOID</p>
       <h1 id="sig-name" class="hero-name hero-headline-wrap"></h1>
       <p class="hero-sub hero-sub-wrap">I build <span class="accent">AI that ships</span> — retrieval systems, on-device models, and the interfaces that make them usable.</p>
-      <p class="hero-sub-wrap" style="margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#8f98ad;line-height:2.1"><span style="color:#ff3b47">◇</span>&nbsp; MSc Advanced Computer Science with AI · University of Strathclyde<br><span style="color:#ff3b47">◆</span>&nbsp; AI Engineer @ Bizora · Fast Company India<br><span style="color:#e9e4df">▸</span>&nbsp; Python · React · FastAPI · LLMs &amp; Agents · AI/ML</p>
+      <p class="hero-sub-wrap hero-facts" style="margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#8f98ad;line-height:2.1"><span style="color:#ff3b47">◇</span>&nbsp; MSc Advanced Computer Science with AI · University of Strathclyde<br><span style="color:#ff3b47">◆</span>&nbsp; AI Engineer @ Bizora · Fast Company India<br><span style="color:#e9e4df">▸</span>&nbsp; Python · React · FastAPI · LLMs &amp; Agents · AI/ML</p>
     </div>
 
     <div class="hero-planets" aria-label="Primary signals">
@@ -1134,7 +1132,7 @@
         <span class="planet__ico"><span class="pbody p-earth-dark glow-e-dark"><span class="psurf d-land"></span><span class="pshade"></span><span class="pspec"></span><span class="pmoon"><i></i></span></span></span>
         <span class="planet__lbl">RÉSUMÉ</span>
       </a>
-      <a class="planet" data-title="Send a transmission" href="mailto:alistairar7@gmail.com" style="left:clamp(400px,52%,620px);top:clamp(620px,92%,760px)">
+      <a class="planet" data-title="Send a transmission" href="#contact" style="left:clamp(400px,52%,620px);top:clamp(620px,92%,760px)">
         <span class="planet__ico"><span class="pbody p-nep-dark glow-n-dark"><span class="psurf d-bands"></span><span class="pshade"></span><span class="pspec"></span></span></span>
         <span class="planet__lbl">CONTACT</span>
       </a>
@@ -1765,7 +1763,7 @@
   </section>
 
   <!-- ============ FOOTER · EVENT HORIZON (16:9 band, segment loop) ============ -->
-  <section style="position:relative;width:100%;min-height:100svh;overflow:hidden">
+  <section id="contact" style="position:relative;width:100%;min-height:100svh;overflow:hidden">
     <div data-role="groot" class="groot-stage" aria-label="Groot dances to greet you">
       <canvas class="groot-canvas"></canvas>
     </div>
@@ -1780,7 +1778,6 @@
     </div>
 
     <footer class="footer-11">
-      <div id="footerPrism" aria-hidden="true"></div>
       <div class="lanyard" aria-label="Contact badge — drag to swing">
         <span class="lanyard__hook"></span>
         <div class="lanyard__swing">
@@ -1849,7 +1846,6 @@
           </nav>
         </div>
         <div class="footer-11__brand-wrap">
-          <div class="footer-11__glow"></div>
           <div class="footer-11__brand">Alistair Rodrigues</div>
         </div>
       </div>
@@ -4935,69 +4931,6 @@ narrow.addEventListener('change', () => bh && bh.setParams(layout()));
     return true;
   }
   const wait = setInterval(() => { if (bind()) clearInterval(wait); }, 100);
-})();
-</script>
-<script type="module">
-/* Prism — subtle Event-Horizon backdrop (ported from React Bits <Prism/> "rotate", ogl) */
-import { Renderer, Triangle, Program, Mesh } from 'https://esm.sh/ogl@1.0.11';
-(() => {
-  const ctn = document.getElementById('footerPrism');
-  if (!ctn) return;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const H=3.5, BW=5.5, BASE_HALF=BW*0.5, GLOW=1, NOISE=0.5, SAT=0.3, SCALE=3.6, HUE=0, CFREQ=1, BLOOM=1, TS=0.5;
-  // 100 ray-march steps per pixel: render a soft, low-res buffer (it shows at 16% opacity and is
-  // upscaled smoothly by the browser) and cap it at ~30fps — a fraction of the full-res cost.
-  const dpr = 0.4;
-  const renderer = new Renderer({ dpr, alpha:true, antialias:false });
-  const gl = renderer.gl; gl.disable(gl.DEPTH_TEST); gl.disable(gl.CULL_FACE); gl.disable(gl.BLEND);
-  Object.assign(gl.canvas.style, { position:'absolute', inset:'0', width:'100%', height:'100%', display:'block' });
-  ctn.appendChild(gl.canvas);
-  const vertex = `attribute vec2 position; void main(){ gl_Position = vec4(position,0.0,1.0); }`;
-  const fragment = `precision highp float;
-  uniform vec2 iResolution; uniform float iTime; uniform float uHeight; uniform float uBaseHalf; uniform mat3 uRot; uniform int uUseBaseWobble;
-  uniform float uGlow; uniform vec2 uOffsetPx; uniform float uNoise; uniform float uSaturation; uniform float uScale; uniform float uHueShift;
-  uniform float uColorFreq; uniform float uBloom; uniform float uCenterShift; uniform float uInvBaseHalf; uniform float uInvHeight;
-  uniform float uMinAxis; uniform float uPxScale; uniform float uTimeScale;
-  vec4 tanh4(vec4 x){ vec4 e2x=exp(2.0*x); return (e2x-1.0)/(e2x+1.0); }
-  float rand(vec2 co){ return fract(sin(dot(co,vec2(12.9898,78.233)))*43758.5453123); }
-  float sdOctaAnisoInv(vec3 p){ vec3 q=vec3(abs(p.x)*uInvBaseHalf,abs(p.y)*uInvHeight,abs(p.z)*uInvBaseHalf); float m=q.x+q.y+q.z-1.0; return m*uMinAxis*0.5773502691896258; }
-  float sdPyramidUpInv(vec3 p){ float oct=sdOctaAnisoInv(p); float halfSpace=-p.y; return max(oct,halfSpace); }
-  mat3 hueRotation(float a){ float c=cos(a),s=sin(a); mat3 W=mat3(0.299,0.587,0.114,0.299,0.587,0.114,0.299,0.587,0.114); mat3 U=mat3(0.701,-0.587,-0.114,-0.299,0.413,-0.114,-0.300,-0.588,0.886); mat3 V=mat3(0.168,-0.331,0.500,0.328,0.035,-0.500,-0.497,0.296,0.201); return W+U*c+V*s; }
-  void main(){
-    vec2 f=(gl_FragCoord.xy-0.5*iResolution.xy-uOffsetPx)*uPxScale;
-    float z=5.0; float d=0.0; vec3 p; vec4 o=vec4(0.0);
-    float centerShift=uCenterShift; float cf=uColorFreq;
-    mat2 wob=mat2(1.0);
-    if(uUseBaseWobble==1){ float t=iTime*uTimeScale; float c0=cos(t+0.0); float c1=cos(t+33.0); float c2=cos(t+11.0); wob=mat2(c0,c1,c2,c0); }
-    const int STEPS=100;
-    for(int i=0;i<STEPS;i++){ p=vec3(f,z); p.xz=p.xz*wob; p=uRot*p; vec3 q=p; q.y+=centerShift; d=0.1+0.2*abs(sdPyramidUpInv(q)); z-=d; o+=(sin((p.y+z)*cf+vec4(0.0,1.0,2.0,3.0))+1.0)/d; }
-    o=tanh4(o*o*(uGlow*uBloom)/1e5);
-    vec3 col=o.rgb; float n=rand(gl_FragCoord.xy+vec2(iTime)); col+=(n-0.5)*uNoise; col=clamp(col,0.0,1.0);
-    float L=dot(col,vec3(0.2126,0.7152,0.0722)); col=clamp(mix(vec3(L),col,uSaturation),0.0,1.0);
-    if(abs(uHueShift)>0.0001){ col=clamp(hueRotation(uHueShift)*col,0.0,1.0); }
-    gl_FragColor=vec4(col,o.a);
-  }`;
-  const geometry = new Triangle(gl);
-  const iResBuf = new Float32Array(2); const offsetPxBuf = new Float32Array(2);
-  const program = new Program(gl, { vertex, fragment, uniforms:{
-    iResolution:{value:iResBuf}, iTime:{value:0}, uHeight:{value:H}, uBaseHalf:{value:BASE_HALF}, uUseBaseWobble:{value:1},
-    uRot:{value:new Float32Array([1,0,0,0,1,0,0,0,1])}, uGlow:{value:GLOW}, uOffsetPx:{value:offsetPxBuf}, uNoise:{value:NOISE},
-    uSaturation:{value:SAT}, uScale:{value:SCALE}, uHueShift:{value:HUE}, uColorFreq:{value:CFREQ}, uBloom:{value:BLOOM},
-    uCenterShift:{value:H*0.25}, uInvBaseHalf:{value:1/BASE_HALF}, uInvHeight:{value:1/H}, uMinAxis:{value:Math.min(BASE_HALF,H)},
-    uPxScale:{value:1/((gl.drawingBufferHeight||1)*0.1*SCALE)}, uTimeScale:{value:TS}
-  } });
-  const mesh = new Mesh(gl, { geometry, program });
-  const resize = () => { const w=ctn.clientWidth||1,h=ctn.clientHeight||1; renderer.setSize(w,h); iResBuf[0]=gl.drawingBufferWidth; iResBuf[1]=gl.drawingBufferHeight; program.uniforms.uPxScale.value=1/((gl.drawingBufferHeight||1)*0.1*SCALE); };
-  const ro = new ResizeObserver(resize); ro.observe(ctn); resize();
-  const t0 = performance.now();
-  let raf=0, vis=false;
-  let lastDraw = -1e9;
-  const render = t => {
-    if (t - lastDraw >= 32) { lastDraw = t; program.uniforms.iTime.value=(t-t0)*0.001; renderer.render({ scene: mesh }); }
-    raf = (vis && !reduce) ? requestAnimationFrame(render) : 0;
-  };
-  const io = new IntersectionObserver(es => { vis = es.some(e=>e.isIntersecting); if (vis && !raf) raf = requestAnimationFrame(render); else if (!vis && raf) { cancelAnimationFrame(raf); raf=0; } }); io.observe(ctn);
-  if (reduce) renderer.render({ scene: mesh });
 })();
 </script>
 <script>
